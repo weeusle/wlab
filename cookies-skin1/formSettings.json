@@ -1,0 +1,157 @@
+{
+  "platforms": [
+    "desktop",
+    "phone"
+  ],
+  "steps": [
+    {
+      "id": "design",
+      "header": "Дизайн",
+      "icon": "palette",
+      "blocks": [
+        [
+          {
+            "type": "design.themes"
+          }
+        ],
+        [
+          {
+            "type": "imagepicker",
+            "label": "Иконка",
+            "destination": "design.icon",
+            "imageType": "icon",
+            "fit": "contain",
+            "showTags": true,
+            "backgroundManipulations": true
+          }
+        ],
+        {
+          "header": "Шрифт",
+          "afterHeader": "выберите подходящий",
+          "blocks": {
+            "type": "design.fonts"
+          }
+        },
+        [
+          {
+            "type": "toggler",
+            "label": "Тень",
+            "hint": "Показывать тень у виджета",
+            "destination": "design.shadow"
+          }
+        ],
+        [
+          {
+            "type": "design.hidelogo"
+          }
+        ]
+      ]
+    },
+    {
+      "id": "texts",
+      "header": "Тексты",
+      "icon": "type",
+      "blocks": [
+        [
+          {
+            "type": "textinput",
+            "label": "Основной текст",
+            "size": 2,
+            "validator": { "required": true, "maxLength": 60, "minLength": 10 },
+            "destination": "texts.text"
+          },
+          {
+            "type": "textinput",
+            "label": "Политика",
+            "size": 1,
+            "validator": { "required": true, "maxLength": 100, "minLength": 5 },
+            "destination": "texts.policy"
+          },
+          {
+            "type": "textinput",
+            "label": "Текст кнопки",
+            "size": 1,
+            "validator": { "required": true, "maxLength": 25, "minLength": 2 },
+            "destination": "texts.buttonText"
+          }
+        ],
+        {
+          "header": "Политика конфиденциальности",
+          "blocks": [
+            {
+              "type": "privacyPolicy"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "settings",
+      "header": "Настройки",
+      "icon": "settings",
+      "blocks": [
+        [
+          {
+            "type": "settings.sizeposition",
+            "destination": "settings.layout",
+            "features": {
+              "showWidth": false
+            }
+          }
+        ],
+        {
+          "header": "Скругление углов",
+          "headerHelp": "Настройка скругления углов виджета",
+          "blocks": [
+            {
+              "type": "slider",
+              "destination": "settings.borderRadius",
+              "min": 0,
+              "max": 100,
+              "step": 2,
+              "options": [
+                { "value": 0, "label": "Без скруглений" },
+                { "value": 25, "label": "" },
+                { "value": 50, "label": "Среднее" },
+                { "value": 75, "label": "" },
+                { "value": 100, "label": "Максимальное" }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "triggers",
+      "header": "Триггеры",
+      "icon": "lightning",
+      "blocks": [
+        [
+          { "type": "triggers.onReady" },
+          { "type": "triggers.timer" }
+        ],
+        [
+          { "type": "showTo" }
+        ]
+      ]
+    },
+    {
+      "id": "integrations",
+      "header": "Интеграции",
+      "icon": "code",
+      "blocks": [
+        [
+          { "type": "integrations.metrika" }
+        ]
+      ]
+    },
+    {
+      "id": "installation",
+      "header": "Установка",
+      "icon": "play-square",
+      "blocks": [
+        [ { "type": "installation.website" } ]
+      ]
+    }
+  ]
+}

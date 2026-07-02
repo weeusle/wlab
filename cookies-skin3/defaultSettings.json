@@ -1,0 +1,50 @@
+{
+  "widgetCode": "cookies",
+  "skinCode": "skin3",
+  "version": "1.0.0",
+  "widgetName": "Кукисы 3",
+  "design": {
+    "colors": {
+      "light": {
+        "text": "#202020",
+        "accent": "#FF4D00",
+        "primary": "#0047F0",
+        "background": "#FFFFFF"
+      },
+      "dark": {
+        "text": "#FFFFFF",
+        "accent": "#FF7033",
+        "primary": "#A6BFFF",
+        "background": "#282828"
+      }
+    },
+    "colorMode": "light",
+    "font": {
+      "family": "Manrope",
+      "files": [
+        {
+          "weight": 500,
+          "format": "woff2",
+          "url": "https://fonts.gstatic.com/s/manrope/v15/xn7gYHE41ni1AdIRggexSvfedN4.woff2"
+        },
+        {
+          "weight": 600,
+          "format": "woff2",
+          "url": "https://fonts.gstatic.com/s/manrope/v15/xn7gYHE41ni1AdIRggexSvfedN4.woff2"
+        }
+      ]
+    },
+    "hideLogo": false
+  },
+  "texts": {
+    "mainText": "Мы используем cookie, чтобы сделать сайт удобнее и полезнее",
+    "buttonText": "Окей"
+  },
+  "settings": {
+    "theme": "theme1",
+    "layout": "floating",
+    "compact": "auto",
+    "mainText": "Мы используем cookie, чтобы сделать сайт удобнее и полезнее",
+    "buttonText": "Окей"
+  }
+}

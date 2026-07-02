@@ -1,0 +1,180 @@
+{
+  "steps": [
+    {
+      "id": "texts",
+      "header": "Тексты",
+      "icon": "type",
+      "blocks": [
+        {
+          "type": "textinput",
+          "label": "Заголовок",
+          "destination": "texts.title",
+          "validator": { "required": true, "maxLength": 120 }
+        },
+        {
+          "type": "textinput",
+          "label": "Текст ссылки на политику",
+          "destination": "texts.policy",
+          "after": "Фраза «Вы соглашаетесь с использованием cookies и…» фиксирована; здесь — только текст ссылки (будет подчёркнут)",
+          "validator": { "maxLength": 120 }
+        },
+        {
+          "type": "textinput",
+          "label": "Текст кнопки",
+          "destination": "texts.buttonText",
+          "validator": { "required": true, "maxLength": 40 }
+        }
+      ]
+    },
+    {
+      "id": "design",
+      "header": "Дизайн",
+      "icon": "palette",
+      "block": { "type": "design" }
+    },
+    {
+      "id": "settings",
+      "header": "Настройки",
+      "icon": "settings",
+      "blocks": [
+        [
+          {
+            "type": "select",
+            "label": "Цветовая тема",
+            "destination": "settings.theme",
+            "options": [
+              { "value": 1, "label": "Тема 1 · синяя" },
+              { "value": 2, "label": "Тема 2 · зелёная" },
+              { "value": 3, "label": "Тема 3 · фиолетовая" },
+              { "value": 4, "label": "Тема 4 · оранжевая" },
+              { "value": 5, "label": "Тема 5 · моно" }
+            ]
+          },
+          {
+            "type": "select",
+            "label": "Форма",
+            "destination": "settings.layout",
+            "options": [
+              { "value": "bar",   "label": "Bar — горизонтальная полоса" },
+              { "value": "mini",  "label": "Mini — компактная карточка" },
+              { "value": "image", "label": "Image — карточка с фото" },
+              { "value": "clear", "label": "Clear — карточка с 3D печеньем" }
+            ]
+          },
+          {
+            "type": "select",
+            "label": "Ширина (только bar)",
+            "destination": "settings.barWidth",
+            "options": [
+              { "value": "mini", "label": "Мини-баннер — компактная узкая полоса" },
+              { "value": "auto", "label": "Средняя — по ширине контента" },
+              { "value": "full", "label": "На всю ширину экрана" }
+            ]
+          },
+          {
+            "type": "select",
+            "label": "Иконка печенья (bar / mini)",
+            "destination": "settings.icon",
+            "options": [
+              { "value": "plain", "label": "Глиф" },
+              { "value": "disc",  "label": "Глиф в диске" },
+              { "value": "none",  "label": "Без иконки" }
+            ]
+          },
+          {
+            "type": "select",
+            "label": "Позиция",
+            "destination": "settings.position",
+            "options": [
+              { "value": "top-left",      "label": "Верхний левый угол" },
+              { "value": "top-center",    "label": "Верхний центр" },
+              { "value": "top-right",     "label": "Верхний правый угол" },
+              { "value": "center-left",   "label": "Центр слева" },
+              { "value": "center-right",  "label": "Центр справа" },
+              { "value": "bottom-left",   "label": "Нижний левый угол" },
+              { "value": "bottom-center", "label": "Нижний центр" },
+              { "value": "bottom-right",  "label": "Нижний правый угол" }
+            ]
+          },
+          {
+            "type": "range",
+            "label": "Скругление углов",
+            "destination": "settings.borderRadius",
+            "min": 0,
+            "max": 100,
+            "step": 1
+          },
+          {
+            "type": "range",
+            "label": "Отступ по горизонтали, px (кроме «на всю ширину»)",
+            "destination": "settings.offsetX",
+            "min": 0,
+            "max": 100,
+            "step": 2
+          },
+          {
+            "type": "range",
+            "label": "Отступ по вертикали, px (кроме «на всю ширину»)",
+            "destination": "settings.offsetY",
+            "min": 0,
+            "max": 100,
+            "step": 2
+          }
+        ],
+        {
+          "header": "Политика конфиденциальности",
+          "blocks": [
+            {
+              "type": "toggler",
+              "label": "Показывать строку политики",
+              "destination": "settings.showPolicy"
+            },
+            {
+              "type": "textinput",
+              "label": "URL документа",
+              "destination": "settings.policyUrl",
+              "after": "Ссылка в подписи под заголовком"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "triggers",
+      "header": "Триггеры",
+      "icon": "lightning",
+      "blocks": [
+        [
+          { "type": "triggers.onReady" },
+          { "type": "triggers.button" },
+          { "type": "triggers.timer" },
+          { "type": "triggers.onExit" },
+          { "type": "triggers.javascript" },
+          { "type": "showTo" }
+        ]
+      ]
+    },
+    {
+      "id": "integrations",
+      "header": "Интеграции",
+      "icon": "code",
+      "blocks": [
+        [
+          { "type": "integrations.metrika" }
+        ]
+      ]
+    },
+    {
+      "id": "installation",
+      "header": "Установка",
+      "icon": "play-square",
+      "blocks": [
+        [
+          { "type": "installation.cloud" },
+          { "type": "installation.website" },
+          { "type": "installation.telegram" }
+        ]
+      ]
+    }
+  ]
+}

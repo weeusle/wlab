@@ -1,0 +1,128 @@
+{
+  "widgetCode": "cookies",
+  "skinCode": "skin1",
+  "version": "1.0.0",
+  "widgetName": "Cookies",
+  "design": {
+    "colors": {
+      "light": {
+        "primary": "#0047FF",
+        "accent": "#FF4D00",
+        "background": "#FFFFFF",
+        "text": "#001240"
+      },
+      "dark": {
+        "primary": "#A6BFFF",
+        "accent": "#FFAE8C",
+        "background": "#000A22",
+        "text": "#F3F7FF"
+      }
+    },
+    "altColors": [
+      {
+        "light": {
+          "primary": "#00BB41",
+          "accent": "#4300D4",
+          "background": "#FFFFFF",
+          "text": "#1A0052"
+        },
+        "dark": {
+          "primary": "#D0FF73",
+          "accent": "#D0FF73",
+          "background": "#000A22",
+          "text": "#F3F7FF"
+        }
+      },
+      {
+        "light": {
+          "primary": "#FF4949",
+          "accent": "#003754",
+          "background": "#FFFFFF",
+          "text": "#003754"
+        },
+        "dark": {
+          "primary": "#FFA0A0",
+          "accent": "#DFF4FF",
+          "background": "#001A27",
+          "text": "#ECF9FF"
+        }
+      }
+    ],
+    "colorMode": "light",
+    "font": {
+      "family": "Inter",
+      "files": [
+        {
+          "weight": 400,
+          "format": "woff2",
+          "url": "https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa0ZL7SUc.woff2"
+        },
+        {
+          "weight": 500,
+          "format": "woff2",
+          "url": "https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa0ZL7SUc.woff2"
+        },
+        {
+          "weight": 700,
+          "format": "woff2",
+          "url": "https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa0ZL7SUc.woff2"
+        }
+      ]
+    },
+    "hideLogo": false,
+    "shadow": true,
+    "icon": {
+      "url": "https://static-t2.wlab.pro/system/widget_icon/chocolate-chip-cookie.png"
+    }
+  },
+  "texts": {
+    "text": "Пользуясь сайтом, вы соглашаетесь с использованием cookies и",
+    "policy": "политикой обработки персональных данных",
+    "buttonText": "Хорошо"
+  },
+  "settings": {
+    "layout": {
+      "mode": "compact",
+      "position": "bottom-right",
+      "offsetX": 16,
+      "offsetY": 16
+    },
+    "borderRadius": 50
+  },
+  "settings-variants": {
+    "settings.layout.mode": [
+      "fullwidth",
+      "compact"
+    ],
+    "settings.layout.position": [
+      "bottom-right",
+      "bottom-center",
+      "bottom-left",
+      "center-right",
+      "center-left",
+      "top-right",
+      "top-center",
+      "top-left"
+    ],
+    "settings.layout.offsetX": {
+      "type": "range",
+      "minFn": "offset-x-min",
+      "maxFn": "vw/3",
+      "step": 4
+    },
+    "settings.layout.offsetY": {
+      "type": "range",
+      "minFn": "offset-y-min",
+      "maxFn": "vh/3",
+      "step": 4
+    },
+    "settings.borderRadius": {"type": "range", "label": "Скругление", "min": 0, "max": 100, "step": 1},
+    "design.shadow": {"type": "checkbox", "label": "Тень"}
+  },
+  "triggers": {
+    "onReady": {
+      "enabled": true
+    }
+  },
+  "urlPrivacyDoc": "#"
+}

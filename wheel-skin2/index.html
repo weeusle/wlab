@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Колесо фортуны 2 — редактор</title>
+<style>
+  :root{--bg:#eef0f4;--panel:#fff;--ink:#1a1d24;--muted:#6b7280;--line:#e6e8ee;--accent:#0047F0;--accent-soft:#eaf0ff}
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%}
+  body{font-family:-apple-system,system-ui,'Segoe UI',Roboto,sans-serif;color:var(--ink);background:var(--bg);display:flex;flex-direction:column;height:100vh;overflow:hidden}
+  /* top bar */
+  .topbar{flex-shrink:0;height:48px;display:flex;align-items:center;gap:16px;padding:0 16px;background:var(--panel);border-bottom:1px solid var(--line)}
+  .brand{font-weight:700;font-size:14px}
+  .brand small{color:var(--muted);font-weight:500;margin-left:6px}
+  .toggle{display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px;font-weight:600;user-select:none}
+  .sw{position:relative;width:38px;height:21px;border-radius:11px;background:#cfd3dc;transition:background .2s;flex-shrink:0}
+  .sw.on{background:var(--accent)}
+  .sw::after{content:'';position:absolute;top:2px;left:2px;width:17px;height:17px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.25);transition:transform .2s}
+  .sw.on::after{transform:translateX(17px)}
+  .vp{margin-left:auto;display:flex;gap:2px}
+  .vp button{height:28px;padding:0 9px;border:1px solid var(--line);background:transparent;color:var(--muted);border-radius:6px;cursor:pointer;font-size:12px;font-weight:600}
+  .vp button:hover{color:var(--ink)}
+  .vp button.active{background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
+  /* body split */
+  .main{flex:1;display:flex;min-height:0}
+  .stage{flex:1;min-width:0;display:flex;justify-content:center;align-items:stretch;padding:20px;overflow:auto;background:var(--bg);position:relative}
+  .stage.dark{background:#4a4d55}
+  #frame{width:100%;height:100%;border:none;background:#fff;border-radius:12px;box-shadow:0 0 0 1px rgba(0,0,0,.06),0 8px 40px rgba(0,0,0,.08);transition:width .25s;flex-shrink:0}
+  /* preview loading overlay */
+  .stage__load{position:absolute;inset:20px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;background:rgba(255,255,255,.72);border-radius:12px;color:var(--muted);font-size:13px;font-weight:600;z-index:5;transition:opacity .25s}
+  .stage.dark .stage__load{background:rgba(74,77,85,.72);color:#e6e8ee}
+  .stage__load.hide{opacity:0;pointer-events:none}
+  .spin{width:34px;height:34px;border-radius:50%;border:3px solid var(--line);border-top-color:var(--accent);animation:sp .8s linear infinite}
+  @keyframes sp{to{transform:rotate(360deg)}}
+  .stage__load button{margin-top:2px;padding:6px 12px;border:1px solid var(--line);background:#fff;border-radius:8px;font:inherit;font-size:12px;font-weight:600;color:var(--ink);cursor:pointer}
+  .panel{width:352px;flex-shrink:0;background:var(--panel);border-left:1px solid var(--line);overflow-y:auto}
+  .sec{border-bottom:1px solid var(--line);padding:14px 16px}
+  .sec__t{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:700;margin-bottom:12px}
+  .field{margin-bottom:12px}.field:last-child{margin-bottom:0}
+  .field>label{display:block;font-size:12.5px;color:var(--muted);margin-bottom:5px;font-weight:600}
+  .field input[type=text],.field select{width:100%;border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-size:13px;color:var(--ink);background:#fff;font-family:inherit}
+  .field input:focus,.field select:focus{outline:none;border-color:var(--accent)}
+  .row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}.row:last-child{margin-bottom:0}
+  .row span{font-size:13px;font-weight:550}
+  .bg{display:flex;flex-wrap:wrap;gap:4px}
+  .bg button{flex:1 1 auto;min-width:56px;padding:6px 8px;border:1px solid var(--line);background:#fff;border-radius:7px;cursor:pointer;font-size:12px;color:var(--muted);font-weight:600}
+  .bg button.active{background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
+  .rw{display:flex;align-items:center;gap:10px}.rw input[type=range]{flex:1;accent-color:var(--accent)}.rw b{font-size:12px;color:var(--muted);min-width:30px;text-align:right}
+  .swatches{display:flex;gap:6px;flex-wrap:wrap}
+  .swatch{width:30px;height:30px;border-radius:7px;border:2px solid transparent;cursor:pointer;overflow:hidden}
+  .swatch.active{border-color:rgba(0,0,0,.5)}
+  .colorgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .cp{display:flex;align-items:center;gap:8px}
+  .cp input[type=color]{width:30px;height:26px;border:1px solid var(--line);border-radius:6px;padding:0;background:none;cursor:pointer}
+  .cp label{font-size:12px;color:var(--muted);font-weight:600}
+  .acts{display:flex;flex-wrap:wrap;gap:6px}
+  .acts button{padding:7px 11px;border:1px solid var(--line);background:#fff;border-radius:8px;cursor:pointer;font-size:12.5px;font-weight:600;color:var(--ink)}
+  .acts button:hover{border-color:var(--accent);color:var(--accent)}
+  .acts button.on{background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
+</style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="brand">Колесо фортуны 2 <small>wheel-skin2</small></div>
+    <label class="toggle"><span>Edit</span><span class="sw on" id="sw-edit"></span></label>
+    <div class="vp" id="vp">
+      <button data-w="100%" class="active">100%</button>
+      <button data-w="1440px">1440</button>
+      <button data-w="1024px">1024</button>
+      <button data-w="768px">768</button>
+      <button data-w="414px">414</button>
+      <button data-w="375px">375</button>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="stage" id="stage">
+      <iframe id="frame" src="./widget.html"></iframe>
+      <div class="stage__load" id="stage-load">
+        <div class="spin"></div>
+        <div id="load-text">Загрузка превью…</div>
+        <button id="load-reload" style="display:none">Перезагрузить превью</button>
+      </div>
+    </div>
+    <aside class="panel">
+      <div class="sec" id="sec-actions" style="display:none">
+        <div class="sec__t">Экран / состояние</div>
+        <div class="acts" id="actions"></div>
+      </div>
+      <div class="sec">
+        <div class="sec__t">Отображение</div>
+        <div class="row"><span>Тёмная тема</span><div class="sw" id="sw-theme"></div></div>
+        <div class="row"><span>Логотип widget lab</span><div class="sw on" id="sw-logo"></div></div>
+        <div id="schemes-field" class="field" style="display:none;margin-top:12px">
+          <label>Цветовые схемы</label><div class="swatches" id="schemes"></div>
+        </div>
+        <div class="field" style="margin-top:12px">
+          <label>Цвета (<span id="theme-label">светлая</span> тема)</label>
+          <div class="colorgrid" id="colors"></div>
+        </div>
+      </div>
+      <div id="form"></div>
+    </aside>
+  </div>
+
+<script>
+(function(){
+  var frame=document.getElementById('frame'), stage=document.getElementById('stage'), formEl=document.getElementById('form');
+  var loadEl=document.getElementById('stage-load'), loadText=document.getElementById('load-text'), loadReload=document.getElementById('load-reload');
+  var st={config:{},form:null,dark:false,logo:true,editMode:true};
+  var ROLES=[{k:'primary',l:'Основной'},{k:'accent',l:'Акцент'},{k:'background',l:'Фон'},{k:'text',l:'Текст'}];
+  var SKIP={triggers:1,integrations:1,installation:1};
+  var SIMPLE={textinput:1,textarea:1,toggler:1,select:1,range:1,slider:1,'settings.position':1,'settings.shape':1};
+
+  var frameReady=false, reloadTries=0;
+
+  function post(t,p){ if(frame.contentWindow) frame.contentWindow.postMessage(Object.assign({type:t},p||{}),'*'); }
+  function getP(o,p){ return p.split('.').reduce(function(x,k){return x==null?undefined:x[k];},o); }
+  function setLocal(p,v){ var a=p.split('.'),o=st.config; for(var i=0;i<a.length-1;i++){ if(typeof o[a[i]]!=='object'||o[a[i]]==null)o[a[i]]={}; o=o[a[i]]; } o[a[a.length-1]]=v; }
+  function apply(p,v){ setLocal(p,v); post('wlab:dev:setSetting',{key:p,value:v}); }
+  function clone(x){ return JSON.parse(JSON.stringify(x)); }
+
+  // ── Устойчивый старт ─────────────────────────────────────────────────────
+  // Панель строится СРАЗУ из статических json'ов и не зависит от превью-фрейма.
+  // Так контролы (схемы, цвета, тексты, настройки) не пропадают, даже если
+  // iframe грузится долго (перекраска картинок призов) или хендштейк потерялся.
+  Promise.all([
+    fetch('./defaultSettings.json').then(function(r){return r.json();}).catch(function(){return {};}),
+    fetch('./formSettings.json').then(function(r){return r.json();}).catch(function(){return {steps:[]};})
+  ]).then(function(res){
+    if(!frameReady){                       // фрейм ещё не ответил — рисуем панель по дефолтам
+      st.config=clone(res[0]||{});
+      st.form=res[1]||{steps:[]};
+      st.logo=!((st.config.design||{}).hideLogo===true);
+      st.dark=((st.config.design||{}).colorMode==='dark');
+      syncToggles(); buildSchemes(); buildColors(); buildForm();
+    } else if(!st.form){                   // фрейм уже ответил, но форму ещё не подтянули
+      st.form=res[1]||{steps:[]}; buildForm();
+    }
+  });
+
+  // ── Хендшейк с превью ────────────────────────────────────────────────────
+  window.addEventListener('message',function(e){
+    var d=e.data; if(!d||d.type!=='wlab:dev:frameReady') return;
+    frameReady=true;
+    st.config=clone(d.currentConfig||{});
+    st.logo=!((st.config.design||{}).hideLogo===true);
+    st.dark=((st.config.design||{}).colorMode==='dark');
+    syncToggles();
+    post('wlab:dev:setEditMode',{editMode:st.editMode});
+    post('wlab:dev:setColorMode',{colorMode:st.dark?'dark':'light'});
+    buildActions(d.devActions||[]); buildSchemes(); buildColors();
+    if(st.form) buildForm();              // форма отрисуется здесь либо из fetch-ветки — что раньше
+    hideLoader();
+  });
+
+  // Восстановление потерянного хендшейка: если frameReady не пришёл — один раз
+  // перезагружаем iframe (частая причина — зависшая HMR-вкладка). Дальше —
+  // предлагаем кнопку ручной перезагрузки, чтобы не уйти в бесконечный цикл.
+  function watchHandshake(){
+    setTimeout(function(){
+      if(frameReady) return;
+      if(reloadTries<1){ reloadTries++; loadText.textContent='Переподключаемся к превью…'; try{frame.contentWindow.location.reload();}catch(_){frame.src='./widget.html?r='+reloadTries;} watchHandshake(); }
+      else { loadText.textContent='Превью не отвечает'; loadReload.style.display=''; }
+    }, 2500);
+  }
+  loadReload.addEventListener('click',function(){ frameReady=false; reloadTries=0; loadReload.style.display='none'; loadText.textContent='Загрузка превью…'; loadEl.classList.remove('hide'); try{frame.contentWindow.location.reload();}catch(_){frame.src='./widget.html?r='+Date.now();} watchHandshake(); });
+  watchHandshake();
+
+  function hideLoader(){ loadEl.classList.add('hide'); }
+
+  // ── Тумблеры отображения ─────────────────────────────────────────────────
+  function swset(el,on){el.classList.toggle('on',!!on);}
+  function syncToggles(){
+    swset(document.getElementById('sw-theme'),st.dark);
+    swset(document.getElementById('sw-logo'),st.logo);
+    stage.classList.toggle('dark',st.dark);
+    document.getElementById('theme-label').textContent=st.dark?'тёмная':'светлая';
+  }
+  document.getElementById('sw-edit').addEventListener('click',function(){ st.editMode=!st.editMode; swset(this,st.editMode); post('wlab:dev:setEditMode',{editMode:st.editMode}); });
+  document.getElementById('sw-theme').addEventListener('click',function(){ st.dark=!st.dark; swset(this,st.dark); stage.classList.toggle('dark',st.dark); document.getElementById('theme-label').textContent=st.dark?'тёмная':'светлая'; post('wlab:dev:setColorMode',{colorMode:st.dark?'dark':'light'}); buildColors(); });
+  document.getElementById('sw-logo').addEventListener('click',function(){ st.logo=!st.logo; swset(this,st.logo); apply('design.hideLogo',!st.logo); });
+
+  // ── Кнопки экранов/состояний (только из devActions фрейма) ────────────────
+  function buildActions(actions){
+    var box=document.getElementById('actions'); box.innerHTML='';
+    var items=(actions||[]).filter(function(a){return (a.kind==='button'||a.kind==='toggle')&&a.type;});
+    document.getElementById('sec-actions').style.display=items.length?'':'none';
+    items.forEach(function(a){
+      var b=document.createElement('button');
+      if(a.kind==='toggle'){
+        var labels=a.labels||['●','○'], on=false;
+        b.textContent=labels[0]; if(a.titles)b.title=a.titles[0];
+        b.addEventListener('click',function(){ on=!on; b.classList.toggle('on',on); b.textContent=labels[on?1:0]; if(a.titles)b.title=a.titles[on?1:0]; post(a.type,{payload:a.payload||{},on:on}); });
+      } else {
+        b.textContent=a.label||a.type;
+        b.addEventListener('click',function(){post(a.type,{payload:a.payload||{}});});
+      }
+      box.appendChild(b);
+    });
+  }
+
+  // ── Цветовые схемы (основная + altColors) ────────────────────────────────
+  function buildSchemes(){
+    var wrap=document.getElementById('schemes-field'),box=document.getElementById('schemes'); box.innerHTML='';
+    var dz=st.config.design||{},def=dz.colors||{},alt=dz.altColors;
+    if(!alt){wrap.style.display='none';return;} wrap.style.display='';
+    var arr=Array.isArray(alt)?alt:[alt];
+    var schemes=[{colors:def}].concat(arr.map(function(c){return{colors:c};}));
+    schemes.forEach(function(s,idx){
+      var el=document.createElement('button'); el.className='swatch';
+      var lc=s.colors.light||s.colors,keys=['primary','accent','background','text'].filter(function(k){return lc[k];});
+      var pct=100/keys.length,stops=keys.map(function(k,i){return lc[k]+' '+(i*pct)+'% '+((i+1)*pct)+'%';});
+      el.style.background='linear-gradient(to right,'+stops.join(',')+')';
+      el.title=idx===0?'Основная':'Альт. '+idx;
+      el.addEventListener('click',function(){ box.querySelectorAll('.swatch').forEach(function(x){x.classList.remove('active');}); el.classList.add('active'); st.config.design.colors=clone(s.colors); apply('design.colors',st.config.design.colors); buildColors(); });
+      box.appendChild(el);
+    });
+    // подсветка текущей схемы
+    var curJson=JSON.stringify((st.config.design||{}).colors||{});
+    var nodes=box.querySelectorAll('.swatch');
+    schemes.forEach(function(s,idx){ if(JSON.stringify(s.colors)===curJson&&nodes[idx])nodes[idx].classList.add('active'); });
+    if(!box.querySelector('.swatch.active')&&nodes[0])nodes[0].classList.add('active');
+  }
+
+  // ── Пипетки цветов текущей темы ──────────────────────────────────────────
+  function buildColors(){
+    var box=document.getElementById('colors'); box.innerHTML='';
+    var theme=st.dark?'dark':'light';
+    var colors=((st.config.design||{}).colors||{})[theme]||{};
+    ROLES.forEach(function(r){
+      if(colors[r.k]==null) return;
+      var w=document.createElement('div'); w.className='cp';
+      var inp=document.createElement('input'); inp.type='color'; inp.value=(''+colors[r.k]).slice(0,7);
+      var l=document.createElement('label'); l.textContent=r.l;
+      inp.addEventListener('input',function(){ apply('design.colors.'+theme+'.'+r.k,inp.value); });
+      w.appendChild(inp); w.appendChild(l); box.appendChild(w);
+    });
+  }
+
+  // ── Форма из formSettings.json ───────────────────────────────────────────
+  function labelOf(f){ if(f.label) return f.label; var s=(''+(f.destination||'')).split('.').pop()||''; return s.charAt(0).toUpperCase()+s.slice(1); }
+  function collect(node,out){
+    if(Array.isArray(node)){node.forEach(function(n){collect(n,out);});return;}
+    if(!node||typeof node!=='object')return;
+    if(node.type&&node.destination&&SIMPLE[node.type]){out.push(node);return;}
+    if(node.blocks)collect(node.blocks,out); if(node.block)collect(node.block,out);
+  }
+  function buildForm(){
+    formEl.innerHTML='';
+    var steps=(st.form&&st.form.steps)||[];
+    steps.forEach(function(step){
+      if(SKIP[step.id])return;
+      var fields=[]; collect(step.blocks||step.block||[],fields);
+      if(!fields.length)return;
+      var sec=document.createElement('div');sec.className='sec';
+      var t=document.createElement('div');t.className='sec__t';t.textContent=step.header||step.id;sec.appendChild(t);
+      fields.forEach(function(f){var n=renderField(f);if(n)sec.appendChild(n);});
+      formEl.appendChild(sec);
+    });
+  }
+  function renderField(f){
+    var cur=getP(st.config,f.destination);
+    if(f.type==='toggler'){
+      var row=document.createElement('div');row.className='row';
+      var sp=document.createElement('span');sp.textContent=labelOf(f);
+      var s=document.createElement('div');s.className='sw'+(cur?' on':'');
+      s.addEventListener('click',function(){var nv=!s.classList.contains('on');s.classList.toggle('on',nv);apply(f.destination,nv);});
+      row.appendChild(sp);row.appendChild(s);return row;
+    }
+    var wrap=document.createElement('div');wrap.className='field';
+    var lab=document.createElement('label');lab.textContent=labelOf(f);wrap.appendChild(lab);
+    if(f.type==='textinput'||f.type==='textarea'){
+      var inp=document.createElement('input');inp.type='text';inp.value=cur==null?'':cur;
+      inp.addEventListener('input',function(){apply(f.destination,inp.value);});wrap.appendChild(inp);
+    }else if(f.type==='select'){
+      var sel=document.createElement('select');
+      (f.options||[]).forEach(function(o){var op=document.createElement('option');op.value=String(o.value);op.textContent=o.label!=null?o.label:o.value;if(String(o.value)===String(cur))op.selected=true;sel.appendChild(op);});
+      sel.addEventListener('change',function(){var raw=sel.value,opt=(f.options||[]).filter(function(o){return String(o.value)===raw;})[0];apply(f.destination,opt?opt.value:raw);});
+      wrap.appendChild(sel);
+    }else if(f.type==='range'||f.type==='slider'){
+      var rw=document.createElement('div');rw.className='rw';
+      var rg=document.createElement('input');rg.type='range';rg.min=f.min!=null?f.min:0;rg.max=f.max!=null?f.max:100;rg.step=f.step!=null?f.step:1;rg.value=cur==null?rg.min:cur;
+      var bv=document.createElement('b');bv.textContent=rg.value;
+      rg.addEventListener('input',function(){bv.textContent=rg.value;apply(f.destination,Number(rg.value));});
+      rw.appendChild(rg);rw.appendChild(bv);wrap.appendChild(rw);
+    }else if(f.type==='settings.position'||f.type==='settings.shape'){
+      var bgd=document.createElement('div');bgd.className='bg';
+      (f.options||[]).forEach(function(o){var b=document.createElement('button');b.textContent=o.label!=null?o.label:o.value;if(String(o.value)===String(cur))b.classList.add('active');b.addEventListener('click',function(){bgd.querySelectorAll('button').forEach(function(x){x.classList.remove('active');});b.classList.add('active');apply(f.destination,o.value);});bgd.appendChild(b);});
+      wrap.appendChild(bgd);
+    }else{return null;}
+    return wrap;
+  }
+
+  // ── Ширина вьюпорта ──────────────────────────────────────────────────────
+  document.getElementById('vp').addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;this.querySelectorAll('button').forEach(function(x){x.classList.remove('active');});b.classList.add('active');frame.style.width=b.dataset.w;});
+})();
+</script>
+</body>
+</html>

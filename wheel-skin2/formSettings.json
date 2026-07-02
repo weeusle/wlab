@@ -1,0 +1,160 @@
+{
+  "steps": [
+    {
+      "id": "texts",
+      "header": "Тексты",
+      "icon": "type",
+      "blocks": [
+        [
+          {
+            "type": "textinput",
+            "label": "Заголовок 1",
+            "destination": "texts.mainHeader",
+            "validator": { "required": true, "maxLength": 80 }
+          },
+          {
+            "type": "textinput",
+            "label": "Заголовок 2",
+            "destination": "texts.secondHeader",
+            "validator": { "maxLength": 80 }
+          },
+          {
+            "type": "textinput",
+            "label": "Подзаголовок",
+            "destination": "texts.thirdHeader",
+            "validator": { "maxLength": 120 }
+          },
+          {
+            "type": "textinput",
+            "label": "Кнопка CTA",
+            "destination": "texts.buttonText",
+            "validator": { "required": true, "maxLength": 40 }
+          }
+        ],
+        {
+          "header": "Экран выигрыша",
+          "blocks": [
+            {
+              "type": "textinput",
+              "label": "Заголовок выигрыша",
+              "destination": "texts.winHeader",
+              "validator": { "maxLength": 80 }
+            },
+            {
+              "type": "textinput",
+              "label": "Подпись результата",
+              "destination": "texts.winText",
+              "validator": { "maxLength": 120 }
+            },
+            {
+              "type": "textinput",
+              "label": "Кнопка закрытия",
+              "destination": "texts.winCloseText",
+              "validator": { "maxLength": 40 }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "design",
+      "header": "Дизайн",
+      "icon": "palette",
+      "block": { "type": "design" }
+    },
+    {
+      "id": "settings",
+      "header": "Настройки",
+      "icon": "settings",
+      "blocks": [
+        [
+          {
+            "type": "toggler",
+            "label": "Поле телефона",
+            "destination": "settings.phone.enabled"
+          },
+          {
+            "type": "toggler",
+            "label": "Поле email",
+            "destination": "settings.email.enabled"
+          },
+          {
+            "type": "toggler",
+            "label": "Анимация выигрыша",
+            "destination": "settings.win_animation"
+          }
+        ],
+        {
+          "header": "Кнопка-триггер",
+          "blocks": [
+            {
+              "type": "settings.shape",
+              "label": "Форма кнопки",
+              "destination": "triggers.button.shape",
+              "options": [
+                { "value": "circle", "label": "circle" },
+                { "value": "rounded", "label": "rounded" },
+                { "value": "square", "label": "square" }
+              ]
+            },
+            {
+              "type": "settings.position",
+              "label": "Положение кнопки",
+              "destination": "triggers.button.viewVariant",
+              "options": [
+                { "value": "bottom-left", "label": "bottom-left" },
+                { "value": "bottom-center", "label": "bottom-center" },
+                { "value": "bottom-right", "label": "bottom-right" }
+              ]
+            },
+            {
+              "type": "toggler",
+              "label": "Анимация кнопки",
+              "destination": "triggers.button.animation"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "triggers",
+      "header": "Триггеры",
+      "icon": "lightning",
+      "blocks": [
+        [
+          { "type": "triggers.onReady" },
+          { "type": "triggers.button" },
+          { "type": "triggers.timer" },
+          { "type": "triggers.onExit" },
+          { "type": "triggers.javascript" }
+        ]
+      ]
+    },
+    {
+      "id": "integrations",
+      "header": "Интеграции",
+      "icon": "code",
+      "blocks": [
+        [
+          { "type": "integrations.amo" },
+          { "type": "integrations.b24" },
+          { "type": "integrations.webhook" },
+          { "type": "integrations.sheets" },
+          { "type": "integrations.metrika" }
+        ]
+      ]
+    },
+    {
+      "id": "installation",
+      "header": "Установка",
+      "icon": "play-square",
+      "blocks": [
+        [
+          { "type": "installation.cloud" },
+          { "type": "installation.website" },
+          { "type": "installation.telegram" }
+        ]
+      ]
+    }
+  ]
+}
