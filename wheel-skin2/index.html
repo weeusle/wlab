@@ -247,8 +247,10 @@
     if(node.type&&node.destination&&SIMPLE[node.type]){out.push(node);return;}
     if(node.blocks)collect(node.blocks,out); if(node.block)collect(node.block,out);
   }
+  var exGroups={};
   function buildForm(){
     formEl.innerHTML='';
+    exGroups={};
     var steps=(st.form&&st.form.steps)||[];
     steps.forEach(function(step){
       if(SKIP[step.id])return;
@@ -266,7 +268,20 @@
       var row=document.createElement('div');row.className='row';
       var sp=document.createElement('span');sp.textContent=labelOf(f);
       var s=document.createElement('div');s.className='sw'+(cur?' on':'');
-      s.addEventListener('click',function(){var nv=!s.classList.contains('on');s.classList.toggle('on',nv);apply(f.destination,nv);});
+      if(f.exclusiveGroup){
+        // Взаимоисключающие свитчеры: включение одного выключает остальные в группе.
+        // Повторный клик по уже включённому — no-op (нельзя оставить группу пустой).
+        var grp=exGroups[f.exclusiveGroup]||(exGroups[f.exclusiveGroup]=[]);
+        var entry={dest:f.destination,el:s};
+        grp.push(entry);
+        s.addEventListener('click',function(){
+          if(s.classList.contains('on'))return;
+          grp.forEach(function(e){if(e!==entry&&e.el.classList.contains('on')){e.el.classList.remove('on');apply(e.dest,false);}});
+          s.classList.add('on');apply(f.destination,true);
+        });
+      }else{
+        s.addEventListener('click',function(){var nv=!s.classList.contains('on');s.classList.toggle('on',nv);apply(f.destination,nv);});
+      }
       row.appendChild(sp);row.appendChild(s);return row;
     }
     var wrap=document.createElement('div');wrap.className='field';
