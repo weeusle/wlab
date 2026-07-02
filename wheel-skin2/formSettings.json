@@ -45,12 +45,6 @@
               "label": "Подпись результата",
               "destination": "texts.winText",
               "validator": { "maxLength": 120 }
-            },
-            {
-              "type": "textinput",
-              "label": "Кнопка закрытия",
-              "destination": "texts.winCloseText",
-              "validator": { "maxLength": 40 }
             }
           ]
         }
