@@ -63,14 +63,13 @@
       "blocks": [
         [
           {
-            "type": "toggler",
-            "label": "Поле телефона",
-            "destination": "settings.phone.enabled"
-          },
-          {
-            "type": "toggler",
-            "label": "Поле email",
-            "destination": "settings.email.enabled"
+            "type": "select",
+            "label": "Поле контакта",
+            "destination": "settings.contactField",
+            "options": [
+              { "value": "phone", "label": "Телефон" },
+              { "value": "email", "label": "Email" }
+            ]
           },
           {
             "type": "toggler",

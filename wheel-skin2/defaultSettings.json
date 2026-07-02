@@ -218,6 +218,7 @@
     "email": {
       "enabled": false
     },
+    "contactField": "phone",
     "marketing": {
       "spins_counter": true,
       "date_finish": false
