@@ -108,10 +108,10 @@
         </div>
         <div class="field">
           <label class="field__label">Цвета</label>
-          <div class="hint">Бренд-цвета мессенджеров (MAX/TG/WA/ВК) фиксированы и не перекрашиваются.</div>
+          <div class="hint">Задайте сами или выберите цветовую схему. Бренд-цвета каналов (MAX/TG/WA/ВК) не перекрашиваются.</div>
           <div class="colors">
             <div class="color-row"><label class="color-dot"><input type="color" id="c-primary"></label><span>Основной</span></div>
-            <div class="color-row"><label class="color-dot"><input type="color" id="c-accent"></label><span>Акцент</span></div>
+            <div class="color-row"><label class="color-dot"><input type="color" id="c-accent"></label><span>Акцентный</span></div>
             <div class="color-row"><label class="color-dot"><input type="color" id="c-bg"></label><span>Фон</span></div>
             <div class="color-row"><label class="color-dot"><input type="color" id="c-text"></label><span>Текст</span></div>
           </div>
@@ -255,13 +255,25 @@
         });
       });
 
-      // Colour schemes (задают primary/accent для обеих тем; фон/текст не трогают)
+      // Базовые цветовые схемы (как в конструкторе): по 4 цвета на тему —
+      // primary / accent / background / text. Схемы 1–3 = базовые Cookies; 4 —
+      // фиолетовая; 5 — моно (чёрно-белая).
       var SCHEMES = [
-        { id: 'indigo', label: 'Индиго',      l: '#5533EE', d: '#A6BFFF' },
-        { id: 'blue',   label: 'Синяя',       l: '#0047F0', d: '#A6BFFF' },
-        { id: 'green',  label: 'Зелёная',     l: '#00A854', d: '#5BE672' },
-        { id: 'purple', label: 'Фиолетовая',  l: '#8E3DFF', d: '#CBA5FF' },
-        { id: 'mono',   label: 'Моно',        l: '#222222', d: '#FFFFFF' }
+        { id: 'blue',   label: 'Синяя',
+          light: { primary: '#0047FF', accent: '#FF4D00', background: '#FFFFFF', text: '#001240' },
+          dark:  { primary: '#A6BFFF', accent: '#FFAE8C', background: '#000A22', text: '#F3F7FF' } },
+        { id: 'green',  label: 'Зелёная',
+          light: { primary: '#00BB41', accent: '#4300D4', background: '#FFFFFF', text: '#1A0052' },
+          dark:  { primary: '#D0FF73', accent: '#D0FF73', background: '#000A22', text: '#F3F7FF' } },
+        { id: 'coral',  label: 'Коралловая',
+          light: { primary: '#FF4949', accent: '#003754', background: '#FFFFFF', text: '#003754' },
+          dark:  { primary: '#FFA0A0', accent: '#DFF4FF', background: '#001A27', text: '#ECF9FF' } },
+        { id: 'violet', label: 'Фиолетовая',
+          light: { primary: '#8E3DFF', accent: '#2E0A52', background: '#FFFFFF', text: '#2E0A52' },
+          dark:  { primary: '#CBA5FF', accent: '#CBA5FF', background: '#12082A', text: '#F3F7FF' } },
+        { id: 'mono',   label: 'Моно',
+          light: { primary: '#222222', accent: '#222222', background: '#FFFFFF', text: '#222222' },
+          dark:  { primary: '#FFFFFF', accent: '#FFFFFF', background: '#181818', text: '#FFFFFF' } }
       ];
       function ensureColors() {
         lastConfig.design = lastConfig.design || {};
@@ -290,14 +302,15 @@
       bindColor('c-bg', 'background');
       bindColor('c-text', 'text');
 
+      var SCHEME_KEYS = ['primary', 'accent', 'background', 'text'];
       function applyScheme(s) {
         ensureColors();
-        lastConfig.design.colors.light.primary = s.l; lastConfig.design.colors.light.accent = s.l;
-        lastConfig.design.colors.dark.primary = s.d;  lastConfig.design.colors.dark.accent = s.d;
-        setSetting('design.colors.light.primary', s.l);
-        setSetting('design.colors.light.accent', s.l);
-        setSetting('design.colors.dark.primary', s.d);
-        setSetting('design.colors.dark.accent', s.d);
+        ['light', 'dark'].forEach(function (m) {
+          SCHEME_KEYS.forEach(function (k) {
+            lastConfig.design.colors[m][k] = s[m][k];
+            setSetting('design.colors.' + m + '.' + k, s[m][k]);
+          });
+        });
         refreshColorInputs();
       }
       function buildSchemes() {
@@ -305,7 +318,11 @@
         SCHEMES.forEach(function (s) {
           var btn = document.createElement('button');
           btn.className = 'scheme'; btn.dataset.id = s.id; btn.title = s.label;
-          btn.style.background = 'linear-gradient(to right, ' + s.l + ' 0 50%, ' + s.d + ' 50% 100%)';
+          // 4 вертикальные полосы: primary / accent / фон / текст.
+          var stops = SCHEME_KEYS.map(function (k, i) {
+            return s.light[k] + ' ' + (i * 25) + '% ' + ((i + 1) * 25) + '%';
+          });
+          btn.style.background = 'linear-gradient(to right, ' + stops.join(', ') + ')';
           btn.addEventListener('click', function () { applyScheme(s); markActiveScheme(); });
           box.appendChild(btn);
         });
@@ -314,7 +331,7 @@
         var lp = ((((lastConfig.design) || {}).colors || {}).light || {}).primary || '';
         document.querySelectorAll('#schemes .scheme').forEach(function (b) {
           var s = SCHEMES.filter(function (x) { return x.id === b.dataset.id; })[0];
-          b.classList.toggle('active', !!(s && lp && lp.toLowerCase() === s.l.toLowerCase()));
+          b.classList.toggle('active', !!(s && lp && lp.toLowerCase() === s.light.primary.toLowerCase()));
         });
       }
 
