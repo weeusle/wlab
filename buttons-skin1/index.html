@@ -108,9 +108,10 @@
         </div>
         <div class="field">
           <label class="field__label">Цвета</label>
-          <div class="hint">Основной — кнопки звонка и «своего текста», Фон — фон бара. Бренд-кнопки мессенджеров не перекрашиваются.</div>
+          <div class="hint">Основной — кнопка звонка (иконка, номер, заливка 4%). Акцент — плашка и кнопка «Свой текст». Фон — фон бара. Бренд-кнопки мессенджеров не перекрашиваются.</div>
           <div class="colors">
             <div class="color-row"><label class="color-dot"><input type="color" id="c-primary"></label><span>Основной</span></div>
+            <div class="color-row"><label class="color-dot"><input type="color" id="c-accent"></label><span>Акцент</span></div>
             <div class="color-row"><label class="color-dot"><input type="color" id="c-bg"></label><span>Фон</span></div>
           </div>
         </div>
@@ -253,13 +254,18 @@
       function refreshColorInputs() {
         var c = colorsOf(mode());
         var p = document.getElementById('c-primary'); p.value = hex6(c.primary); paintDot(p);
+        var a = document.getElementById('c-accent'); a.value = hex6(c.accent); paintDot(a);
         var b = document.getElementById('c-bg'); b.value = hex6(c.background); paintDot(b);
       }
       document.getElementById('c-primary').addEventListener('input', function () {
         paintDot(this); ensureColors();
         lastConfig.design.colors[mode()].primary = this.value;
-        lastConfig.design.colors[mode()].accent = this.value;
         setSetting('design.colors.' + mode() + '.primary', this.value);
+        markActiveScheme();
+      });
+      document.getElementById('c-accent').addEventListener('input', function () {
+        paintDot(this); ensureColors();
+        lastConfig.design.colors[mode()].accent = this.value;
         setSetting('design.colors.' + mode() + '.accent', this.value);
         markActiveScheme();
       });
