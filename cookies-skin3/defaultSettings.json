@@ -34,7 +34,8 @@
         }
       ]
     },
-    "hideLogo": false
+    "hideLogo": false,
+    "shadow": true
   },
   "texts": {
     "mainText": "Мы используем cookie, чтобы сделать сайт удобнее и полезнее",

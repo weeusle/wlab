@@ -80,6 +80,14 @@
               { "value": "compact", "label": "Компактная" }
             ]
           }
+        ],
+        [
+          {
+            "type": "toggler",
+            "label": "Тень",
+            "hint": "Показывать тень у виджета",
+            "destination": "design.shadow"
+          }
         ]
       ]
     },
