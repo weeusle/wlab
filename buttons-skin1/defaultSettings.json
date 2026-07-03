@@ -2,7 +2,7 @@
   "widgetCode": "messengers",
   "skinCode": "skin1",
   "version": "1.0.0",
-  "widgetName": "Мессенджеры",
+  "widgetName": "Фиксированные кнопки",
   "design": {
     "colors": {
       "light": {

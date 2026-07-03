@@ -10,7 +10,12 @@
       "icon": "palette",
       "block": {
         "type": "design",
-        "validator": { "wcag": { "text": 4.5, "primary": 3 } }
+        "validator": {
+          "wcag": {
+            "text": 4.5,
+            "primary": 3
+          }
+        }
       }
     },
     {
@@ -32,23 +37,40 @@
               "label": "Мессенджер",
               "destination": "settings.messenger",
               "options": [
-                { "value": "max", "label": "MAX" },
-                { "value": "telegram", "label": "Telegram" },
-                { "value": "whatsapp", "label": "WhatsApp" },
-                { "value": "vk", "label": "ВКонтакте" }
+                {
+                  "value": "max",
+                  "label": "MAX"
+                },
+                {
+                  "value": "telegram",
+                  "label": "Telegram"
+                },
+                {
+                  "value": "whatsapp",
+                  "label": "WhatsApp"
+                },
+                {
+                  "value": "vk",
+                  "label": "ВКонтакте"
+                }
               ]
             },
             {
               "type": "textinput",
               "label": "Текст кнопки",
               "destination": "texts.messengerText",
-              "validator": { "maxLength": 30, "minLength": 2 }
+              "validator": {
+                "maxLength": 30
+              },
+              "hint": "Пусто = «Написать в <мессенджер>» по умолчанию"
             },
             {
               "type": "textinput",
               "label": "Ссылка на чат в мессенджере",
               "destination": "settings.messengerUrl",
-              "validator": { "maxLength": 300 }
+              "validator": {
+                "maxLength": 300
+              }
             }
           ]
         },
@@ -64,7 +86,9 @@
               "type": "textinput",
               "label": "Номер телефона",
               "destination": "texts.phone",
-              "validator": { "maxLength": 30 }
+              "validator": {
+                "maxLength": 30
+              }
             }
           ]
         },
@@ -80,13 +104,18 @@
               "type": "textinput",
               "label": "Текст кнопки",
               "destination": "texts.customText",
-              "validator": { "maxLength": 30, "minLength": 2 }
+              "validator": {
+                "maxLength": 30,
+                "minLength": 2
+              }
             },
             {
               "type": "textinput",
               "label": "Ссылка в кнопке",
               "destination": "settings.customUrl",
-              "validator": { "maxLength": 300 }
+              "validator": {
+                "maxLength": 300
+              }
             }
           ]
         },
@@ -102,7 +131,9 @@
               "type": "textinput",
               "label": "Текст плашки",
               "destination": "texts.badgeText",
-              "validator": { "maxLength": 40 }
+              "validator": {
+                "maxLength": 40
+              }
             }
           ]
         }
@@ -119,14 +150,38 @@
             "label": "Положение",
             "destination": "settings.position",
             "options": [
-              { "value": "top-left", "label": "Сверху слева" },
-              { "value": "top-center", "label": "Сверху по центру" },
-              { "value": "top-right", "label": "Сверху справа" },
-              { "value": "center-left", "label": "Центр слева" },
-              { "value": "center-right", "label": "Центр справа" },
-              { "value": "bottom-left", "label": "Снизу слева" },
-              { "value": "bottom-center", "label": "Снизу по центру" },
-              { "value": "bottom-right", "label": "Снизу справа" }
+              {
+                "value": "top-left",
+                "label": "Сверху слева"
+              },
+              {
+                "value": "top-center",
+                "label": "Сверху по центру"
+              },
+              {
+                "value": "top-right",
+                "label": "Сверху справа"
+              },
+              {
+                "value": "center-left",
+                "label": "Центр слева"
+              },
+              {
+                "value": "center-right",
+                "label": "Центр справа"
+              },
+              {
+                "value": "bottom-left",
+                "label": "Снизу слева"
+              },
+              {
+                "value": "bottom-center",
+                "label": "Снизу по центру"
+              },
+              {
+                "value": "bottom-right",
+                "label": "Снизу справа"
+              }
             ]
           },
           {
@@ -162,9 +217,15 @@
       "icon": "lightning",
       "blocks": [
         [
-          { "type": "triggers.onReady" },
-          { "type": "triggers.timer" },
-          { "type": "showTo" }
+          {
+            "type": "triggers.onReady"
+          },
+          {
+            "type": "triggers.timer"
+          },
+          {
+            "type": "showTo"
+          }
         ]
       ]
     },
@@ -174,7 +235,9 @@
       "icon": "code",
       "blocks": [
         [
-          { "type": "integrations.metrika" }
+          {
+            "type": "integrations.metrika"
+          }
         ]
       ]
     },
@@ -183,9 +246,21 @@
       "header": "Установка",
       "icon": "play-square",
       "blocks": [
-        [ { "type": "installation.cloud" } ],
-        [ { "type": "installation.website" } ],
-        [ { "type": "installation.telegram" } ]
+        [
+          {
+            "type": "installation.cloud"
+          }
+        ],
+        [
+          {
+            "type": "installation.website"
+          }
+        ],
+        [
+          {
+            "type": "installation.telegram"
+          }
+        ]
       ]
     }
   ]
