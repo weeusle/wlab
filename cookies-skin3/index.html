@@ -208,6 +208,12 @@
         <div class="dev-panel__thumb"></div>
       </div>
     </div>
+    <div class="dev-panel__row" id="shadow-row" style="display:none;">
+      <span>Тень</span>
+      <div class="dev-panel__track" id="shadow-track">
+        <div class="dev-panel__thumb"></div>
+      </div>
+    </div>
     <!-- Color scheme switcher (shown when altColors present) -->
     <div id="color-schemes" style="display:none;align-items:center;gap:4px;"></div>
     <!-- Layout mode switcher (shown when settings.layout.mode present) -->
@@ -267,6 +273,9 @@
       var themeRow = document.getElementById('theme-row');
       var logoTrack = document.getElementById('logo-track');
       var logoRow = document.getElementById('logo-row');
+      var isShadowOn = true;
+      var shadowTrack = document.getElementById('shadow-track');
+      var shadowRow = document.getElementById('shadow-row');
       var frame = document.getElementById('widget-frame');
 
       function postToFrame(type, payload) {
@@ -353,12 +362,25 @@
         postToFrame('wlab:dev:setSetting', { key: 'design.hideLogo', value: !isLogoShown });
       });
 
+      function initShadowToggle(config) {
+        isShadowOn = ((config.design) || {}).shadow !== false;
+        shadowTrack.classList.toggle('active', isShadowOn);
+        shadowRow.style.display = 'flex';
+      }
+
+      shadowTrack.addEventListener('click', function() {
+        isShadowOn = !isShadowOn;
+        shadowTrack.classList.toggle('active', isShadowOn);
+        postToFrame('wlab:dev:setSetting', { key: 'design.shadow', value: isShadowOn });
+      });
+
       // When iframe is ready, sync initial state and build color scheme switcher
       window.addEventListener('message', function(e) {
         if (e.data && e.data.type === 'wlab:dev:frameReady') {
           var cfg = e.data.currentConfig || {};
           sendEditMode();
           initLogoToggle(cfg);
+          initShadowToggle(cfg);
           buildColorSchemes(cfg);
           initLayoutMode(cfg);
         }

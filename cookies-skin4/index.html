@@ -136,6 +136,13 @@
           <div class="hint"><a href="#" id="icon-clear">Вернуть стандартную</a></div>
         </div>
         <div class="field">
+          <label class="field__label">Тень</label>
+          <div class="seg" id="shadow-seg">
+            <button class="seg__btn active" data-sh="1">Вкл</button>
+            <button class="seg__btn" data-sh="0">Выкл</button>
+          </div>
+        </div>
+        <div class="field">
           <label class="field__label">Расположение</label>
           <div class="posgrid" id="posgrid"></div>
         </div>
@@ -260,6 +267,15 @@
         e.preventDefault(); iconUrl.value = ''; setSetting('design.icon.url', '');
       });
 
+      // Тень (design.shadow)
+      document.querySelectorAll('#shadow-seg .seg__btn').forEach(function (b) {
+        b.addEventListener('click', function () {
+          document.querySelectorAll('#shadow-seg .seg__btn').forEach(function (x) { x.classList.remove('active'); });
+          b.classList.add('active');
+          setSetting('design.shadow', b.dataset.sh === '1');
+        });
+      });
+
       // Вариант (4)
       function buildVariants() {
         var box = document.getElementById('variant-group'); box.innerHTML = '';
@@ -350,6 +366,9 @@
 
         var ic = ((lastConfig.design) || {}).icon || {};
         document.getElementById('icon-url').value = ic.url || '';
+
+        var sh = ((lastConfig.design) || {}).shadow !== false;
+        document.querySelectorAll('#shadow-seg .seg__btn').forEach(function (x) { x.classList.toggle('active', (x.dataset.sh === '1') === sh); });
       });
     })();
   </script>
