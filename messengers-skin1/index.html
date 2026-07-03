@@ -175,6 +175,7 @@
             <option value="telegram">Telegram</option>
             <option value="whatsapp">WhatsApp</option>
             <option value="vk">ВКонтакте</option>
+            <option value="phone">Звонок</option>
           </select>
         </div>
       </div>
@@ -195,14 +196,6 @@
             <option value="brand">Градиент</option>
             <option value="dark">Тёмная</option>
             <option value="white">Белая</option>
-          </select>
-        </div>
-        <div class="field">
-          <label class="field__label">Что открывает кнопка</label>
-          <select class="inp" id="s-open">
-            <option value="icons">Ряд иконок каналов</option>
-            <option value="panel">Панель с QR</option>
-            <option value="modal">Панель по центру (модально)</option>
           </select>
         </div>
       </div>
@@ -366,7 +359,6 @@
       // Appearance selects
       document.getElementById('s-collapsed').addEventListener('change', function () { setSetting('settings.collapsedStyle', this.value); });
       document.getElementById('s-fab').addEventListener('change', function () { setSetting('settings.fabStyle', this.value); });
-      document.getElementById('s-open').addEventListener('change', function () { setSetting('settings.openMode', this.value); });
 
       // Position grid (8 positions, center-center disabled) — ТЗ; key is settings.layout.position
       var POS = ['top-left','top-center','top-right','center-left',null,'center-right','bottom-left','bottom-center','bottom-right'];
@@ -429,7 +421,6 @@
         document.getElementById('s-qr').value = s.qrChannel || 'max';
         document.getElementById('s-collapsed').value = s.collapsedStyle || 'peek';
         document.getElementById('s-fab').value = s.fabStyle || 'brand';
-        document.getElementById('s-open').value = s.openMode || 'panel';
 
         buildPosGrid();
 
