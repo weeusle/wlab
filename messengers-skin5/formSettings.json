@@ -1,0 +1,207 @@
+{
+  "steps": [
+    {
+      "id": "texts",
+      "header": "Тексты",
+      "icon": "type",
+      "blocks": [
+        [
+          {
+            "type": "textinput",
+            "label": "Заголовок панели (без звонка)",
+            "size": 2,
+            "destination": "texts.panelTitle",
+            "validator": { "required": true, "minLength": 5, "maxLength": 60 }
+          },
+          {
+            "type": "textinput",
+            "label": "Заголовок панели (со звонком)",
+            "size": 2,
+            "destination": "texts.panelTitleCall",
+            "validator": { "required": true, "minLength": 5, "maxLength": 60 }
+          },
+          {
+            "type": "textinput",
+            "label": "Подсказка под заголовком",
+            "destination": "texts.panelSubtitle",
+            "validator": { "maxLength": 80 }
+          },
+          {
+            "type": "textinput",
+            "label": "Телефон",
+            "destination": "settings.phone",
+            "validator": { "maxLength": 30 }
+          }
+        ]
+      ]
+    },
+    {
+      "id": "design",
+      "header": "Дизайн",
+      "icon": "palette",
+      "block": {
+        "type": "design",
+        "validator": { "wcag": { "text": 4.5, "primary": 3 } }
+      }
+    },
+    {
+      "id": "settings",
+      "header": "Настройки",
+      "icon": "settings",
+      "blocks": [
+        [
+          {
+            "type": "select",
+            "label": "Свернутая кнопка",
+            "destination": "settings.collapsedStyle",
+            "options": [
+              { "value": "peek", "label": "С иконками соседних каналов" },
+              { "value": "fab", "label": "Простая круглая" }
+            ]
+          },
+          {
+            "type": "select",
+            "label": "Стиль кнопки",
+            "destination": "settings.fabStyle",
+            "options": [
+              { "value": "brand", "label": "Градиент" },
+              { "value": "dark", "label": "Тёмная" },
+              { "value": "white", "label": "Белая" }
+            ]
+          },
+          {
+            "type": "select",
+            "label": "Что открывает кнопка",
+            "destination": "settings.openMode",
+            "options": [
+              { "value": "icons", "label": "Ряд иконок каналов" },
+              { "value": "panel", "label": "Панель с QR" },
+              { "value": "modal", "label": "Панель по центру (модально)" }
+            ]
+          },
+          {
+            "type": "select",
+            "label": "Канал для QR-кода",
+            "destination": "settings.qrChannel",
+            "options": [
+              { "value": "max", "label": "MAX" },
+              { "value": "telegram", "label": "Telegram" },
+              { "value": "whatsapp", "label": "WhatsApp" },
+              { "value": "vk", "label": "ВКонтакте" }
+            ]
+          }
+        ],
+        {
+          "header": "Каналы связи",
+          "blocks": [
+            {
+              "type": "toggler",
+              "label": "MAX",
+              "destination": "settings.channels.max"
+            },
+            {
+              "type": "toggler",
+              "label": "Telegram",
+              "destination": "settings.channels.telegram"
+            },
+            {
+              "type": "toggler",
+              "label": "WhatsApp",
+              "destination": "settings.channels.whatsapp"
+            },
+            {
+              "type": "toggler",
+              "label": "ВКонтакте",
+              "destination": "settings.channels.vk"
+            },
+            {
+              "type": "toggler",
+              "label": "Звонок по телефону",
+              "hint": "Добавляет кнопку звонка и пилюлю с номером в панель, меняет заголовок",
+              "destination": "settings.channels.phone"
+            }
+          ]
+        },
+        {
+          "header": "Ссылки мессенджеров",
+          "blocks": [
+            {
+              "type": "textinput",
+              "label": "MAX",
+              "destination": "settings.channelUrls.max",
+              "validator": { "maxLength": 200 }
+            },
+            {
+              "type": "textinput",
+              "label": "Telegram",
+              "destination": "settings.channelUrls.telegram",
+              "validator": { "maxLength": 200 }
+            },
+            {
+              "type": "textinput",
+              "label": "WhatsApp",
+              "destination": "settings.channelUrls.whatsapp",
+              "validator": { "maxLength": 200 }
+            },
+            {
+              "type": "textinput",
+              "label": "ВКонтакте",
+              "destination": "settings.channelUrls.vk",
+              "validator": { "maxLength": 200 }
+            }
+          ]
+        },
+        {
+          "header": "Расположение",
+          "blocks": [
+            {
+              "type": "settings.sizeposition",
+              "destination": "settings.layout",
+              "positions": ["top-left", "top-right", "bottom-left", "bottom-right"],
+              "features": { "showWidth": false, "showOffset": true }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "triggers",
+      "header": "Триггеры",
+      "icon": "lightning",
+      "blocks": [
+        [
+          { "type": "triggers.onReady" }
+        ],
+        [
+          { "type": "showTo" }
+        ]
+      ]
+    },
+    {
+      "id": "integrations",
+      "header": "Интеграции",
+      "icon": "code",
+      "blocks": [
+        [
+          { "type": "integrations.metrika" }
+        ]
+      ]
+    },
+    {
+      "id": "installation",
+      "header": "Установка",
+      "icon": "play-square",
+      "blocks": [
+        [
+          { "type": "installation.cloud" }
+        ],
+        [
+          { "type": "installation.website" }
+        ],
+        [
+          { "type": "installation.telegram" }
+        ]
+      ]
+    }
+  ]
+}

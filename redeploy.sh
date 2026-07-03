@@ -23,6 +23,8 @@ done
 for s in skin1 skin2; do
   build_one "/home/am/wlab/new widgets/Buttons/$s" "buttons-$s"
 done
+build_one "/home/am/wlab/new widgets/Messengers/skin3"                "messengers-skin3"
+build_one "/home/am/wlab/new widgets/Messengers/messengers-skin5-dev" "messengers-skin5"
 
 cd "$PAGES"
 git add -A

@@ -1,20 +1,20 @@
 {
   "widgetCode": "messengers",
-  "skinCode": "skin1",
+  "skinCode": "skin3",
   "version": "1.0.0",
-  "widgetName": "Мессенджеры",
+  "widgetName": "Мессенджеры 1",
   "design": {
     "colors": {
       "light": {
         "text": "#001240",
-        "accent": "#FF4D00",
-        "primary": "#475476",
+        "accent": "#5533EE",
+        "primary": "#001240",
         "background": "#FFFFFF"
       },
       "dark": {
-        "text": "#F3F7FF",
-        "accent": "#FF4D00",
-        "primary": "#C7CEDE",
+        "text": "#F7F7F7",
+        "accent": "#A6BFFF",
+        "primary": "#F5F5F5",
         "background": "#111111"
       }
     },
@@ -39,23 +39,32 @@
     "hideLogo": false
   },
   "texts": {
-    "messengerText": "Написать",
-    "callText": "Позвонить",
-    "phone": "+7 996 245 45 55",
-    "customText": "Оставить заявку",
-    "badgeText": "Бесплатно, ещё 2 дня"
+    "headerText": "Пишите, звоните — мы на связи",
+    "subtitleText": "Сканируйте код с телефона",
+    "phone": "+7 995 380 55 44"
   },
   "settings": {
+    "popupVariant": "qr",
+    "showMessengers": [
+      "max",
+      "telegram",
+      "whatsapp",
+      "vk"
+    ],
     "messenger": "max",
-    "messengerUrl": "https://max.ru/",
-    "customUrl": "https://example.com/",
-    "showMessenger": true,
-    "showCall": true,
-    "showCustom": false,
-    "showBadge": false,
+    "messengerUrls": {
+      "max": "https://max.ru/",
+      "telegram": "https://t.me/telegram",
+      "whatsapp": "https://wa.me/79953805544",
+      "vk": "https://vk.com/"
+    },
+    "phone": "+7 995 380 55 44",
+    "theme": "light",
     "position": "bottom-right",
-    "offsetX": 24,
-    "offsetY": 24,
-    "borderRadius": 100
+    "openByDefault": false,
+    "compact": "auto",
+    "a11yContrast": false,
+    "headerText": "Пишите, звоните — мы на связи",
+    "subtitleText": "Сканируйте код с телефона"
   }
 }
