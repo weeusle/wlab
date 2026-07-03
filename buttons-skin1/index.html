@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Widget Skin Dev — Фиксированные кнопки · skin1</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; height: 100vh; display: flex; flex-direction: column;
+      background: #eef1f5; color: #0f172a; font-family: system-ui, sans-serif; font-size: 14px;
+    }
+    body.dark .preview { background: #6b7280; }
+
+    .topbar {
+      flex-shrink: 0; display: flex; align-items: center; gap: 14px;
+      background: #fff; border-bottom: 1px solid #e2e8f0; padding: 6px 12px; font-size: 13px;
+    }
+    .toggle { display: inline-flex; align-items: center; gap: 6px; cursor: pointer; user-select: none; }
+    .toggle__track { width: 34px; height: 20px; border-radius: 10px; background: #cbd5e1; position: relative; transition: background .2s; }
+    .toggle__track.on { background: #2563eb; }
+    .toggle__track::after { content: ''; position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; border-radius: 50%; background: #fff; transition: transform .2s; }
+    .toggle__track.on::after { transform: translateX(14px); }
+    .viewport { display: flex; gap: 2px; margin-left: auto; }
+    .vp-btn { border: none; background: transparent; color: #64748b; font-size: 11px; padding: 4px 7px; border-radius: 6px; cursor: pointer; }
+    .vp-btn.active { background: #e2e8f0; color: #0f172a; }
+
+    .main { flex: 1; display: flex; min-height: 0; }
+    .preview { flex: 1; display: flex; justify-content: center; min-height: 0; background: #eef1f5; }
+    .preview iframe { height: 100%; border: none; display: block; transition: width .3s; box-shadow: 0 0 0 1px rgba(0,0,0,.1); background: #fff; }
+
+    .editor {
+      width: 360px; flex-shrink: 0; background: #fff; border-left: 1px solid #e2e8f0;
+      overflow-y: auto; padding: 18px 18px 60px;
+    }
+    .section + .section { margin-top: 26px; border-top: 1px solid #eef1f5; padding-top: 22px; }
+    .section__title { font-size: 20px; font-weight: 800; margin: 0 0 16px; }
+    .field { margin-bottom: 16px; }
+    .field__label { display: block; font-size: 12px; font-weight: 600; color: #64748b; margin-bottom: 6px; }
+    .subhead { font-size: 12px; font-weight: 700; color: #0f172a; margin: 18px 0 10px; text-transform: uppercase; letter-spacing: .03em; }
+
+    .seg { display: flex; background: #f1f5f9; border-radius: 10px; padding: 4px; gap: 4px; flex-wrap: wrap; }
+    .seg__btn { flex: 1; border: none; background: transparent; color: #475569; font-size: 13px; font-weight: 600; padding: 8px 6px; border-radius: 7px; cursor: pointer; white-space: nowrap; }
+    .seg__btn.active { background: #fff; color: #0f172a; box-shadow: 0 1px 3px rgba(0,0,0,.12); }
+
+    .colors { display: flex; flex-direction: column; gap: 10px; }
+    .color-row { display: flex; align-items: center; gap: 10px; }
+    .color-dot { width: 34px; height: 34px; border-radius: 50%; border: 1px solid #e2e8f0; padding: 0; cursor: pointer; overflow: hidden; position: relative; }
+    .color-dot input { opacity: 0; width: 100%; height: 100%; cursor: pointer; border: none; }
+    .color-row span { font-weight: 600; }
+    .hint { font-size: 12px; color: #94a3b8; margin: -2px 0 8px; }
+
+    .inp, select.inp { width: 100%; border: 1px solid #e2e8f0; border-radius: 9px; background: #f8fafc; padding: 9px 11px; font: inherit; color: inherit; }
+    .inp:focus { outline: 2px solid #93c5fd; border-color: #93c5fd; }
+
+    .row-toggle { display: flex; align-items: center; justify-content: space-between; padding: 8px 0; }
+    .row-toggle span { font-weight: 600; }
+
+    .posgrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; background: #f1f5f9; border-radius: 10px; padding: 10px; width: 150px; }
+    .pos-cell { height: 30px; border: none; border-radius: 7px; background: transparent; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+    .pos-cell:disabled { cursor: default; }
+    .pos-cell .dot { width: 7px; height: 7px; border-radius: 50%; background: #cbd5e1; }
+    .pos-cell:not(:disabled):hover .dot { background: #94a3b8; }
+    .pos-cell.active { background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,.12); }
+    .pos-cell.active .dot { background: #2563eb; width: 9px; height: 9px; }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <label class="toggle"><span>Edit Mode</span><span class="toggle__track on" id="edit-track"></span></label>
+    <div class="viewport" id="viewport">
+      <button class="vp-btn active" data-w="100%">100%</button>
+      <button class="vp-btn" data-w="1440px">1440</button>
+      <button class="vp-btn" data-w="1280px">1280</button>
+      <button class="vp-btn" data-w="1024px">1024</button>
+      <button class="vp-btn" data-w="768px">768</button>
+      <button class="vp-btn" data-w="600px">600</button>
+      <button class="vp-btn" data-w="480px">480</button>
+      <button class="vp-btn" data-w="375px">375</button>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="preview"><iframe id="frame" style="width:100%" src="./widget.html"></iframe></div>
+
+    <div class="editor">
+      <!-- ДИЗАЙН -->
+      <div class="section">
+        <h2 class="section__title">Дизайн</h2>
+        <div class="field">
+          <label class="field__label">Тема</label>
+          <div class="seg" id="theme-seg">
+            <button class="seg__btn active" data-mode="light">Светлая</button>
+            <button class="seg__btn" data-mode="dark">Тёмная</button>
+          </div>
+        </div>
+        <div class="field">
+          <label class="field__label">Мессенджер</label>
+          <select class="inp" id="s-messenger">
+            <option value="max">MAX</option>
+            <option value="telegram">Telegram</option>
+            <option value="whatsapp">WhatsApp</option>
+            <option value="vk">ВКонтакте</option>
+            <option value="message">Сообщение</option>
+            <option value="audit">Аудит</option>
+          </select>
+          <div class="hint">В ТЗ 4 мессенджера (MAX/TG/WA/ВК); «Сообщение» и «Аудит» — лишние в коде</div>
+        </div>
+        <div class="field">
+          <label class="field__label">Стиль кнопки звонка</label>
+          <select class="inp" id="s-phonestyle">
+            <option value="ghost">Контурная</option>
+            <option value="soft">Мягкая</option>
+            <option value="solid">Заливка</option>
+          </select>
+          <div class="hint">Нет в ТЗ — доп. настройка кода</div>
+        </div>
+        <div class="field">
+          <label class="field__label">Скрыть лого wlab</label>
+          <div class="seg" id="logo-seg">
+            <button class="seg__btn" data-hide="0">Показать</button>
+            <button class="seg__btn active" data-hide="1">Скрыть</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ТЕКСТЫ -->
+      <div class="section">
+        <h2 class="section__title">Тексты</h2>
+        <div class="field">
+          <label class="field__label">Текст кнопки мессенджера</label>
+          <input class="inp" id="t-msg" placeholder="Написать">
+        </div>
+        <div class="field">
+          <label class="field__label">Ссылка на мессенджер</label>
+          <input class="inp" id="t-msgurl" placeholder="https://max.ru/">
+        </div>
+        <div class="field">
+          <label class="field__label">Текст кнопки звонка</label>
+          <input class="inp" id="t-call" placeholder="Позвонить">
+        </div>
+        <div class="field">
+          <label class="field__label">Телефон</label>
+          <input class="inp" id="t-phone" placeholder="+7 996 245 45 55">
+        </div>
+        <div class="field">
+          <label class="field__label">Текст плашки (бейджа)</label>
+          <input class="inp" id="t-badge" placeholder="Бесплатно, ещё 2 дня">
+        </div>
+      </div>
+
+      <!-- НАСТРОЙКИ -->
+      <div class="section">
+        <h2 class="section__title">Настройки</h2>
+
+        <div class="subhead">Что показывать</div>
+        <div class="row-toggle"><span>Кнопка мессенджера</span><span class="toggle__track on" data-set="showMessenger"></span></div>
+        <div class="row-toggle"><span>Кнопка звонка</span><span class="toggle__track on" data-set="showPhone"></span></div>
+        <div class="row-toggle"><span>Плашка над кнопкой</span><span class="toggle__track" data-set="showBadge"></span></div>
+        <div class="row-toggle"><span>Повышенный контраст</span><span class="toggle__track" data-set="a11yContrast"></span></div>
+
+        <div class="subhead">Форма и положение</div>
+        <div class="field">
+          <label class="field__label">Скругление углов</label>
+          <div class="seg" id="round-seg">
+            <button class="seg__btn" data-r="full">Капсула</button>
+            <button class="seg__btn active" data-r="rounded">Скругл.</button>
+            <button class="seg__btn" data-r="square">Прямоуг.</button>
+          </div>
+          <div class="hint">В ТЗ — ползунок 0–100; в коде 3 варианта</div>
+        </div>
+        <div class="field">
+          <label class="field__label">Плотность</label>
+          <select class="inp" id="s-compact">
+            <option value="auto">Авто</option>
+            <option value="full">Полная</option>
+            <option value="labels">С подписями</option>
+            <option value="icon-phone">Иконка телефона</option>
+            <option value="min">Минимальная</option>
+          </select>
+          <div class="hint">Нет в ТЗ — доп. настройка кода</div>
+        </div>
+        <div class="field">
+          <label class="field__label">Расположение</label>
+          <div class="posgrid" id="posgrid"></div>
+          <div class="hint">В коде 6 позиций (нет center-left/right; нет «во всю ширину», нет отступов)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var frame = document.getElementById('frame');
+      var isDark = false;
+      var lastConfig = {};
+      var editMode = true;
+
+      function post(type, payload) {
+        if (frame.contentWindow) frame.contentWindow.postMessage(Object.assign({ type: type }, payload), '*');
+      }
+      function setSetting(key, value) { post('wlab:dev:setSetting', { key: key, value: value }); }
+      function mode() { return isDark ? 'dark' : 'light'; }
+
+      // ---- Edit mode ----
+      var editTrack = document.getElementById('edit-track');
+      editTrack.parentElement.addEventListener('click', function () {
+        editMode = !editMode;
+        editTrack.classList.toggle('on', editMode);
+        post('wlab:dev:setEditMode', { editMode: editMode });
+      });
+
+      // ---- Viewport ----
+      document.querySelectorAll('#viewport .vp-btn').forEach(function (b) {
+        b.addEventListener('click', function () {
+          document.querySelectorAll('#viewport .vp-btn').forEach(function (x) { x.classList.remove('active'); });
+          b.classList.add('active');
+          frame.style.width = b.dataset.w;
+        });
+      });
+
+      // ---- Theme ----
+      document.querySelectorAll('#theme-seg .seg__btn').forEach(function (b) {
+        b.addEventListener('click', function () {
+          document.querySelectorAll('#theme-seg .seg__btn').forEach(function (x) { x.classList.remove('active'); });
+          b.classList.add('active');
+          isDark = b.dataset.mode === 'dark';
+          document.body.classList.toggle('dark', isDark);
+          post('wlab:dev:setColorMode', { colorMode: mode() });
+        });
+      });
+
+      // ---- Logo (design.hideLogo) ----
+      document.querySelectorAll('#logo-seg .seg__btn').forEach(function (b) {
+        b.addEventListener('click', function () {
+          document.querySelectorAll('#logo-seg .seg__btn').forEach(function (x) { x.classList.remove('active'); });
+          b.classList.add('active');
+          setSetting('design.hideLogo', b.dataset.hide === '1');
+        });
+      });
+
+      // ---- Selects ----
+      document.getElementById('s-messenger').addEventListener('change', function () { setSetting('settings.messenger', this.value); });
+      document.getElementById('s-phonestyle').addEventListener('change', function () { setSetting('settings.phoneStyle', this.value); });
+      document.getElementById('s-compact').addEventListener('change', function () { setSetting('settings.compact', this.value); });
+
+      // ---- Texts ----
+      function bindText(id, key) {
+        var el = document.getElementById(id);
+        el.addEventListener('input', function () { setSetting('texts.' + key, el.value); });
+      }
+      bindText('t-msg', 'messengerText');
+      bindText('t-call', 'callText');
+      bindText('t-phone', 'phone');
+      bindText('t-badge', 'badgeText');
+      document.getElementById('t-msgurl').addEventListener('input', function () { setSetting('settings.messengerUrl', this.value); });
+
+      // ---- Show-toggles ----
+      document.querySelectorAll('.toggle__track[data-set]').forEach(function (tr) {
+        tr.addEventListener('click', function () {
+          var on = !tr.classList.contains('on');
+          tr.classList.toggle('on', on);
+          setSetting('settings.' + tr.dataset.set, on);
+        });
+      });
+
+      // ---- Rounding ----
+      document.querySelectorAll('#round-seg .seg__btn').forEach(function (b) {
+        b.addEventListener('click', function () {
+          document.querySelectorAll('#round-seg .seg__btn').forEach(function (x) { x.classList.remove('active'); });
+          b.classList.add('active');
+          setSetting('settings.rounding', b.dataset.r);
+        });
+      });
+
+      // ---- Position grid (6 positions: top/bottom × left/center/right) ----
+      var POS = [
+        'top-left', 'top-center', 'top-right',
+        null, null, null,
+        'bottom-left', 'bottom-center', 'bottom-right'
+      ];
+      function buildPosGrid() {
+        var grid = document.getElementById('posgrid');
+        grid.innerHTML = '';
+        var current = ((lastConfig.settings) || {}).position || 'bottom-right';
+        POS.forEach(function (p) {
+          var cell = document.createElement('button');
+          cell.className = 'pos-cell' + (p === current ? ' active' : '');
+          cell.disabled = !p;
+          if (p) { var d = document.createElement('span'); d.className = 'dot'; cell.appendChild(d); }
+          if (p) {
+            cell.addEventListener('click', function () {
+              lastConfig.settings = lastConfig.settings || {}; lastConfig.settings.position = p;
+              grid.querySelectorAll('.pos-cell').forEach(function (x) { x.classList.remove('active'); });
+              cell.classList.add('active');
+              setSetting('settings.position', p);
+            });
+          }
+          grid.appendChild(cell);
+        });
+      }
+
+      // ---- Init from frameReady ----
+      window.addEventListener('message', function (e) {
+        if (!e.data || e.data.type !== 'wlab:dev:frameReady') return;
+        lastConfig = e.data.currentConfig || {};
+        post('wlab:dev:setEditMode', { editMode: editMode });
+
+        isDark = ((lastConfig.design) || {}).colorMode === 'dark';
+        document.body.classList.toggle('dark', isDark);
+        document.querySelectorAll('#theme-seg .seg__btn').forEach(function (x) { x.classList.toggle('active', x.dataset.mode === mode()); });
+
+        var hide = ((lastConfig.design) || {}).hideLogo === true;
+        document.querySelectorAll('#logo-seg .seg__btn').forEach(function (x) { x.classList.toggle('active', (x.dataset.hide === '1') === hide); });
+
+        var s = lastConfig.settings || {};
+        document.getElementById('s-messenger').value = s.messenger || 'max';
+        document.getElementById('s-phonestyle').value = s.phoneStyle || 'ghost';
+        document.getElementById('s-compact').value = s.compact || 'auto';
+        document.getElementById('t-msgurl').value = s.messengerUrl || '';
+
+        var t = lastConfig.texts || {};
+        document.getElementById('t-msg').value = t.messengerText || '';
+        document.getElementById('t-call').value = t.callText || '';
+        document.getElementById('t-phone').value = t.phone || '';
+        document.getElementById('t-badge').value = t.badgeText || '';
+
+        document.querySelectorAll('.toggle__track[data-set]').forEach(function (tr) {
+          var key = tr.dataset.set;
+          var on = key === 'showBadge' || key === 'a11yContrast' ? (s[key] === true) : (s[key] !== false);
+          tr.classList.toggle('on', on);
+        });
+
+        document.querySelectorAll('#round-seg .seg__btn').forEach(function (x) { x.classList.toggle('active', x.dataset.r === (s.rounding || 'rounded')); });
+
+        buildPosGrid();
+      });
+    })();
+  </script>
+</body>
+</html>

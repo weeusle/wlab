@@ -20,6 +20,9 @@ build_one "/home/am/wlab/new widgets/Wheel/skin2" "wheel-skin2"
 for s in skin1 skin2 skin3 skin4; do
   build_one "/home/am/wlab/new widgets/Cookies/$s" "cookies-$s"
 done
+for s in skin1 skin2; do
+  build_one "/home/am/wlab/new widgets/Buttons/$s" "buttons-$s"
+done
 
 cd "$PAGES"
 git add -A
