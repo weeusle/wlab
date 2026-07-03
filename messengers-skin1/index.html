@@ -341,7 +341,26 @@
       document.getElementById('t-phone').addEventListener('input', function () { setSetting('settings.phone', this.value); });
 
       // Channels — independent togglers; each grp shows its url/phone field when on
+      var CHAN_KEYS = ['max','telegram','whatsapp','vk','phone'];
       function grpOfChan(key) { return document.querySelector('.grp[data-chan="' + key + '"]'); }
+      function enabledChannelKeys() {
+        return CHAN_KEYS.filter(function (k) {
+          var g = grpOfChan(k); var tr = g && g.querySelector('[data-chantoggle]');
+          return tr && tr.classList.contains('on');
+        });
+      }
+      // Автоподстановка: ровно один канал → «Канал для QR-кода» = этот канал (и блокируем
+      // селект, т.к. выбирать больше не из чего). ≥2 каналов — селект снова доступен.
+      function syncQrToSingle() {
+        var sel = document.getElementById('s-qr');
+        var en = enabledChannelKeys();
+        if (en.length === 1) {
+          if (sel.value !== en[0]) { sel.value = en[0]; setSetting('settings.qrChannel', en[0]); }
+          sel.disabled = true;
+        } else {
+          sel.disabled = false;
+        }
+      }
       document.querySelectorAll('[data-chantoggle]').forEach(function (tr) {
         tr.addEventListener('click', function () {
           var key = tr.dataset.chantoggle;
@@ -349,6 +368,7 @@
           tr.classList.toggle('on', on);
           grpOfChan(key).classList.toggle('on', on);
           setSetting('settings.channels.' + key, on);
+          syncQrToSingle();
         });
       });
       document.querySelectorAll('[data-chanurl]').forEach(function (el) {
@@ -419,6 +439,7 @@
         document.querySelectorAll('[data-chanurl]').forEach(function (el) { el.value = urls[el.dataset.chanurl] || ''; });
         document.getElementById('t-phone').value = s.phone || '';
         document.getElementById('s-qr').value = s.qrChannel || 'max';
+        syncQrToSingle(); // авто-подстановка QR-канала, если включён один канал
         document.getElementById('s-collapsed').value = s.collapsedStyle || 'peek';
         document.getElementById('s-fab').value = s.fabStyle || 'brand';
 
