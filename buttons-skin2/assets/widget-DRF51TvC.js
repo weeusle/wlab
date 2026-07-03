@@ -125,7 +125,7 @@
     >
       <wl-copyright></wl-copyright>
     </div>
-  `}function Yt(n){if(!n.isOpen)return b`${u}`;const e=n.resolved(),t=n.config?.texts??{},s=t.messengerText||"Написать",i=t.callText||"Позвонить",o=t.phone||"",r=t.customText||"Подробнее",a=t.badgeText||"",l=o.replace(/[^\d+]/g,""),d=l.length>0,h=Re(e.messenger).label,c=Math.round(e.borderRadius/2),f=Math.round(e.borderRadius/4),g=`--bar-radius:${c}px;--disc-radius:${f}px;--off-x:${e.offsetX}px;--off-y:${e.offsetY}px;`,m=b`
+  `}function Yt(n){if(!n.isOpen)return b`${u}`;const e=n.resolved(),t=n.config?.texts??{},s=t.messengerText||"Написать",i=t.callText||"Позвонить",o=t.phone||"",r=t.customText||"Подробнее",a=t.badgeText||"",l=o.replace(/[^\d+]/g,""),d=l.length>0,h=Re(e.messenger).label,c=Math.round(e.borderRadius/2),f=Math.max(0,c-10),g=`--bar-radius:${c}px;--disc-radius:${f}px;--off-x:${e.offsetX}px;--off-y:${e.offsetY}px;`,m=b`
     <a
       class="item item--msg"
       href=${e.messengerUrl}

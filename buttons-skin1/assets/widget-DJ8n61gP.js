@@ -134,7 +134,7 @@
     >
       <wl-copyright></wl-copyright>
     </div>
-  `}function Qt(i){if(!i.isOpen)return b`${p}`;const e=i.resolved(),t=i.config?.texts??{},s=t.messengerText||K(e.messenger).label||"Написать",n=t.callText||"Позвонить",o=t.phone||"",r=t.customText||"Подробнее",a=t.badgeText||"",l=o.replace(/[^\d+]/g,""),d=l.length>0,h=`${s} — ${K(e.messenger).label}`,c=Math.round(e.borderRadius/2),f=Math.round(e.borderRadius/4),g=`--bar-radius:${c}px;--item-radius:${f}px;--off-x:${e.offsetX}px;--off-y:${e.offsetY}px;`,m=b`
+  `}function Qt(i){if(!i.isOpen)return b`${p}`;const e=i.resolved(),t=i.config?.texts??{},s=t.messengerText||K(e.messenger).label||"Написать",n=t.callText||"Позвонить",o=t.phone||"",r=t.customText||"Подробнее",a=t.badgeText||"",l=o.replace(/[^\d+]/g,""),d=l.length>0,h=`${s} — ${K(e.messenger).label}`,c=Math.round(e.borderRadius/2),f=Math.max(0,c-4),g=`--bar-radius:${c}px;--item-radius:${f}px;--off-x:${e.offsetX}px;--off-y:${e.offsetY}px;`,m=b`
     <a
       class="btn btn--msg"
       href=${e.messengerUrl}
