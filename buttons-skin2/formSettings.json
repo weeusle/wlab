@@ -5,56 +5,6 @@
   ],
   "steps": [
     {
-      "id": "texts",
-      "header": "Тексты",
-      "icon": "type",
-      "blocks": [
-        [
-          {
-            "type": "textinput",
-            "label": "Текст кнопки мессенджера",
-            "size": 1,
-            "validator": { "required": true, "maxLength": 30, "minLength": 2 },
-            "destination": "texts.messengerText"
-          },
-          {
-            "type": "textinput",
-            "label": "Текст кнопки звонка",
-            "size": 1,
-            "validator": { "maxLength": 30, "minLength": 2 },
-            "destination": "texts.callText"
-          },
-          {
-            "type": "textinput",
-            "label": "Телефон",
-            "size": 1,
-            "validator": { "maxLength": 30 },
-            "destination": "texts.phone"
-          }
-        ],
-        {
-          "header": "Оффер",
-          "afterHeader": "двухстрочный заголовок вместо обычной надписи",
-          "blocks": [
-            {
-              "type": "textinput",
-              "label": "Заголовок оффера",
-              "size": 1,
-              "validator": { "maxLength": 40 },
-              "destination": "texts.offerTitle"
-            },
-            {
-              "type": "textinput",
-              "label": "Подзаголовок оффера",
-              "size": 1,
-              "validator": { "maxLength": 40 },
-              "destination": "texts.offerSubtitle"
-            }
-          ]
-        }
-      ]
-    },
-    {
       "id": "design",
       "header": "Дизайн",
       "icon": "palette",
@@ -64,6 +14,101 @@
       }
     },
     {
+      "id": "buttons",
+      "header": "Блок кнопки",
+      "icon": "grid",
+      "afterHeader": "Одновременно можно включить максимум 2 кнопки: мессенджер, звонок или свой текст.",
+      "blocks": [
+        {
+          "header": "Написать в мессенджер",
+          "blocks": [
+            {
+              "type": "toggler",
+              "label": "Показывать кнопку",
+              "destination": "settings.showMessenger"
+            },
+            {
+              "type": "select",
+              "label": "Мессенджер",
+              "destination": "settings.messenger",
+              "options": [
+                { "value": "max", "label": "MAX" },
+                { "value": "telegram", "label": "Telegram" },
+                { "value": "whatsapp", "label": "WhatsApp" },
+                { "value": "vk", "label": "ВКонтакте" }
+              ]
+            },
+            {
+              "type": "textinput",
+              "label": "Текст кнопки",
+              "destination": "texts.messengerText",
+              "validator": { "maxLength": 30, "minLength": 2 }
+            },
+            {
+              "type": "textinput",
+              "label": "Ссылка на чат в мессенджере",
+              "destination": "settings.messengerUrl",
+              "validator": { "maxLength": 300 }
+            }
+          ]
+        },
+        {
+          "header": "Позвонить",
+          "blocks": [
+            {
+              "type": "toggler",
+              "label": "Показывать кнопку",
+              "destination": "settings.showCall"
+            },
+            {
+              "type": "textinput",
+              "label": "Номер телефона",
+              "destination": "texts.phone",
+              "validator": { "maxLength": 30 }
+            }
+          ]
+        },
+        {
+          "header": "Свой текст",
+          "blocks": [
+            {
+              "type": "toggler",
+              "label": "Показывать кнопку",
+              "destination": "settings.showCustom"
+            },
+            {
+              "type": "textinput",
+              "label": "Текст кнопки",
+              "destination": "texts.customText",
+              "validator": { "maxLength": 30, "minLength": 2 }
+            },
+            {
+              "type": "textinput",
+              "label": "Ссылка в кнопке",
+              "destination": "settings.customUrl",
+              "validator": { "maxLength": 300 }
+            }
+          ]
+        },
+        {
+          "header": "Плашка над кнопкой",
+          "blocks": [
+            {
+              "type": "toggler",
+              "label": "Показывать плашку",
+              "destination": "settings.showBadge"
+            },
+            {
+              "type": "textinput",
+              "label": "Текст плашки",
+              "destination": "texts.badgeText",
+              "validator": { "maxLength": 40 }
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "settings",
       "header": "Настройки",
       "icon": "settings",
@@ -71,86 +116,44 @@
         [
           {
             "type": "select",
-            "label": "Мессенджер",
-            "destination": "settings.messenger",
+            "label": "Положение",
+            "destination": "settings.position",
             "options": [
-              { "value": "telegram", "label": "Telegram" },
-              { "value": "whatsapp", "label": "WhatsApp" },
-              { "value": "max", "label": "MAX" },
-              { "value": "vk", "label": "ВКонтакте" }
+              { "value": "top-left", "label": "Сверху слева" },
+              { "value": "top-center", "label": "Сверху по центру" },
+              { "value": "top-right", "label": "Сверху справа" },
+              { "value": "center-left", "label": "Центр слева" },
+              { "value": "center-right", "label": "Центр справа" },
+              { "value": "bottom-left", "label": "Снизу слева" },
+              { "value": "bottom-center", "label": "Снизу по центру" },
+              { "value": "bottom-right", "label": "Снизу справа" }
             ]
           },
           {
-            "type": "textinput",
-            "label": "Ссылка на мессенджер",
-            "destination": "settings.messengerUrl",
-            "validator": { "maxLength": 300 }
+            "type": "range",
+            "label": "Скругление углов",
+            "destination": "settings.borderRadius",
+            "min": 0,
+            "max": 100,
+            "step": 1
+          },
+          {
+            "type": "range",
+            "label": "Отступ по горизонтали, px",
+            "destination": "settings.offsetX",
+            "min": 0,
+            "max": 100,
+            "step": 2
+          },
+          {
+            "type": "range",
+            "label": "Отступ по вертикали, px",
+            "destination": "settings.offsetY",
+            "min": 0,
+            "max": 100,
+            "step": 2
           }
-        ],
-        {
-          "header": "Что показывать",
-          "blocks": [
-            {
-              "type": "toggler",
-              "label": "Кнопка мессенджера",
-              "destination": "settings.showMessenger"
-            },
-            {
-              "type": "toggler",
-              "label": "Кнопка звонка",
-              "destination": "settings.showCall"
-            },
-            {
-              "type": "toggler",
-              "label": "Режим оффера",
-              "hint": "Вместо простой надписи выводится заголовок с подзаголовком.",
-              "destination": "settings.offer"
-            },
-            {
-              "type": "toggler",
-              "label": "Повышенный контраст",
-              "destination": "settings.a11yContrast"
-            }
-          ]
-        },
-        {
-          "header": "Форма и положение",
-          "blocks": [
-            {
-              "type": "settings.shape",
-              "destination": "settings.rounding",
-              "options": [
-                { "value": "full", "label": "Капсула" },
-                { "value": "rounded", "label": "Скруглённая" },
-                { "value": "square", "label": "Прямоугольная" }
-              ]
-            },
-            {
-              "type": "select",
-              "label": "Плотность",
-              "destination": "settings.compact",
-              "options": [
-                { "value": "auto", "label": "Авто" },
-                { "value": "full", "label": "Полная" },
-                { "value": "labels", "label": "С подписями" },
-                { "value": "icon-call", "label": "Иконка звонка" },
-                { "value": "min", "label": "Минимальная" }
-              ]
-            },
-            {
-              "type": "settings.position",
-              "destination": "settings.position",
-              "options": [
-                { "value": "top-left", "label": "Сверху слева" },
-                { "value": "top-center", "label": "Сверху по центру" },
-                { "value": "top-right", "label": "Сверху справа" },
-                { "value": "bottom-left", "label": "Снизу слева" },
-                { "value": "bottom-center", "label": "Снизу по центру" },
-                { "value": "bottom-right", "label": "Снизу справа" }
-              ]
-            }
-          ]
-        }
+        ]
       ]
     },
     {
@@ -159,9 +162,8 @@
       "icon": "lightning",
       "blocks": [
         [
-          { "type": "triggers.onReady" }
-        ],
-        [
+          { "type": "triggers.onReady" },
+          { "type": "triggers.timer" },
           { "type": "showTo" }
         ]
       ]

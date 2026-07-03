@@ -42,18 +42,20 @@
     "messengerText": "Написать",
     "callText": "Позвонить",
     "phone": "+7 (995) 380-55-44",
-    "offerTitle": "Специальный тариф",
-    "offerSubtitle": "От 450 ₽, ещё 2 дня"
+    "customText": "Оставить заявку",
+    "badgeText": "Специальный тариф"
   },
   "settings": {
     "messenger": "telegram",
     "messengerUrl": "https://t.me/",
-    "rounding": "full",
-    "position": "bottom-right",
-    "compact": "auto",
+    "customUrl": "https://example.com/",
     "showMessenger": true,
     "showCall": true,
-    "offer": false,
-    "a11yContrast": false
+    "showCustom": false,
+    "showBadge": false,
+    "position": "bottom-right",
+    "offsetX": 24,
+    "offsetY": 24,
+    "borderRadius": 100
   }
 }
