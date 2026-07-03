@@ -39,7 +39,7 @@
     "hideLogo": false
   },
   "texts": {
-    "messengerText": "Написать",
+    "messengerText": "",
     "callText": "Позвонить",
     "phone": "+7 (995) 380-55-44",
     "customText": "Оставить заявку",

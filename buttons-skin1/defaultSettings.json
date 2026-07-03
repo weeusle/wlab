@@ -39,7 +39,7 @@
     "hideLogo": false
   },
   "texts": {
-    "messengerText": "Написать",
+    "messengerText": "",
     "callText": "Позвонить",
     "phone": "+7 996 245 45 55",
     "customText": "Оставить заявку",

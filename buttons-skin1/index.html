@@ -364,7 +364,12 @@
       });
 
       // Selects / texts
-      document.getElementById('s-messenger').addEventListener('change', function () { setSetting('settings.messenger', this.value); });
+      var BRAND_LABEL = { max: 'MAX', telegram: 'Telegram', whatsapp: 'WhatsApp', vk: 'VK' };
+      function updateMsgPlaceholder() {
+        var m = document.getElementById('s-messenger').value;
+        document.getElementById('t-msg').placeholder = 'Написать в ' + (BRAND_LABEL[m] || m);
+      }
+      document.getElementById('s-messenger').addEventListener('change', function () { setSetting('settings.messenger', this.value); updateMsgPlaceholder(); });
       function bindText(id, key) { var el = document.getElementById(id); el.addEventListener('input', function () { setSetting('texts.' + key, el.value); }); }
       bindText('t-msg', 'messengerText');
       bindText('t-phone', 'phone');
@@ -419,6 +424,7 @@
 
         var s = lastConfig.settings || {};
         document.getElementById('s-messenger').value = s.messenger || 'max';
+        updateMsgPlaceholder();
         document.getElementById('t-msgurl').value = s.messengerUrl || '';
         document.getElementById('t-customurl').value = s.customUrl || '';
 
