@@ -130,10 +130,6 @@
         <h2 class="section__title">Тексты</h2>
         <div class="field"><label class="field__label">Основной текст панели</label><input class="inp" id="t-main" placeholder="Пишите, звоните — мы на связи"></div>
         <div class="field"><label class="field__label">Подсказка под QR-кодом</label><input class="inp" id="t-qrhint" placeholder="Сканируйте QR-код с телефона"></div>
-        <div class="field"><label class="field__label">Подпись Telegram</label><input class="inp" id="t-tt-telegram" placeholder="Telegram"></div>
-        <div class="field"><label class="field__label">Подпись WhatsApp</label><input class="inp" id="t-tt-whatsapp" placeholder="WhatsApp"></div>
-        <div class="field"><label class="field__label">Подпись MAX</label><input class="inp" id="t-tt-max" placeholder="Max"></div>
-        <div class="field"><label class="field__label">Подпись ВКонтакте</label><input class="inp" id="t-tt-vk" placeholder="Вконтакте"></div>
       </div>
 
       <!-- КАНАЛЫ СВЯЗИ -->
@@ -351,10 +347,6 @@
       function bindText(id, key) { var el = document.getElementById(id); el.addEventListener('input', function () { setSetting('texts.' + key, el.value); }); }
       bindText('t-main', 'mainText');
       bindText('t-qrhint', 'qrHintText');
-      bindText('t-tt-telegram', 'tooltipTelegram');
-      bindText('t-tt-whatsapp', 'tooltipWhatsapp');
-      bindText('t-tt-max', 'tooltipMax');
-      bindText('t-tt-vk', 'tooltipVk');
       document.getElementById('t-phone').addEventListener('input', function () { setSetting('settings.phone', this.value); });
 
       // Channels — skin2 хранит включённые каналы в массиве settings.showMessengers.
@@ -458,10 +450,6 @@
         var t = lastConfig.texts || {};
         document.getElementById('t-main').value = t.mainText || '';
         document.getElementById('t-qrhint').value = t.qrHintText || '';
-        document.getElementById('t-tt-telegram').value = t.tooltipTelegram || '';
-        document.getElementById('t-tt-whatsapp').value = t.tooltipWhatsapp || '';
-        document.getElementById('t-tt-max').value = t.tooltipMax || '';
-        document.getElementById('t-tt-vk').value = t.tooltipVk || '';
 
         var s = lastConfig.settings || {};
         var shown = Array.isArray(s.showMessengers) ? s.showMessengers : [];
