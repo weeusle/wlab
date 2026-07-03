@@ -184,13 +184,6 @@
       <div class="section">
         <h2 class="section__title">Вид кнопки</h2>
         <div class="field">
-          <label class="field__label">Свёрнутая кнопка</label>
-          <select class="inp" id="s-collapsed">
-            <option value="peek">С иконками соседних каналов</option>
-            <option value="fab">Простая круглая</option>
-          </select>
-        </div>
-        <div class="field">
           <label class="field__label">Стиль кнопки</label>
           <select class="inp" id="s-fab">
             <option value="brand">Градиент</option>
@@ -377,7 +370,6 @@
       document.getElementById('s-qr').addEventListener('change', function () { setSetting('settings.qrChannel', this.value); });
 
       // Appearance selects
-      document.getElementById('s-collapsed').addEventListener('change', function () { setSetting('settings.collapsedStyle', this.value); });
       document.getElementById('s-fab').addEventListener('change', function () { setSetting('settings.fabStyle', this.value); });
 
       // Position grid (8 positions, center-center disabled) — ТЗ; key is settings.layout.position
@@ -440,7 +432,6 @@
         document.getElementById('t-phone').value = s.phone || '';
         document.getElementById('s-qr').value = s.qrChannel || 'max';
         syncQrToSingle(); // авто-подстановка QR-канала, если включён один канал
-        document.getElementById('s-collapsed').value = s.collapsedStyle || 'peek';
         document.getElementById('s-fab').value = s.fabStyle || 'brand';
 
         buildPosGrid();
