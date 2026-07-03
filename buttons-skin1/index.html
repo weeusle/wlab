@@ -43,6 +43,12 @@
     .color-row span { font-weight: 600; }
     .hint { font-size: 12px; color: #94a3b8; margin: -2px 0 8px; }
 
+    .schemes { display: flex; gap: 8px; flex-wrap: wrap; }
+    .scheme { width: 46px; height: 38px; border-radius: 8px; border: 2px solid transparent; padding: 0; cursor: pointer; overflow: hidden; position: relative; }
+    .scheme:hover { opacity: .85; }
+    .scheme.active { border-color: #2563eb; }
+    .scheme.active::after { content: '✓'; position: absolute; top: -1px; right: 2px; color: #2563eb; font-weight: 700; font-size: 12px; }
+
     .inp, select.inp { width: 100%; border: 1px solid #e2e8f0; border-radius: 9px; background: #f8fafc; padding: 9px 11px; font: inherit; color: inherit; }
     .inp:focus { outline: 2px solid #93c5fd; border-color: #93c5fd; }
 
@@ -95,6 +101,10 @@
             <button class="seg__btn active" data-mode="light">Светлая</button>
             <button class="seg__btn" data-mode="dark">Тёмная</button>
           </div>
+        </div>
+        <div class="field">
+          <label class="field__label">Цветовые схемы</label>
+          <div class="schemes" id="schemes"></div>
         </div>
         <div class="field">
           <label class="field__label">Цвета</label>
@@ -221,6 +231,23 @@
         });
       });
 
+      // Colour schemes — наши базовые темы, двуцветные для кнопок:
+      // светлый акцент (кнопки звонка/«свой текст») + тёмная поверхность (фон бара в dark);
+      // фон в light — белый.
+      var SCHEMES = [
+        { id: 'blue',   label: 'Синяя',      light: '#0047F0', dark: '#A6BFFF', darkBg: '#181818' },
+        { id: 'green',  label: 'Зелёная',    light: '#00BB41', dark: '#D0FF73', darkBg: '#181818' },
+        { id: 'purple', label: 'Фиолетовая', light: '#8E3DFF', dark: '#CBA5FF', darkBg: '#100E13' },
+        { id: 'orange', label: 'Оранжевая',  light: '#FF5500', dark: '#FFBA97', darkBg: '#111111' },
+        { id: 'mono',   label: 'Моно',       light: '#222222', dark: '#FFFFFF', darkBg: '#222222' }
+      ];
+      function ensureColors() {
+        lastConfig.design = lastConfig.design || {};
+        lastConfig.design.colors = lastConfig.design.colors || {};
+        lastConfig.design.colors.light = lastConfig.design.colors.light || {};
+        lastConfig.design.colors.dark = lastConfig.design.colors.dark || {};
+      }
+
       // Colour pickers
       function paintDot(input) { input.parentElement.style.background = input.value; }
       function refreshColorInputs() {
@@ -229,13 +256,50 @@
         var b = document.getElementById('c-bg'); b.value = hex6(c.background); paintDot(b);
       }
       document.getElementById('c-primary').addEventListener('input', function () {
-        paintDot(this);
+        paintDot(this); ensureColors();
+        lastConfig.design.colors[mode()].primary = this.value;
+        lastConfig.design.colors[mode()].accent = this.value;
         setSetting('design.colors.' + mode() + '.primary', this.value);
         setSetting('design.colors.' + mode() + '.accent', this.value);
+        markActiveScheme();
       });
       document.getElementById('c-bg').addEventListener('input', function () {
-        paintDot(this); setSetting('design.colors.' + mode() + '.background', this.value);
+        paintDot(this); ensureColors();
+        lastConfig.design.colors[mode()].background = this.value;
+        setSetting('design.colors.' + mode() + '.background', this.value);
+        markActiveScheme();
       });
+
+      function applyScheme(s) {
+        ensureColors();
+        var L = lastConfig.design.colors.light, D = lastConfig.design.colors.dark;
+        L.primary = s.light; L.accent = s.light; L.background = '#FFFFFF';
+        D.primary = s.dark;  D.accent = s.dark;  D.background = s.darkBg;
+        setSetting('design.colors.light.primary', s.light);
+        setSetting('design.colors.light.accent', s.light);
+        setSetting('design.colors.light.background', '#FFFFFF');
+        setSetting('design.colors.dark.primary', s.dark);
+        setSetting('design.colors.dark.accent', s.dark);
+        setSetting('design.colors.dark.background', s.darkBg);
+        refreshColorInputs();
+      }
+      function buildSchemes() {
+        var box = document.getElementById('schemes'); box.innerHTML = '';
+        SCHEMES.forEach(function (s) {
+          var btn = document.createElement('button');
+          btn.className = 'scheme'; btn.dataset.id = s.id; btn.title = s.label;
+          btn.style.background = 'linear-gradient(to right, ' + s.light + ' 0 50%, ' + s.darkBg + ' 50% 100%)';
+          btn.addEventListener('click', function () { applyScheme(s); markActiveScheme(); });
+          box.appendChild(btn);
+        });
+      }
+      function markActiveScheme() {
+        var lp = ((((lastConfig.design) || {}).colors || {}).light || {}).primary || '';
+        document.querySelectorAll('#schemes .scheme').forEach(function (b) {
+          var s = SCHEMES.filter(function (x) { return x.id === b.dataset.id; })[0];
+          b.classList.toggle('active', !!(s && lp && lp.toLowerCase() === s.light.toLowerCase()));
+        });
+      }
 
       // Logo
       document.querySelectorAll('#logo-seg .seg__btn').forEach(function (b) {
@@ -325,6 +389,8 @@
         document.body.classList.toggle('dark', isDark);
         document.querySelectorAll('#theme-seg .seg__btn').forEach(function (x) { x.classList.toggle('active', x.dataset.mode === mode()); });
         refreshColorInputs();
+        buildSchemes();
+        markActiveScheme();
 
         var hide = ((lastConfig.design) || {}).hideLogo === true;
         document.querySelectorAll('#logo-seg .seg__btn').forEach(function (x) { x.classList.toggle('active', (x.dataset.hide === '1') === hide); });

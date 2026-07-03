@@ -1,21 +1,21 @@
 {
   "widgetCode": "messengers",
-  "skinCode": "skin3",
+  "skinCode": "skin1",
   "version": "1.0.0",
-  "widgetName": "Мессенджеры 1",
+  "widgetName": "Мессенджеры",
   "design": {
     "colors": {
       "light": {
-        "text": "#001240",
-        "accent": "#5533EE",
-        "primary": "#001240",
-        "background": "#FFFFFF"
+        "primary": "#5533EE",
+        "accent": "#0047FF",
+        "background": "#FFFFFF",
+        "text": "#001240"
       },
       "dark": {
-        "text": "#F7F7F7",
+        "primary": "#5533EE",
         "accent": "#A6BFFF",
-        "primary": "#F5F5F5",
-        "background": "#111111"
+        "background": "#001240",
+        "text": "#F3F7FF"
       }
     },
     "colorMode": "light",
@@ -39,32 +39,33 @@
     "hideLogo": false
   },
   "texts": {
-    "headerText": "Пишите, звоните — мы на связи",
-    "subtitleText": "Сканируйте код с телефона",
-    "phone": "+7 995 380 55 44"
+    "panelTitle": "Пишите — мы на связи",
+    "panelTitleCall": "Пишите, звоните — мы на связи",
+    "panelSubtitle": "Сканируйте код с телефона"
   },
   "settings": {
-    "popupVariant": "qr",
-    "showMessengers": [
-      "max",
-      "telegram",
-      "whatsapp",
-      "vk"
-    ],
-    "messenger": "max",
-    "messengerUrls": {
+    "layout": {
+      "position": "bottom-right",
+      "offsetX": 16,
+      "offsetY": 16
+    },
+    "collapsedStyle": "peek",
+    "fabStyle": "brand",
+    "openMode": "panel",
+    "channels": {
+      "max": true,
+      "telegram": true,
+      "whatsapp": true,
+      "vk": true,
+      "phone": true
+    },
+    "channelUrls": {
       "max": "https://max.ru/",
       "telegram": "https://t.me/telegram",
       "whatsapp": "https://wa.me/79953805544",
       "vk": "https://vk.com/"
     },
     "phone": "+7 995 380 55 44",
-    "theme": "light",
-    "position": "bottom-right",
-    "openByDefault": false,
-    "compact": "auto",
-    "a11yContrast": false,
-    "headerText": "Пишите, звоните — мы на связи",
-    "subtitleText": "Сканируйте код с телефона"
+    "qrChannel": "max"
   }
 }
