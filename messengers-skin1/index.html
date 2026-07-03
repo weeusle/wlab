@@ -187,7 +187,48 @@
       box-shadow: 0 0 0 1px rgba(0,0,0,0.12), 0 4px 32px rgba(0,0,0,0.08);
     }
   </style>
-  <script src="./src/position-picker.js"></script>
+  <!-- 3×3 position picker inlined so the built/deployed editor is self-contained
+       (vite publicDir:false does not copy src/position-picker.js into dist). -->
+  <script>
+  (function () {
+    var STYLES_ID = 'position-picker-styles';
+    var GRID = [
+      'top-left',    'top-center',    'top-right',
+      'center-left',  null,           'center-right',
+      'bottom-left', 'bottom-center', 'bottom-right'
+    ];
+    var CSS = '.position-picker{display:grid;grid-template-columns:repeat(3,10px);grid-template-rows:repeat(3,10px);gap:4px;padding:5px;border:1.5px solid currentColor;border-radius:5px;opacity:0.6;transition:opacity 0.2s;cursor:default;}'
+      + '.position-picker:hover{opacity:0.9;}'
+      + '.position-dot{width:10px;height:10px;border-radius:50%;border:none;background:currentColor;opacity:0.2;cursor:pointer;padding:0;transition:opacity 0.15s,transform 0.15s;}'
+      + '.position-dot:hover{opacity:0.6;transform:scale(1.3);}'
+      + '.position-dot.active{opacity:1;transform:scale(1.2);}'
+      + '.position-dot--empty{background:transparent;cursor:default;pointer-events:none;}';
+    function injectStyles() {
+      if (document.getElementById(STYLES_ID)) return;
+      var style = document.createElement('style');
+      style.id = STYLES_ID; style.textContent = CSS;
+      document.head.appendChild(style);
+    }
+    window.createPositionPicker = function (currentValue, onSelect) {
+      injectStyles();
+      var picker = document.createElement('div');
+      picker.className = 'position-picker';
+      GRID.forEach(function (pos) {
+        var dot = document.createElement('button');
+        if (!pos) { dot.className = 'position-dot position-dot--empty'; picker.appendChild(dot); return; }
+        dot.className = 'position-dot'; dot.title = pos;
+        if (pos === currentValue) dot.classList.add('active');
+        dot.addEventListener('click', function () {
+          picker.querySelectorAll('.position-dot').forEach(function (d) { d.classList.remove('active'); });
+          dot.classList.add('active');
+          onSelect(pos);
+        });
+        picker.appendChild(dot);
+      });
+      return picker;
+    };
+  })();
+  </script>
 </head>
 <body>
   <div class="dev-panel">
