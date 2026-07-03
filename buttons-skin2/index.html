@@ -232,15 +232,25 @@
         });
       });
 
-      // Colour schemes — наши базовые темы, двуцветные для кнопок:
-      // светлый акцент (кнопки звонка/«свой текст») + тёмная поверхность (фон бара в dark);
-      // фон в light — белый.
+      // Colour schemes — наши базовые, у каждой РАЗНЫЕ Основной(primary)/Акцент(accent)/Текст(text).
+      // primary — кнопка звонка; accent — плашка + «свой текст»; text — цвет для контраста.
+      // ⚠ значения предварительные (сняты со скринов) — заменить на точные бренд-коды.
       var SCHEMES = [
-        { id: 'blue',   label: 'Синяя',      light: '#0047F0', dark: '#A6BFFF', darkBg: '#181818' },
-        { id: 'green',  label: 'Зелёная',    light: '#00BB41', dark: '#D0FF73', darkBg: '#181818' },
-        { id: 'purple', label: 'Фиолетовая', light: '#8E3DFF', dark: '#CBA5FF', darkBg: '#100E13' },
-        { id: 'orange', label: 'Оранжевая',  light: '#FF5500', dark: '#FFBA97', darkBg: '#111111' },
-        { id: 'mono',   label: 'Моно',       light: '#222222', dark: '#FFFFFF', darkBg: '#222222' }
+        { id: 'blue',   label: 'Синяя',
+          L: { p: '#0047F0', a: '#FF4D00', t: '#001240', bg: '#FFFFFF' },
+          D: { p: '#A6BFFF', a: '#FF6A33', t: '#F3F7FF', bg: '#101828' } },
+        { id: 'green',  label: 'Зелёная',
+          L: { p: '#00BB41', a: '#6A2BE0', t: '#1B0A3D', bg: '#FFFFFF' },
+          D: { p: '#5CE08A', a: '#B79CFF', t: '#F3F7FF', bg: '#14121C' } },
+        { id: 'coral',  label: 'Коралловая',
+          L: { p: '#F85D5D', a: '#12303F', t: '#12303F', bg: '#FFFFFF' },
+          D: { p: '#FF8A8A', a: '#9FB6C4', t: '#F3F7FF', bg: '#0E1A22' } },
+        { id: 'purple', label: 'Фиолетовая',
+          L: { p: '#8E3DFF', a: '#1E0B3D', t: '#1E0B3D', bg: '#FFFFFF' },
+          D: { p: '#C6A5FF', a: '#C6A5FF', t: '#F3F7FF', bg: '#150C24' } },
+        { id: 'mono',   label: 'Моно',
+          L: { p: '#111111', a: '#111111', t: '#111111', bg: '#FFFFFF' },
+          D: { p: '#FFFFFF', a: '#FFFFFF', t: '#FFFFFF', bg: '#222222' } }
       ];
       function ensureColors() {
         lastConfig.design = lastConfig.design || {};
@@ -276,17 +286,18 @@
         markActiveScheme();
       });
 
+      function applyMode(m, v) {
+        var C = lastConfig.design.colors[m];
+        C.primary = v.p; C.accent = v.a; C.text = v.t; C.background = v.bg;
+        setSetting('design.colors.' + m + '.primary', v.p);
+        setSetting('design.colors.' + m + '.accent', v.a);
+        setSetting('design.colors.' + m + '.text', v.t);
+        setSetting('design.colors.' + m + '.background', v.bg);
+      }
       function applyScheme(s) {
         ensureColors();
-        var L = lastConfig.design.colors.light, D = lastConfig.design.colors.dark;
-        L.primary = s.light; L.accent = s.light; L.background = '#FFFFFF';
-        D.primary = s.dark;  D.accent = s.dark;  D.background = s.darkBg;
-        setSetting('design.colors.light.primary', s.light);
-        setSetting('design.colors.light.accent', s.light);
-        setSetting('design.colors.light.background', '#FFFFFF');
-        setSetting('design.colors.dark.primary', s.dark);
-        setSetting('design.colors.dark.accent', s.dark);
-        setSetting('design.colors.dark.background', s.darkBg);
+        applyMode('light', s.L);
+        applyMode('dark', s.D);
         refreshColorInputs();
       }
       function buildSchemes() {
@@ -294,16 +305,21 @@
         SCHEMES.forEach(function (s) {
           var btn = document.createElement('button');
           btn.className = 'scheme'; btn.dataset.id = s.id; btn.title = s.label;
-          btn.style.background = 'linear-gradient(to right, ' + s.light + ' 0 50%, ' + s.darkBg + ' 50% 100%)';
+          // 4 полосы как в продукте: Основной | Акцент | Фон | Текст
+          btn.style.background = 'linear-gradient(to right, ' +
+            s.L.p + ' 0 30%, ' + s.L.a + ' 30% 55%, ' + s.L.bg + ' 55% 78%, ' + s.L.t + ' 78% 100%)';
           btn.addEventListener('click', function () { applyScheme(s); markActiveScheme(); });
           box.appendChild(btn);
         });
       }
       function markActiveScheme() {
-        var lp = ((((lastConfig.design) || {}).colors || {}).light || {}).primary || '';
+        var c = (((lastConfig.design) || {}).colors || {}).light || {};
         document.querySelectorAll('#schemes .scheme').forEach(function (b) {
           var s = SCHEMES.filter(function (x) { return x.id === b.dataset.id; })[0];
-          b.classList.toggle('active', !!(s && lp && lp.toLowerCase() === s.light.toLowerCase()));
+          var on = !!(s && c.primary && c.accent &&
+            c.primary.toLowerCase() === s.L.p.toLowerCase() &&
+            c.accent.toLowerCase() === s.L.a.toLowerCase());
+          b.classList.toggle('active', on);
         });
       }
 
