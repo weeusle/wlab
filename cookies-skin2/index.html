@@ -159,16 +159,7 @@
       <div class="section">
         <h2 class="section__title">Настройки</h2>
         <div class="field">
-          <label class="field__label">Форма</label>
-          <div class="seg" id="form-seg">
-            <button class="seg__btn active" data-form="bar">Bar</button>
-            <button class="seg__btn" data-form="mini">Mini</button>
-            <button class="seg__btn" data-form="image">Image</button>
-            <button class="seg__btn" data-form="clear">Clear</button>
-          </div>
-        </div>
-        <div class="field">
-          <label class="field__label">Размер (форма bar)</label>
+          <label class="field__label">Размер</label>
           <div class="seg" id="size-seg">
             <button class="seg__btn" data-bw="mini">Мини-баннер</button>
             <button class="seg__btn active" data-bw="auto">Компактно</button>
@@ -361,15 +352,6 @@
       offX.addEventListener('input', function () { setSetting('settings.layout.offsetX', Number(offX.value || 0)); });
       offY.addEventListener('input', function () { setSetting('settings.layout.offsetY', Number(offY.value || 0)); });
 
-      // ---- Форма карточки (bar/mini/image/clear) ----
-      document.querySelectorAll('#form-seg .seg__btn').forEach(function (b) {
-        b.addEventListener('click', function () {
-          document.querySelectorAll('#form-seg .seg__btn').forEach(function (x) { x.classList.remove('active'); });
-          b.classList.add('active');
-          setSetting('settings.form', b.dataset.form);
-        });
-      });
-
       // ---- Иконка (design.icon.url) ----
       var iconUrl = document.getElementById('icon-url');
       iconUrl.addEventListener('input', function () { setSetting('design.icon.url', iconUrl.value.trim()); });
@@ -416,9 +398,6 @@
         var bw = modeVal === 'fullwidth' ? 'full' : modeVal === 'mini' ? 'mini' : 'auto';
         currentBw = bw;
         document.querySelectorAll('#size-seg .seg__btn').forEach(function (x) { x.classList.toggle('active', x.dataset.bw === bw); });
-
-        var formVal = ((lastConfig.settings) || {}).form || 'bar';
-        document.querySelectorAll('#form-seg .seg__btn').forEach(function (x) { x.classList.toggle('active', x.dataset.form === formVal); });
 
         buildPosGrid();
 
