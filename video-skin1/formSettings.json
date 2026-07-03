@@ -1,0 +1,232 @@
+{
+  "platforms": [
+    "desktop",
+    "phone"
+  ],
+  "steps": [
+    {
+      "id": "texts",
+      "header": "Тексты",
+      "icon": "type",
+      "blocks": [
+        {
+          "header": "Оффер",
+          "afterHeader": "карточка с кнопками действия",
+          "blocks": [
+            {
+              "type": "textinput",
+              "label": "Заголовок оффера",
+              "size": 1,
+              "validator": { "maxLength": 60 },
+              "destination": "settings.offerTitle"
+            },
+            {
+              "type": "textinput",
+              "label": "Подзаголовок оффера",
+              "size": 1,
+              "validator": { "maxLength": 120 },
+              "destination": "settings.offerSubtitle"
+            },
+            {
+              "type": "textinput",
+              "label": "Текст основной кнопки",
+              "size": 1,
+              "validator": { "maxLength": 30 },
+              "destination": "settings.primaryLabel"
+            },
+            {
+              "type": "textinput",
+              "label": "Текст второй кнопки",
+              "size": 1,
+              "validator": { "maxLength": 30 },
+              "destination": "settings.secondaryLabel"
+            }
+          ]
+        },
+        {
+          "header": "Обратный звонок",
+          "blocks": [
+            {
+              "type": "textinput",
+              "label": "Заголовок",
+              "size": 1,
+              "validator": { "maxLength": 60 },
+              "destination": "settings.callbackTitle"
+            },
+            {
+              "type": "textinput",
+              "label": "Подзаголовок",
+              "size": 1,
+              "validator": { "maxLength": 120 },
+              "destination": "settings.callbackSubtitle"
+            },
+            {
+              "type": "textinput",
+              "label": "Плейсхолдер телефона",
+              "size": 1,
+              "validator": { "maxLength": 30 },
+              "destination": "settings.phonePlaceholder"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "design",
+      "header": "Дизайн",
+      "icon": "palette",
+      "block": {
+        "type": "design",
+        "validator": { "wcag": { "text": 4.5, "primary": 3 } }
+      }
+    },
+    {
+      "id": "settings",
+      "header": "Настройки",
+      "icon": "settings",
+      "blocks": [
+        {
+          "header": "Видео",
+          "blocks": [
+            {
+              "type": "textinput",
+              "label": "Ссылка на видео",
+              "destination": "settings.videoUrl",
+              "validator": { "maxLength": 300 }
+            },
+            {
+              "type": "imagepicker",
+              "label": "Постер",
+              "destination": "settings.posterUrl",
+              "imageType": "image",
+              "fit": "cover"
+            }
+          ]
+        },
+        [
+          {
+            "type": "select",
+            "label": "Форма",
+            "destination": "settings.skin",
+            "options": [
+              { "value": "rect", "label": "Прямоугольная" },
+              { "value": "circle", "label": "Круглая" }
+            ]
+          },
+          {
+            "type": "select",
+            "label": "Кнопки действия",
+            "destination": "settings.cta",
+            "options": [
+              { "value": "none", "label": "Нет" },
+              { "value": "offer", "label": "Оффер" },
+              { "value": "callback", "label": "Обратный звонок" }
+            ]
+          }
+        ],
+        {
+          "header": "Воспроизведение",
+          "blocks": [
+            {
+              "type": "toggler",
+              "label": "Автозапуск",
+              "destination": "settings.autoplay"
+            },
+            {
+              "type": "toggler",
+              "label": "Зацикливание",
+              "destination": "settings.loop"
+            },
+            {
+              "type": "toggler",
+              "label": "Без звука",
+              "destination": "settings.muted"
+            },
+            {
+              "type": "toggler",
+              "label": "Открыто по умолчанию",
+              "destination": "settings.openByDefault"
+            }
+          ]
+        },
+        {
+          "header": "Ссылки кнопок",
+          "blocks": [
+            {
+              "type": "textinput",
+              "label": "Ссылка основной кнопки",
+              "destination": "settings.primaryUrl",
+              "validator": { "maxLength": 300 }
+            },
+            {
+              "type": "textinput",
+              "label": "Ссылка второй кнопки",
+              "destination": "settings.secondaryUrl",
+              "validator": { "maxLength": 300 }
+            }
+          ]
+        },
+        {
+          "header": "Рамка",
+          "blocks": [
+            {
+              "type": "textinput",
+              "label": "Цвет рамки",
+              "placeholder": "#FFFFFF (пусто — без рамки)",
+              "destination": "settings.borderColor",
+              "validator": { "maxLength": 30 }
+            }
+          ]
+        },
+        {
+          "header": "Положение",
+          "blocks": [
+            {
+              "type": "settings.position",
+              "destination": "settings.position",
+              "options": [
+                { "value": "top-left", "label": "Сверху слева" },
+                { "value": "top-right", "label": "Сверху справа" },
+                { "value": "bottom-left", "label": "Снизу слева" },
+                { "value": "bottom-right", "label": "Снизу справа" }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "triggers",
+      "header": "Триггеры",
+      "icon": "lightning",
+      "blocks": [
+        [
+          { "type": "triggers.onReady" }
+        ],
+        [
+          { "type": "showTo" }
+        ]
+      ]
+    },
+    {
+      "id": "integrations",
+      "header": "Интеграции",
+      "icon": "code",
+      "blocks": [
+        [
+          { "type": "integrations.metrika" }
+        ]
+      ]
+    },
+    {
+      "id": "installation",
+      "header": "Установка",
+      "icon": "play-square",
+      "blocks": [
+        [ { "type": "installation.cloud" } ],
+        [ { "type": "installation.website" } ],
+        [ { "type": "installation.telegram" } ]
+      ]
+    }
+  ]
+}

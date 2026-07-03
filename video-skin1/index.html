@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Widget Skin Dev</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background: #f0f0f0;
+      color: #333;
+      font-family: system-ui, sans-serif;
+      transition: background 0.3s, color 0.3s;
+    }
+    body.dark {
+      background: #777777;
+      color: #e0e0e0;
+    }
+    .dev-panel {
+      flex-shrink: 0;
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      background: rgba(128, 128, 128, 0.15);
+      backdrop-filter: blur(8px);
+      padding: 8px 12px;
+      font-size: 13px;
+      user-select: none;
+      flex-wrap: wrap;
+    }
+    .dev-panel__row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .dev-panel__track {
+      position: relative;
+      width: 40px;
+      height: 22px;
+      background: #f0f0f0;
+      border-radius: 11px;
+      cursor: pointer;
+      transition: background 0.3s;
+      flex-shrink: 0;
+    }
+    .dev-panel__track.active {
+      background: #BBBBBB;
+    }
+    .dev-panel__thumb {
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      width: 18px;
+      height: 18px;
+      background: #fff;
+      border-radius: 50%;
+      transition: transform 0.3s;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    }
+    .dev-panel__track.active .dev-panel__thumb {
+      transform: translateX(18px);
+    }
+    .dev-panel__theme-row { transition: opacity 0.3s; }
+    .dev-panel__theme-row.hidden { opacity: 0.3; pointer-events: none; }
+    .dev-panel__separator {
+      width: 1px;
+      height: 22px;
+      background: rgba(128, 128, 128, 0.3);
+      flex-shrink: 0;
+    }
+    .viewport-switcher {
+      flex-shrink: 0;
+      display: flex;
+      gap: 2px;
+      align-items: center;
+    }
+    .viewport-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1px;
+      width: 36px;
+      height: 36px;
+      border: none;
+      border-radius: 6px;
+      background: transparent;
+      cursor: pointer;
+      color: inherit;
+      opacity: 0.4;
+      transition: opacity 0.2s, background 0.2s;
+      padding: 0;
+    }
+    .viewport-btn:hover { opacity: 0.7; }
+    .viewport-btn.active { opacity: 1; background: rgba(128, 128, 128, 0.2); }
+    .viewport-btn svg { width: 14px; height: 14px; fill: currentColor; flex-shrink: 0; }
+    .viewport-btn__label { font-size: 8px; line-height: 1; opacity: 0.8; }
+    .pos-btn {
+      width: 36px;
+      height: 26px;
+      padding: 3px 4px;
+      border: 1.5px solid currentColor;
+      background: transparent;
+      cursor: pointer;
+      color: inherit;
+      opacity: 0.5;
+      transition: opacity 0.2s, background 0.2s;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .pos-btn:hover { opacity: 0.8; }
+    .pos-btn.active { opacity: 1; background: rgba(128,128,128,0.2); }
+    .pos-btn svg { width: 100%; height: 100%; }
+    .color-scheme-btn {
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      border: 2px solid transparent;
+      padding: 0;
+      cursor: pointer;
+      overflow: hidden;
+      opacity: 0.6;
+      transition: opacity 0.2s, border-color 0.2s;
+      flex-shrink: 0;
+    }
+    .color-scheme-btn:hover { opacity: 0.85; }
+    .color-scheme-btn.active { opacity: 1; border-color: rgba(128,128,128,0.6); }
+    .dev-form-input {
+      font-size: 13px;
+      border-radius: 4px;
+      border: 1px solid rgba(128,128,128,0.3);
+      background: transparent;
+      color: inherit;
+      padding: 2px 6px;
+      width: 120px;
+    }
+    .dev-form-select {
+      font-size: 13px;
+      border-radius: 4px;
+      border: 1px solid rgba(128,128,128,0.3);
+      background: transparent;
+      color: inherit;
+      padding: 2px 4px;
+    }
+    .dev-form-color {
+      width: 32px;
+      height: 22px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      padding: 0;
+      background: none;
+    }
+    .dev-form-slider { width: 80px; cursor: pointer; }
+    .dev-form-slider-val { min-width: 24px; text-align: right; opacity: 0.6; font-size: 12px; }
+    .dev-form-btngroup { display: flex; gap: 2px; flex-wrap: wrap; }
+    .dev-form-btn {
+      font-size: 11px;
+      padding: 2px 6px;
+      border: 1px solid rgba(128,128,128,0.4);
+      border-radius: 4px;
+      background: transparent;
+      color: inherit;
+      cursor: pointer;
+      opacity: 0.5;
+    }
+    .dev-form-btn:hover { opacity: 0.75; }
+    .dev-form-btn.active { opacity: 1; background: rgba(128,128,128,0.2); }
+    .widget-frame-wrap {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      min-height: 0;
+    }
+    .widget-frame {
+      height: 100%;
+      border: none;
+      display: block;
+      transition: width 0.3s;
+      box-shadow: 0 0 0 1px rgba(0,0,0,0.12), 0 4px 32px rgba(0,0,0,0.08);
+    }
+  </style>
+  <script src="./src/position-picker.js"></script>
+</head>
+<body>
+  <div class="dev-panel">
+    <div class="dev-panel__row">
+      <span>Edit Mode</span>
+      <div class="dev-panel__track active" id="edit-track">
+        <div class="dev-panel__thumb"></div>
+      </div>
+    </div>
+    <div class="dev-panel__row dev-panel__theme-row" id="theme-row">
+      <span>Light</span>
+      <div class="dev-panel__track" id="theme-track">
+        <div class="dev-panel__thumb"></div>
+      </div>
+      <span>Dark</span>
+    </div>
+    <div class="dev-panel__row" id="logo-row" style="display:none;">
+      <span>Лого</span>
+      <div class="dev-panel__track" id="logo-track">
+        <div class="dev-panel__thumb"></div>
+      </div>
+    </div>
+    <!-- Color scheme switcher (shown when altColors present) -->
+    <div id="color-schemes" style="display:none;align-items:center;gap:4px;"></div>
+    <!-- Layout mode switcher (shown when settings.layout.mode present) -->
+    <div id="layout-mode-row" style="display:none;align-items:center;gap:4px;"></div>
+    <!-- Border color (shown when settings.borderColor present) -->
+    <div id="border-color-row" style="display:none;align-items:center;gap:6px;">
+      <span>Рамка</span>
+      <input type="color" class="dev-form-color" id="border-color-input" value="#ffffff">
+      <button class="dev-form-btn" id="border-color-none">Нет</button>
+    </div>
+    <div class="dev-panel__separator"></div>
+    <div class="viewport-switcher" id="viewport-switcher">
+      <button class="viewport-btn active" data-width="100%" title="100%">
+        <svg viewBox="0 0 24 24"><path d="M21 2H3a1 1 0 0 0-1 1v13a1 1 0 0 0 1 1h7l-1 3H7v1h10v-1h-2l-1-3h7a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1zm-1 13H4V4h16v11z"/></svg>
+        <span class="viewport-btn__label">100%</span>
+      </button>
+      <button class="viewport-btn" data-width="1440px" title="1440px">
+        <svg viewBox="0 0 24 24"><path d="M21 2H3a1 1 0 0 0-1 1v13a1 1 0 0 0 1 1h7l-1 3H7v1h10v-1h-2l-1-3h7a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1zm-1 13H4V4h16v11z"/></svg>
+        <span class="viewport-btn__label">1440</span>
+      </button>
+      <button class="viewport-btn" data-width="1280px" title="1280px">
+        <svg viewBox="0 0 24 24"><path d="M20 3H4a1 1 0 0 0-1 1v11h18V4a1 1 0 0 0-1-1zm-1 10H5V5h14v8zM1 17h22a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1z"/></svg>
+        <span class="viewport-btn__label">1280</span>
+      </button>
+      <button class="viewport-btn" data-width="1024px" title="1024px">
+        <svg viewBox="0 0 24 24"><path d="M20 3H4a1 1 0 0 0-1 1v11h18V4a1 1 0 0 0-1-1zm-1 10H5V5h14v8zM1 17h22a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1z"/></svg>
+        <span class="viewport-btn__label">1024</span>
+      </button>
+      <button class="viewport-btn" data-width="768px" title="768px">
+        <svg viewBox="0 0 24 24"><path d="M18 1H6a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2zm-3 20H9v-1h6v1zm3-3H6V4h12v14z"/></svg>
+        <span class="viewport-btn__label">768</span>
+      </button>
+      <button class="viewport-btn" data-width="600px" title="600px">
+        <svg viewBox="0 0 24 24"><path d="M18 1H6a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2zm-3 20H9v-1h6v1zm3-3H6V4h12v14z"/></svg>
+        <span class="viewport-btn__label">600</span>
+      </button>
+      <button class="viewport-btn" data-width="480px" title="480px">
+        <svg viewBox="0 0 24 24"><path d="M16 1H8a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2zm-3 20h-2v-1h2v1zm3-3H8V4h8v14z"/></svg>
+        <span class="viewport-btn__label">480</span>
+      </button>
+      <button class="viewport-btn" data-width="375px" title="375px">
+        <svg viewBox="0 0 24 24"><path d="M16 1H8a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2zm-3 20h-2v-1h2v1zm3-3H8V4h8v14z"/></svg>
+        <span class="viewport-btn__label">375</span>
+      </button>
+      <button class="viewport-btn" data-width="320px" title="320px">
+        <svg viewBox="0 0 24 24"><path d="M16 1H8a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2zm-3 20h-2v-1h2v1zm3-3H8V4h8v14z"/></svg>
+        <span class="viewport-btn__label">320</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="widget-frame-wrap">
+    <iframe id="widget-frame" class="widget-frame" style="width:100%" src="./widget.html"></iframe>
+  </div>
+
+  <script>
+    (function() {
+      var editMode = true;
+      var isDark = false;
+      var isLogoShown = true;
+      var editTrack = document.getElementById('edit-track');
+      var themeTrack = document.getElementById('theme-track');
+      var themeRow = document.getElementById('theme-row');
+      var logoTrack = document.getElementById('logo-track');
+      var logoRow = document.getElementById('logo-row');
+      var frame = document.getElementById('widget-frame');
+
+      function postToFrame(type, payload) {
+        if (!frame.contentWindow) return;
+        frame.contentWindow.postMessage(Object.assign({ type: type }, payload), '*');
+      }
+
+      function sendEditMode() {
+        postToFrame('wlab:dev:setEditMode', { editMode: editMode });
+      }
+
+      function sendColorMode() {
+        postToFrame('wlab:dev:setColorMode', { colorMode: isDark ? 'dark' : 'light' });
+      }
+
+      // Build color scheme switcher when altColors are present in design config.
+      // Stripes order: primary, accent, background, text.
+      // Supports altColors as a single object or an array of objects.
+      function buildColorSchemes(config) {
+        var container = document.getElementById('color-schemes');
+        container.innerHTML = '';
+
+        var design = config.design || {};
+        var defaultColors = design.colors || {};
+        var altColors = design.altColors;
+
+        if (!altColors) return;
+
+        container.style.display = 'flex';
+
+        var activeSchemeId = 'default';
+
+        // Normalize altColors: supports both a single object and an array of objects
+        var altArray = Array.isArray(altColors) ? altColors : [altColors];
+        var schemes = [{ id: 'default', colors: defaultColors }];
+        altArray.forEach(function(alt, i) {
+          schemes.push({ id: 'alt_' + i, colors: alt });
+        });
+
+        schemes.forEach(function(scheme) {
+          var btn = document.createElement('button');
+          btn.className = 'color-scheme-btn' + (scheme.id === activeSchemeId ? ' active' : '');
+          var isDefault = scheme.id === 'default';
+          btn.title = isDefault
+            ? 'Основная схема'
+            : 'Альтернативная схема ' + (parseInt(scheme.id.split('_')[1], 10) + 1);
+
+          var lightColors = scheme.colors.light || scheme.colors;
+          var stripeKeys = ['primary', 'accent', 'background', 'text'];
+          var stripes = stripeKeys.filter(function(k) { return !!lightColors[k]; });
+          var pct = 100 / stripes.length;
+          var stops = [];
+          stripes.forEach(function(k, i) {
+            var from = (i * pct).toFixed(2) + '%';
+            var to   = ((i + 1) * pct).toFixed(2) + '%';
+            stops.push(lightColors[k] + ' ' + from + ' ' + to);
+          });
+          btn.style.background = 'linear-gradient(to right, ' + stops.join(', ') + ')';
+
+          btn.addEventListener('click', function() {
+            container.querySelectorAll('.color-scheme-btn').forEach(function(b) {
+              b.classList.remove('active');
+            });
+            btn.classList.add('active');
+            activeSchemeId = scheme.id;
+            postToFrame('wlab:dev:setSetting', { key: 'design.colors', value: scheme.colors });
+          });
+
+          container.appendChild(btn);
+        });
+      }
+
+      // Init logo toggle state from config and show the row
+      function initLogoToggle(config) {
+        var hideLogo = ((config.design) || {}).hideLogo === true;
+        isLogoShown = !hideLogo;
+        logoTrack.classList.toggle('active', isLogoShown);
+        logoRow.style.display = 'flex';
+      }
+
+      logoTrack.addEventListener('click', function() {
+        isLogoShown = !isLogoShown;
+        logoTrack.classList.toggle('active', isLogoShown);
+        postToFrame('wlab:dev:setSetting', { key: 'design.hideLogo', value: !isLogoShown });
+      });
+
+      // Border color control — shown when settings.borderColor exists in config
+      function initBorderColor(config) {
+        var row = document.getElementById('border-color-row');
+        var input = document.getElementById('border-color-input');
+        var noneBtn = document.getElementById('border-color-none');
+        var settings = config.settings || {};
+        if (!('borderColor' in settings)) return;
+
+        row.style.display = 'flex';
+        var currentColor = settings.borderColor;
+        var hasColor = typeof currentColor === 'string' && currentColor.length > 0;
+        if (hasColor) input.value = currentColor;
+        noneBtn.classList.toggle('active', !hasColor);
+
+        input.addEventListener('input', function() {
+          noneBtn.classList.remove('active');
+          postToFrame('wlab:dev:setSetting', { key: 'settings.borderColor', value: input.value });
+        });
+
+        noneBtn.addEventListener('click', function() {
+          var nowNone = !noneBtn.classList.contains('active');
+          noneBtn.classList.toggle('active', nowNone);
+          postToFrame('wlab:dev:setSetting', { key: 'settings.borderColor', value: nowNone ? '' : input.value });
+        });
+      }
+
+      // When iframe is ready, sync initial state and build color scheme switcher
+      window.addEventListener('message', function(e) {
+        if (e.data && e.data.type === 'wlab:dev:frameReady') {
+          var cfg = e.data.currentConfig || {};
+          sendEditMode();
+          initLogoToggle(cfg);
+          buildColorSchemes(cfg);
+          initLayoutMode(cfg);
+          initBorderColor(cfg);
+        }
+      });
+
+      // Show icon-switcher for settings.layout.mode when the widget config has that key.
+      // SVG icons: compact = page outline with a small floating bar; fullwidth = bar spanning full width.
+      function initLayoutMode(config) {
+        var container = document.getElementById('layout-mode-row');
+        container.innerHTML = '';
+
+        var layout = ((config.settings) || {}).layout || {};
+        if (!('mode' in layout)) return;
+
+        container.style.display = 'flex';
+
+        var layoutModeIcons = {
+          'compact':   '<svg viewBox="0 0 20 14" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="0.75" y="0.75" width="18.5" height="12.5" rx="1.25" stroke="currentColor" stroke-width="1.5"/><rect x="12.5" y="8.5" width="6.25" height="4.25" rx="0.75" fill="currentColor"/></svg>',
+          'fullwidth': '<svg viewBox="0 0 20 14" fill="none" xmlns="http://www.w3.org/2000/svg"><line x1="1" y1="3" x2="1" y2="11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="19" y1="3" x2="19" y2="11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="3" y1="7" x2="17" y2="7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><polyline points="6,4 3,7 6,10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/><polyline points="14,4 17,7 14,10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>'
+        };
+        var layoutModeTitles = { 'compact': 'Компактно', 'fullwidth': 'На всю ширину' };
+        var currentMode = layout.mode || 'compact';
+
+        ['compact', 'fullwidth'].forEach(function(mode) {
+          var btn = document.createElement('button');
+          btn.className = 'pos-btn' + (mode === currentMode ? ' active' : '');
+          btn.innerHTML = layoutModeIcons[mode];
+          btn.title = layoutModeTitles[mode];
+          btn.addEventListener('click', function() {
+            container.querySelectorAll('.pos-btn').forEach(function(b) { b.classList.remove('active'); });
+            btn.classList.add('active');
+            postToFrame('wlab:dev:setSetting', { key: 'settings.layout.mode', value: mode });
+          });
+          container.appendChild(btn);
+        });
+      }
+
+      editTrack.addEventListener('click', function() {
+        editMode = !editMode;
+        editTrack.classList.toggle('active', editMode);
+        themeRow.classList.toggle('hidden', !editMode);
+        sendEditMode();
+      });
+
+      themeTrack.addEventListener('click', function() {
+        if (!editMode) return;
+        isDark = !isDark;
+        document.body.classList.toggle('dark', isDark);
+        themeTrack.classList.toggle('active', isDark);
+        sendColorMode();
+      });
+
+      // Viewport switcher
+      var viewportBtns = document.querySelectorAll('.viewport-btn');
+      viewportBtns.forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          viewportBtns.forEach(function(b) { b.classList.remove('active'); });
+          btn.classList.add('active');
+          frame.style.width = btn.dataset.width;
+        });
+      });
+
+    })();
+  </script>
+</body>
+</html>
