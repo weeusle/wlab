@@ -123,6 +123,18 @@
             <div class="color-row"><label class="color-dot"><input type="color" id="c-text"></label><span>Текст</span></div>
           </div>
         </div>
+        <div class="field">
+          <label class="field__label">Иконка (URL картинки)</label>
+          <input class="inp" id="icon-url" placeholder="https://...">
+          <div class="hint"><a href="#" id="icon-clear">Убрать иконку</a></div>
+        </div>
+        <div class="field">
+          <label class="field__label">Тень</label>
+          <div class="seg" id="shadow-seg">
+            <button class="seg__btn active" data-sh="1">Вкл</button>
+            <button class="seg__btn" data-sh="0">Выкл</button>
+          </div>
+        </div>
       </div>
 
       <!-- ТЕКСТЫ -->
@@ -146,6 +158,15 @@
       <!-- НАСТРОЙКИ -->
       <div class="section">
         <h2 class="section__title">Настройки</h2>
+        <div class="field">
+          <label class="field__label">Форма</label>
+          <div class="seg" id="form-seg">
+            <button class="seg__btn active" data-form="bar">Bar</button>
+            <button class="seg__btn" data-form="mini">Mini</button>
+            <button class="seg__btn" data-form="image">Image</button>
+            <button class="seg__btn" data-form="clear">Clear</button>
+          </div>
+        </div>
         <div class="field">
           <label class="field__label">Размер (форма bar)</label>
           <div class="seg" id="size-seg">
@@ -285,7 +306,11 @@
           document.querySelectorAll('#size-seg .seg__btn').forEach(function (x) { x.classList.remove('active'); });
           b.classList.add('active');
           currentBw = b.dataset.bw;
-          setSetting('settings.barWidth', currentBw);
+          var modeVal = currentBw === 'full' ? 'fullwidth' : currentBw === 'mini' ? 'mini' : 'compact';
+          lastConfig.settings = lastConfig.settings || {};
+          lastConfig.settings.layout = lastConfig.settings.layout || {};
+          lastConfig.settings.layout.mode = modeVal;
+          setSetting('settings.layout.mode', modeVal);
           buildPosGrid(); // fullwidth → только верх/низ
           updateOffsetsEnabled();
         });
@@ -304,7 +329,7 @@
         grid.innerHTML = '';
         var full = (currentBw === 'full');
         var allowed = full ? FULL_POS : ALL8;
-        var current = ((lastConfig.settings) || {}).position || 'bottom-right';
+        var current = (((lastConfig.settings) || {}).layout || {}).position || 'bottom-right';
         var active = full ? (String(current).indexOf('top') === 0 ? 'top-center' : 'bottom-center') : current;
         POS.forEach(function (p) {
           var cell = document.createElement('button');
@@ -313,10 +338,10 @@
           if (p) { var d = document.createElement('span'); d.className = 'dot'; cell.appendChild(d); }
           if (p && allowed[p]) {
             cell.addEventListener('click', function () {
-              lastConfig.settings = lastConfig.settings || {}; lastConfig.settings.position = p;
+              lastConfig.settings = lastConfig.settings || {}; lastConfig.settings.layout = lastConfig.settings.layout || {}; lastConfig.settings.layout.position = p;
               grid.querySelectorAll('.pos-cell').forEach(function (x) { x.classList.remove('active'); });
               cell.classList.add('active');
-              setSetting('settings.position', p);
+              setSetting('settings.layout.position', p);
             });
           }
           grid.appendChild(cell);
@@ -333,8 +358,33 @@
       // ---- Offsets (отступы; недоступны для fullwidth) ----
       var offX = document.getElementById('off-x'), offY = document.getElementById('off-y');
       var offHint = document.getElementById('offsets-hint');
-      offX.addEventListener('input', function () { setSetting('settings.offsetX', Number(offX.value || 0)); });
-      offY.addEventListener('input', function () { setSetting('settings.offsetY', Number(offY.value || 0)); });
+      offX.addEventListener('input', function () { setSetting('settings.layout.offsetX', Number(offX.value || 0)); });
+      offY.addEventListener('input', function () { setSetting('settings.layout.offsetY', Number(offY.value || 0)); });
+
+      // ---- Форма карточки (bar/mini/image/clear) ----
+      document.querySelectorAll('#form-seg .seg__btn').forEach(function (b) {
+        b.addEventListener('click', function () {
+          document.querySelectorAll('#form-seg .seg__btn').forEach(function (x) { x.classList.remove('active'); });
+          b.classList.add('active');
+          setSetting('settings.form', b.dataset.form);
+        });
+      });
+
+      // ---- Иконка (design.icon.url) ----
+      var iconUrl = document.getElementById('icon-url');
+      iconUrl.addEventListener('input', function () { setSetting('design.icon.url', iconUrl.value.trim()); });
+      document.getElementById('icon-clear').addEventListener('click', function (e) {
+        e.preventDefault(); iconUrl.value = ''; setSetting('design.icon.url', '');
+      });
+
+      // ---- Тень (design.shadow) ----
+      document.querySelectorAll('#shadow-seg .seg__btn').forEach(function (b) {
+        b.addEventListener('click', function () {
+          document.querySelectorAll('#shadow-seg .seg__btn').forEach(function (x) { x.classList.remove('active'); });
+          b.classList.add('active');
+          setSetting('design.shadow', b.dataset.sh === '1');
+        });
+      });
       function updateOffsetsEnabled() {
         var full = (currentBw === 'full');
         offX.disabled = full; offY.disabled = full;
@@ -361,19 +411,28 @@
         document.getElementById('t-policy').value = t.policy || '';
         document.getElementById('t-accept').value = t.buttonText || '';
 
-        var bw = ((lastConfig.settings) || {}).barWidth || 'auto';
+        var lay = ((lastConfig.settings) || {}).layout || {};
+        var modeVal = lay.mode || 'compact';
+        var bw = modeVal === 'fullwidth' ? 'full' : modeVal === 'mini' ? 'mini' : 'auto';
         currentBw = bw;
         document.querySelectorAll('#size-seg .seg__btn').forEach(function (x) { x.classList.toggle('active', x.dataset.bw === bw); });
+
+        var formVal = ((lastConfig.settings) || {}).form || 'bar';
+        document.querySelectorAll('#form-seg .seg__btn').forEach(function (x) { x.classList.toggle('active', x.dataset.form === formVal); });
 
         buildPosGrid();
 
         var br = ((lastConfig.settings) || {}).borderRadius; br = (br == null ? 50 : br);
         radius.value = br; radiusVal.textContent = br;
 
-        var st = (lastConfig.settings) || {};
-        offX.value = (st.offsetX == null ? 16 : st.offsetX);
-        offY.value = (st.offsetY == null ? 16 : st.offsetY);
+        offX.value = (lay.offsetX == null ? 16 : lay.offsetX);
+        offY.value = (lay.offsetY == null ? 16 : lay.offsetY);
         updateOffsetsEnabled();
+
+        var ic = ((lastConfig.design) || {}).icon || {};
+        document.getElementById('icon-url').value = ic.url || '';
+        var sh = ((lastConfig.design) || {}).shadow !== false;
+        document.querySelectorAll('#shadow-seg .seg__btn').forEach(function (x) { x.classList.toggle('active', (x.dataset.sh === '1') === sh); });
       });
     })();
   </script>
