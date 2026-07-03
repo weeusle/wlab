@@ -131,6 +131,11 @@
           <div class="btngroup" id="variant-group"></div>
         </div>
         <div class="field">
+          <label class="field__label">Иконка (URL картинки)</label>
+          <input class="inp" id="icon-url" placeholder="https://… (пусто = стандартное печенье)">
+          <div class="hint"><a href="#" id="icon-clear">Вернуть стандартную</a></div>
+        </div>
+        <div class="field">
           <label class="field__label">Расположение</label>
           <div class="posgrid" id="posgrid"></div>
         </div>
@@ -248,6 +253,13 @@
       bindText('t-cookie', 'cookieText');
       bindText('t-accept', 'acceptLabel');
 
+      // Иконка (design.icon.url) — пусто = дефолтное печенье. «Вернуть стандартную» удаляет свою.
+      var iconUrl = document.getElementById('icon-url');
+      iconUrl.addEventListener('input', function () { setSetting('design.icon.url', iconUrl.value.trim()); });
+      document.getElementById('icon-clear').addEventListener('click', function (e) {
+        e.preventDefault(); iconUrl.value = ''; setSetting('design.icon.url', '');
+      });
+
       // Вариант (4)
       function buildVariants() {
         var box = document.getElementById('variant-group'); box.innerHTML = '';
@@ -335,6 +347,9 @@
         var oy = (typeof st.offsetY === 'number') ? st.offsetY : 24;
         document.getElementById('off-x').value = ox; document.getElementById('off-x-val').textContent = ox;
         document.getElementById('off-y').value = oy; document.getElementById('off-y-val').textContent = oy;
+
+        var ic = ((lastConfig.design) || {}).icon || {};
+        document.getElementById('icon-url').value = ic.url || '';
       });
     })();
   </script>
