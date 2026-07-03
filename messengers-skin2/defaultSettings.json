@@ -1,0 +1,61 @@
+{
+  "widgetCode": "messengers",
+  "skinCode": "skin2",
+  "version": "1.0.0",
+  "widgetName": "Мессенджеры — Social bar с QR",
+  "design": {
+    "colors": {
+      "light": { "primary": "#0047F0", "accent": "#0047F0", "background": "#FFFFFF", "text": "#333333" },
+      "dark":  { "primary": "#A6BFFF", "accent": "#A6BFFF", "background": "#111111", "text": "#FFFFFF" }
+    },
+    "altColors": [
+      {
+        "light": { "primary": "#00BB41", "accent": "#00BB41", "background": "#FFFFFF", "text": "#333333" },
+        "dark":  { "primary": "#D0FF73", "accent": "#D0FF73", "background": "#111111", "text": "#FFFFFF" }
+      },
+      {
+        "light": { "primary": "#8E3DFF", "accent": "#8E3DFF", "background": "#FFFFFF", "text": "#333333" },
+        "dark":  { "primary": "#CBA5FF", "accent": "#CBA5FF", "background": "#111111", "text": "#FFFFFF" }
+      },
+      {
+        "light": { "primary": "#FF5500", "accent": "#FF5500", "background": "#FFFFFF", "text": "#333333" },
+        "dark":  { "primary": "#FFBA97", "accent": "#FFBA97", "background": "#111111", "text": "#FFFFFF" }
+      },
+      {
+        "light": { "primary": "#222222", "accent": "#222222", "background": "#FFFFFF", "text": "#333333" },
+        "dark":  { "primary": "#FFFFFF", "accent": "#FFFFFF", "background": "#111111", "text": "#FFFFFF" }
+      }
+    ],
+    "colorMode": "light",
+    "font": {
+      "family": "SF Pro Display",
+      "files": [
+        { "weight": 400, "format": "woff2", "url": "https://cdn.jsdelivr.net/npm/@qpokychuk/sf-pro-display@1.0.2/src/SFProDisplay-Regular.woff2" },
+        { "weight": 600, "format": "woff2", "url": "https://cdn.jsdelivr.net/npm/@qpokychuk/sf-pro-display@1.0.2/src/SFProDisplay-Semibold.woff2" }
+      ]
+    },
+    "hideLogo": false
+  },
+  "texts": {
+    "mainText": "Пишите, звоните — мы на связи",
+    "qrHintText": "Сканируйте QR-код с телефона",
+    "tooltipTelegram": "Telegram",
+    "tooltipWhatsapp": "WhatsApp",
+    "tooltipMax": "Max",
+    "tooltipVk": "Вконтакте"
+  },
+  "settings": {
+    "layout": { "position": "bottom-right", "offsetX": 16, "offsetY": 16 },
+    "orientation": "horizontal",
+    "showMessengers": ["telegram", "whatsapp", "max", "vk", "phone"],
+    "messenger": "max",
+    "messengerUrls": {
+      "telegram": "https://t.me/telegram",
+      "whatsapp": "https://wa.me/79953805544",
+      "max": "https://max.ru/",
+      "vk": "https://vk.com/"
+    },
+    "phone": "+7 (995) 380-55-44",
+    "showQr": true
+  }
+}

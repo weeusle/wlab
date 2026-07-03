@@ -1,0 +1,187 @@
+{
+  "platforms": ["desktop", "phone"],
+  "steps": [
+    {
+      "id": "texts",
+      "header": "Тексты",
+      "icon": "type",
+      "blocks": [
+        [
+          {
+            "type": "textinput",
+            "label": "Заголовок QR-панели",
+            "size": 2,
+            "destination": "texts.mainText",
+            "validator": { "required": true, "minLength": 5, "maxLength": 60 }
+          },
+          {
+            "type": "textinput",
+            "label": "Подсказка QR-панели",
+            "size": 1,
+            "destination": "texts.qrHintText",
+            "validator": { "maxLength": 80 }
+          },
+          {
+            "type": "textinput",
+            "label": "Телефон",
+            "size": 1,
+            "destination": "settings.phone",
+            "validator": { "maxLength": 30 }
+          }
+        ],
+        {
+          "header": "Подписи иконок (тултипы)",
+          "blocks": [
+            {
+              "type": "textinput",
+              "label": "Telegram",
+              "destination": "texts.tooltipTelegram",
+              "validator": { "maxLength": 20 }
+            },
+            {
+              "type": "textinput",
+              "label": "WhatsApp",
+              "destination": "texts.tooltipWhatsapp",
+              "validator": { "maxLength": 20 }
+            },
+            {
+              "type": "textinput",
+              "label": "Max",
+              "destination": "texts.tooltipMax",
+              "validator": { "maxLength": 20 }
+            },
+            {
+              "type": "textinput",
+              "label": "ВКонтакте",
+              "destination": "texts.tooltipVk",
+              "validator": { "maxLength": 20 }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "design",
+      "header": "Дизайн",
+      "icon": "palette",
+      "block": {
+        "type": "design",
+        "validator": { "wcag": { "text": 4.5, "primary": 3 } }
+      }
+    },
+    {
+      "id": "settings",
+      "header": "Настройки",
+      "icon": "settings",
+      "blocks": [
+        [
+          {
+            "type": "select",
+            "label": "Ориентация бара",
+            "destination": "settings.orientation",
+            "options": [
+              { "value": "horizontal", "label": "Горизонтально" },
+              { "value": "vertical", "label": "Вертикально" }
+            ]
+          },
+          {
+            "type": "select",
+            "label": "Основной мессенджер (для QR)",
+            "destination": "settings.messenger",
+            "options": [
+              { "value": "max", "label": "MAX" },
+              { "value": "telegram", "label": "Telegram" },
+              { "value": "whatsapp", "label": "WhatsApp" },
+              { "value": "vk", "label": "ВКонтакте" }
+            ]
+          },
+          {
+            "type": "toggler",
+            "label": "QR-панель",
+            "hint": "Раскрытие панели с QR-кодом при наведении (только десктоп)",
+            "destination": "settings.showQr"
+          }
+        ],
+        {
+          "header": "Ссылки мессенджеров",
+          "blocks": [
+            {
+              "type": "textinput",
+              "label": "Telegram",
+              "destination": "settings.messengerUrls.telegram",
+              "validator": { "maxLength": 200 }
+            },
+            {
+              "type": "textinput",
+              "label": "WhatsApp",
+              "destination": "settings.messengerUrls.whatsapp",
+              "validator": { "maxLength": 200 }
+            },
+            {
+              "type": "textinput",
+              "label": "MAX",
+              "destination": "settings.messengerUrls.max",
+              "validator": { "maxLength": 200 }
+            },
+            {
+              "type": "textinput",
+              "label": "ВКонтакте",
+              "destination": "settings.messengerUrls.vk",
+              "validator": { "maxLength": 200 }
+            }
+          ]
+        },
+        {
+          "header": "Расположение",
+          "blocks": [
+            {
+              "type": "settings.sizeposition",
+              "destination": "settings.layout",
+              "positions": ["top-left", "top-right", "bottom-left", "bottom-right"],
+              "features": { "showWidth": false, "showOffset": true }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "triggers",
+      "header": "Триггеры",
+      "icon": "lightning",
+      "blocks": [
+        [
+          { "type": "triggers.onReady" }
+        ],
+        [
+          { "type": "showTo" }
+        ]
+      ]
+    },
+    {
+      "id": "integrations",
+      "header": "Интеграции",
+      "icon": "code",
+      "blocks": [
+        [
+          { "type": "integrations.metrika" }
+        ]
+      ]
+    },
+    {
+      "id": "installation",
+      "header": "Установка",
+      "icon": "play-square",
+      "blocks": [
+        [
+          { "type": "installation.cloud" }
+        ],
+        [
+          { "type": "installation.website" }
+        ],
+        [
+          { "type": "installation.telegram" }
+        ]
+      ]
+    }
+  ]
+}

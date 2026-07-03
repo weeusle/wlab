@@ -24,6 +24,7 @@ for s in skin1 skin2; do
   build_one "/home/am/wlab/new widgets/Buttons/$s" "buttons-$s"
 done
 build_one "/home/am/wlab/new widgets/Messengers/skin1" "messengers-skin1"
+build_one "/home/am/wlab/new widgets/Messengers/skin2" "messengers-skin2"
 build_one "/home/am/wlab/new widgets/Video/skin1" "video-skin1"
 
 cd "$PAGES"
