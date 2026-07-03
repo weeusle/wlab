@@ -5,80 +5,46 @@
   ],
   "steps": [
     {
-      "id": "texts",
-      "header": "Тексты",
-      "icon": "type",
+      "id": "design",
+      "header": "Дизайн",
+      "icon": "palette",
       "blocks": [
         {
-          "header": "Оффер",
-          "afterHeader": "карточка с кнопками действия",
-          "blocks": [
-            {
-              "type": "textinput",
-              "label": "Заголовок оффера",
-              "size": 1,
-              "validator": { "maxLength": 60 },
-              "destination": "settings.offerTitle"
-            },
-            {
-              "type": "textinput",
-              "label": "Подзаголовок оффера",
-              "size": 1,
-              "validator": { "maxLength": 120 },
-              "destination": "settings.offerSubtitle"
-            },
-            {
-              "type": "textinput",
-              "label": "Текст основной кнопки",
-              "size": 1,
-              "validator": { "maxLength": 30 },
-              "destination": "settings.primaryLabel"
-            },
-            {
-              "type": "textinput",
-              "label": "Текст второй кнопки",
-              "size": 1,
-              "validator": { "maxLength": 30 },
-              "destination": "settings.secondaryLabel"
-            }
-          ]
+          "type": "design",
+          "validator": { "wcag": { "text": 4.5, "primary": 3 } }
         },
         {
-          "header": "Обратный звонок",
+          "header": "Рамка",
           "blocks": [
             {
-              "type": "textinput",
-              "label": "Заголовок",
-              "size": 1,
-              "validator": { "maxLength": 60 },
-              "destination": "settings.callbackTitle"
-            },
-            {
-              "type": "textinput",
-              "label": "Подзаголовок",
-              "size": 1,
-              "validator": { "maxLength": 120 },
-              "destination": "settings.callbackSubtitle"
-            },
-            {
-              "type": "textinput",
-              "label": "Плейсхолдер телефона",
-              "size": 1,
-              "validator": { "maxLength": 30 },
-              "destination": "settings.phonePlaceholder"
+              "type": "toggler",
+              "label": "Показывать рамку",
+              "destination": "settings.border"
             }
           ]
         }
       ]
     },
     {
-      "id": "design",
-      "header": "Дизайн",
-      "icon": "palette",
-      "block": {
-        "type": "design",
-        "validator": { "wcag": { "text": 4.5, "primary": 3 } }
-      }
+      "id": "texts",
+      "header": "Текст",
+      "icon": "type",
+      "blocks": [
+        {
+          "type": "textinput",
+          "label": "Заголовок",
+          "size": 1,
+          "validator": { "maxLength": 60 },
+          "destination": "texts.title"
+        },
+        {
+          "type": "textinput",
+          "label": "Подзаголовок",
+          "size": 1,
+          "validator": { "maxLength": 120 },
+          "destination": "texts.subtitle"
+        }
+      ]
     },
     {
       "id": "settings",
@@ -86,50 +52,34 @@
       "icon": "settings",
       "blocks": [
         {
-          "header": "Видео",
+          "header": "Контент",
           "blocks": [
             {
               "type": "textinput",
-              "label": "Ссылка на видео",
-              "destination": "settings.videoUrl",
+              "label": "Ссылка на первое видео",
+              "destination": "settings.video1",
               "validator": { "maxLength": 300 }
             },
             {
-              "type": "imagepicker",
-              "label": "Постер",
-              "destination": "settings.posterUrl",
-              "imageType": "image",
-              "fit": "cover"
+              "type": "textinput",
+              "label": "Ссылка на второе видео",
+              "destination": "settings.video2",
+              "validator": { "maxLength": 300 }
+            },
+            {
+              "type": "textinput",
+              "label": "Ссылка на третье видео",
+              "destination": "settings.video3",
+              "validator": { "maxLength": 300 }
             }
           ]
         },
-        [
-          {
-            "type": "select",
-            "label": "Форма",
-            "destination": "settings.skin",
-            "options": [
-              { "value": "rect", "label": "Прямоугольная" },
-              { "value": "circle", "label": "Круглая" }
-            ]
-          },
-          {
-            "type": "select",
-            "label": "Кнопки действия",
-            "destination": "settings.cta",
-            "options": [
-              { "value": "none", "label": "Нет" },
-              { "value": "offer", "label": "Оффер" },
-              { "value": "callback", "label": "Обратный звонок" }
-            ]
-          }
-        ],
         {
           "header": "Воспроизведение",
           "blocks": [
             {
               "type": "toggler",
-              "label": "Автозапуск",
+              "label": "Автозапуск видео",
               "destination": "settings.autoplay"
             },
             {
@@ -144,37 +94,47 @@
             },
             {
               "type": "toggler",
-              "label": "Открыто по умолчанию",
+              "label": "Развернуто по умолчанию",
               "destination": "settings.openByDefault"
             }
           ]
         },
         {
-          "header": "Ссылки кнопок",
+          "header": "Кнопки",
           "blocks": [
             {
-              "type": "textinput",
-              "label": "Ссылка основной кнопки",
-              "destination": "settings.primaryUrl",
-              "validator": { "maxLength": 300 }
+              "type": "toggler",
+              "label": "Первая кнопка",
+              "destination": "settings.button1"
             },
             {
               "type": "textinput",
-              "label": "Ссылка второй кнопки",
-              "destination": "settings.secondaryUrl",
-              "validator": { "maxLength": 300 }
-            }
-          ]
-        },
-        {
-          "header": "Рамка",
-          "blocks": [
+              "label": "Текст кнопки",
+              "destination": "settings.button1Label",
+              "validator": { "maxLength": 30 }
+            },
             {
               "type": "textinput",
-              "label": "Цвет рамки",
-              "placeholder": "#FFFFFF (пусто — без рамки)",
-              "destination": "settings.borderColor",
+              "label": "Ссылка в кнопке",
+              "destination": "settings.button1Url",
+              "validator": { "maxLength": 300 }
+            },
+            {
+              "type": "toggler",
+              "label": "Вторая кнопка",
+              "destination": "settings.button2"
+            },
+            {
+              "type": "textinput",
+              "label": "Текст кнопки",
+              "destination": "settings.button2Label",
               "validator": { "maxLength": 30 }
+            },
+            {
+              "type": "textinput",
+              "label": "Ссылка в кнопке",
+              "destination": "settings.button2Url",
+              "validator": { "maxLength": 300 }
             }
           ]
         },
@@ -182,14 +142,19 @@
           "header": "Положение",
           "blocks": [
             {
-              "type": "settings.position",
-              "destination": "settings.position",
-              "options": [
-                { "value": "top-left", "label": "Сверху слева" },
-                { "value": "top-right", "label": "Сверху справа" },
-                { "value": "bottom-left", "label": "Снизу слева" },
-                { "value": "bottom-right", "label": "Снизу справа" }
-              ]
+              "type": "settings.sizeposition",
+              "destination": "settings.layout",
+              "positions": [
+                "top-left",
+                "top-center",
+                "top-right",
+                "center-left",
+                "center-right",
+                "bottom-left",
+                "bottom-center",
+                "bottom-right"
+              ],
+              "features": { "showWidth": false, "showOffset": true }
             }
           ]
         }
@@ -223,9 +188,7 @@
       "header": "Установка",
       "icon": "play-square",
       "blocks": [
-        [ { "type": "installation.cloud" } ],
-        [ { "type": "installation.website" } ],
-        [ { "type": "installation.telegram" } ]
+        [ { "type": "installation.website" } ]
       ]
     }
   ]

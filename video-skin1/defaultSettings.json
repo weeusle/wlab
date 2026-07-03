@@ -1,7 +1,7 @@
 {
   "widgetCode": "video",
   "skinCode": "skin1",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "widgetName": "Видео",
   "design": {
     "colors": {
@@ -39,34 +39,28 @@
     "hideLogo": false
   },
   "texts": {
-    "offerTitle": "Рассмотрим детальнее?",
-    "callbackTitle": "Мы перезвоним"
+    "title": "Рассмотрим детальнее?",
+    "subtitle": "Можем рассчитать цену или обсудить по телефону"
   },
   "settings": {
-    "skin": "rect",
-    "videos": [
-      "https://mdn.github.io/shared-assets/videos/flower.mp4",
-      "https://www.w3schools.com/html/mov_bbb.mp4",
-      "https://www.w3schools.com/html/movie.mp4"
-    ],
-    "videoUrl": "",
-    "posterUrl": "",
-    "position": "bottom-right",
-    "openByDefault": false,
+    "video1": "https://mdn.github.io/shared-assets/videos/flower.mp4",
+    "video2": "https://www.w3schools.com/html/mov_bbb.mp4",
+    "video3": "https://www.w3schools.com/html/movie.mp4",
     "autoplay": true,
     "loop": true,
     "muted": true,
-    "cta": "offer",
-    "offerTitle": "Рассмотрим детальнее?",
-    "offerSubtitle": "Можем рассчитать цену или обсудить по телефону",
-    "primaryLabel": "Рассчитать цену",
-    "primaryUrl": "https://widgetlab.example/calc",
-    "secondaryLabel": "Оставить заявку",
-    "secondaryUrl": "https://widgetlab.example/request",
-    "callbackTitle": "Мы перезвоним",
-    "callbackSubtitle": "оставьте ваш телефон",
-    "phonePlaceholder": "999 999 99 99",
-    "phone": "",
-    "borderColor": "#FFFFFF"
+    "openByDefault": false,
+    "button1": true,
+    "button1Label": "Рассчитать цену",
+    "button1Url": "https://widgetlab.example/calc",
+    "button2": true,
+    "button2Label": "Оставить заявку",
+    "button2Url": "https://widgetlab.example/request",
+    "layout": {
+      "position": "bottom-right",
+      "offsetX": 24,
+      "offsetY": 24
+    },
+    "border": true
   }
 }

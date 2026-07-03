@@ -212,11 +212,12 @@
     <div id="color-schemes" style="display:none;align-items:center;gap:4px;"></div>
     <!-- Layout mode switcher (shown when settings.layout.mode present) -->
     <div id="layout-mode-row" style="display:none;align-items:center;gap:4px;"></div>
-    <!-- Border color (shown when settings.borderColor present) -->
-    <div id="border-color-row" style="display:none;align-items:center;gap:6px;">
+    <!-- Border toggle (shown when settings.border present) -->
+    <div class="dev-panel__row" id="border-row" style="display:none;">
       <span>Рамка</span>
-      <input type="color" class="dev-form-color" id="border-color-input" value="#ffffff">
-      <button class="dev-form-btn" id="border-color-none">Нет</button>
+      <div class="dev-panel__track" id="border-track">
+        <div class="dev-panel__thumb"></div>
+      </div>
     </div>
     <div class="dev-panel__separator"></div>
     <div class="viewport-switcher" id="viewport-switcher">
@@ -359,29 +360,21 @@
         postToFrame('wlab:dev:setSetting', { key: 'design.hideLogo', value: !isLogoShown });
       });
 
-      // Border color control — shown when settings.borderColor exists in config
-      function initBorderColor(config) {
-        var row = document.getElementById('border-color-row');
-        var input = document.getElementById('border-color-input');
-        var noneBtn = document.getElementById('border-color-none');
+      // Border toggle — shown when settings.border exists in config
+      function initBorder(config) {
+        var row = document.getElementById('border-row');
+        var track = document.getElementById('border-track');
         var settings = config.settings || {};
-        if (!('borderColor' in settings)) return;
+        if (!('border' in settings)) return;
 
         row.style.display = 'flex';
-        var currentColor = settings.borderColor;
-        var hasColor = typeof currentColor === 'string' && currentColor.length > 0;
-        if (hasColor) input.value = currentColor;
-        noneBtn.classList.toggle('active', !hasColor);
+        var on = settings.border !== false;
+        track.classList.toggle('active', on);
 
-        input.addEventListener('input', function() {
-          noneBtn.classList.remove('active');
-          postToFrame('wlab:dev:setSetting', { key: 'settings.borderColor', value: input.value });
-        });
-
-        noneBtn.addEventListener('click', function() {
-          var nowNone = !noneBtn.classList.contains('active');
-          noneBtn.classList.toggle('active', nowNone);
-          postToFrame('wlab:dev:setSetting', { key: 'settings.borderColor', value: nowNone ? '' : input.value });
+        track.addEventListener('click', function() {
+          on = !on;
+          track.classList.toggle('active', on);
+          postToFrame('wlab:dev:setSetting', { key: 'settings.border', value: on });
         });
       }
 
@@ -393,7 +386,7 @@
           initLogoToggle(cfg);
           buildColorSchemes(cfg);
           initLayoutMode(cfg);
-          initBorderColor(cfg);
+          initBorder(cfg);
         }
       });
 
