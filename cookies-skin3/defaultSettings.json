@@ -1,23 +1,27 @@
 {
   "widgetCode": "cookies",
   "skinCode": "skin3",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "widgetName": "Кукисы 3",
   "design": {
     "colors": {
-      "light": {
-        "text": "#202020",
-        "accent": "#FF4D00",
-        "primary": "#0047F0",
-        "background": "#FFFFFF"
-      },
-      "dark": {
-        "text": "#FFFFFF",
-        "accent": "#FF7033",
-        "primary": "#A6BFFF",
-        "background": "#282828"
-      }
+      "light": { "primary": "#FF4D00", "accent": "#FF4D00", "background": "#FFFFFF", "text": "#202020" },
+      "dark":  { "primary": "#FF7033", "accent": "#FF7033", "background": "#282828", "text": "#FFFFFF" }
     },
+    "altColors": [
+      {
+        "light": { "primary": "#9000FF", "accent": "#9000FF", "background": "#FFFFFF", "text": "#202020" },
+        "dark":  { "primary": "#CBA5FF", "accent": "#CBA5FF", "background": "#282828", "text": "#FFFFFF" }
+      },
+      {
+        "light": { "primary": "#FFC300", "accent": "#FFC300", "background": "#FFFFFF", "text": "#202020" },
+        "dark":  { "primary": "#FFE799", "accent": "#FFE799", "background": "#282828", "text": "#FFFFFF" }
+      },
+      {
+        "light": { "primary": "#00BB41", "accent": "#00BB41", "background": "#FFFFFF", "text": "#202020" },
+        "dark":  { "primary": "#D0FF73", "accent": "#D0FF73", "background": "#282828", "text": "#FFFFFF" }
+      }
+    ],
     "colorMode": "light",
     "font": {
       "family": "Manrope",
@@ -42,9 +46,11 @@
     "buttonText": "Окей"
   },
   "settings": {
-    "theme": "theme1",
     "layout": "floating",
     "compact": "auto",
+    "position": "bottom-center",
+    "offsetX": 24,
+    "offsetY": 24,
     "mainText": "Мы используем cookie, чтобы сделать сайт удобнее и полезнее",
     "buttonText": "Окей"
   }

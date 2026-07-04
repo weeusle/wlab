@@ -13,7 +13,7 @@
     body.dark .preview { background: #6b7280; }
     .topbar { flex-shrink: 0; display: flex; align-items: center; gap: 14px; background: #fff; border-bottom: 1px solid #e2e8f0; padding: 6px 12px; font-size: 13px; }
     .toggle { display: inline-flex; align-items: center; gap: 6px; cursor: pointer; user-select: none; }
-    .toggle__track { width: 34px; height: 20px; border-radius: 10px; background: #cbd5e1; position: relative; transition: background .2s; }
+    .toggle__track { width: 34px; height: 20px; border-radius: 10px; background: #cbd5e1; position: relative; transition: background .2s; cursor: pointer; }
     .toggle__track.on { background: #2563eb; }
     .toggle__track::after { content: ''; position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; border-radius: 50%; background: #fff; transition: transform .2s; }
     .toggle__track.on::after { transform: translateX(14px); }
@@ -40,6 +40,12 @@
     .scheme.active { border-color: #2563eb; }
     .scheme.active::after { content: '✓'; position: absolute; top: -3px; right: 1px; color: #2563eb; font-weight: 700; font-size: 13px; }
 
+    .colors { display: flex; flex-direction: column; gap: 10px; }
+    .color-row { display: flex; align-items: center; gap: 10px; }
+    .color-dot { width: 34px; height: 34px; border-radius: 50%; border: 1px solid #e2e8f0; padding: 0; cursor: pointer; overflow: hidden; position: relative; }
+    .color-dot input { position: absolute; inset: -4px; width: calc(100% + 8px); height: calc(100% + 8px); cursor: pointer; border: none; padding: 0; background: none; }
+    .color-row span { font-weight: 600; }
+
     .switch-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 12px; }
     .switch-row span { font-size: 13px; font-weight: 600; }
     .hint { font-size: 12px; color: #94a3b8; margin: -6px 0 10px; }
@@ -50,6 +56,20 @@
     .btngroup { display: flex; flex-direction: column; gap: 6px; }
     .opt-btn { text-align: left; border: 1px solid #e2e8f0; background: #f8fafc; color: #0f172a; font: inherit; font-weight: 600; padding: 9px 12px; border-radius: 9px; cursor: pointer; }
     .opt-btn.active { border-color: #2563eb; background: #eff6ff; color: #1d4ed8; }
+
+    .posgrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; background: #f1f5f9; border-radius: 10px; padding: 10px; width: 150px; }
+    .posgrid.full { grid-template-columns: 1fr; width: 96px; }
+    .pos-cell { height: 30px; border: none; border-radius: 7px; background: transparent; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+    .pos-cell:disabled { cursor: default; }
+    .pos-cell .dot { width: 7px; height: 7px; border-radius: 50%; background: #cbd5e1; }
+    .pos-cell:not(:disabled):hover .dot { background: #94a3b8; }
+    .pos-cell.active { background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,.12); }
+    .pos-cell.active .dot { background: #2563eb; width: 9px; height: 9px; }
+
+    .range-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+    .range-row__cap { flex: 0 0 96px; font-size: 12px; color: #64748b; }
+    .range-row .range { flex: 1; accent-color: #2563eb; }
+    .range-row__val { flex: 0 0 34px; text-align: right; font-variant-numeric: tabular-nums; font-weight: 600; color: #0f172a; }
   </style>
 </head>
 <body>
@@ -84,7 +104,14 @@
         <div class="field">
           <label class="field__label">Цветовые схемы</label>
           <div class="schemes" id="schemes"></div>
-          <div class="hint">Цвета баннера заданы выбранной схемой (Тема 1–4) и зависят от режима Светлая/Тёмная</div>
+        </div>
+        <div class="field">
+          <label class="field__label">Цвет (<span id="color-mode-label">светлая</span> тема)</label>
+          <div class="colors">
+            <div class="color-row"><label class="color-dot"><input type="color" id="c-bg"></label><span>Фон</span></div>
+            <div class="color-row"><label class="color-dot"><input type="color" id="c-text"></label><span>Текст</span></div>
+            <div class="color-row"><label class="color-dot"><input type="color" id="c-accent"></label><span>Кнопка</span></div>
+          </div>
         </div>
         <div class="switch-row"><span>Тень</span><span class="toggle__track on" id="shadow-track"></span></div>
         <div class="switch-row"><span>Логотип widget lab</span><span class="toggle__track on" id="logo-track"></span></div>
@@ -114,6 +141,23 @@
           <label class="field__label">Плотность</label>
           <div class="btngroup" id="compact-group"></div>
         </div>
+        <div class="field">
+          <label class="field__label">Расположение</label>
+          <div class="posgrid" id="posgrid"></div>
+        </div>
+        <div class="field">
+          <label class="field__label">Отступы от края</label>
+          <div class="range-row">
+            <span class="range-row__cap">По горизонтали</span>
+            <input type="range" class="range" id="off-x" min="0" max="100" step="4">
+            <output class="range-row__val" id="off-x-val">24</output>
+          </div>
+          <div class="range-row">
+            <span class="range-row__cap">По вертикали</span>
+            <input type="range" class="range" id="off-y" min="0" max="100" step="4">
+            <output class="range-row__val" id="off-y-val">24</output>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -124,14 +168,6 @@
       var isDark = false;
       var lastConfig = {};
 
-      // 4 цветовые схемы skin3, значения из design-tokens.ts (THEMES).
-      // Полоски свотча: primary, accent, bg, text.
-      var THEMES = [
-        { key: 'theme1', label: 'Тема 1', light: { primary: '#0047F0', accent: '#FF4D00', bg: '#FFFFFF', text: '#202020' }, dark: { primary: '#A6BFFF', accent: '#FF7033', bg: '#282828', text: '#FFFFFF' } },
-        { key: 'theme2', label: 'Тема 2', light: { primary: '#00BB41', accent: '#9000FF', bg: '#FFFFFF', text: '#202020' }, dark: { primary: '#D0FF73', accent: '#CBA5FF', bg: '#282828', text: '#FFFFFF' } },
-        { key: 'theme3', label: 'Тема 3', light: { primary: '#8E3DFF', accent: '#FFC300', bg: '#FFFFFF', text: '#202020' }, dark: { primary: '#CBA5FF', accent: '#FFE799', bg: '#282828', text: '#FFFFFF' } },
-        { key: 'theme4', label: 'Тема 4', light: { primary: '#FF5500', accent: '#00BB41', bg: '#FFFFFF', text: '#202020' }, dark: { primary: '#FFBA97', accent: '#D0FF73', bg: '#282828', text: '#FFFFFF' } }
-      ];
       var LAYOUTS = [
         { value: 'floating', label: 'Плавающая' },
         { value: 'full',     label: 'Во всю ширину' }
@@ -141,11 +177,33 @@
         { value: 'expanded', label: 'Развёрнутая' },
         { value: 'compact',  label: 'Компактная' }
       ];
+      // floating: 3×3 сетка, 8 точек (центр-центр не поддержан)
+      var POS_FLOATING = [
+        'top-left', 'top-center', 'top-right',
+        'center-left', null, 'center-right',
+        'bottom-left', 'bottom-center', 'bottom-right'
+      ];
+      // full: только верх/низ (2 точки)
+      var POS_FULL = ['top-center', 'bottom-center'];
+      var COLOR_ROLES = [
+        { id: 'c-bg', key: 'background' },
+        { id: 'c-text', key: 'text' },
+        { id: 'c-accent', key: 'accent' }
+      ];
 
       function post(type, payload) { if (frame.contentWindow) frame.contentWindow.postMessage(Object.assign({ type: type }, payload), '*'); }
       function setSetting(key, value) { post('wlab:dev:setSetting', { key: key, value: value }); }
       function mode() { return isDark ? 'dark' : 'light'; }
+      function hex6(v) { return /^#[0-9a-fA-F]{6}$/.test(v || '') ? v : '#000000'; }
       function settingsOf() { return (lastConfig.settings) || {}; }
+      function designOf() { return (lastConfig.design) || {}; }
+      function colorsOf(m) { return ((designOf().colors) || {})[m || mode()] || {}; }
+      function ensureColors() {
+        lastConfig.design = lastConfig.design || {};
+        lastConfig.design.colors = lastConfig.design.colors || {};
+        lastConfig.design.colors[mode()] = lastConfig.design.colors[mode()] || {};
+        return lastConfig.design.colors[mode()];
+      }
 
       // Edit mode
       var editTrack = document.getElementById('edit-track');
@@ -170,32 +228,66 @@
           b.classList.add('active');
           isDark = b.dataset.mode === 'dark';
           document.body.classList.toggle('dark', isDark);
+          document.getElementById('color-mode-label').textContent = isDark ? 'тёмная' : 'светлая';
           post('wlab:dev:setColorMode', { colorMode: mode() });
-          buildSchemes(); // свотчи показывают цвета текущего режима
+          buildSchemes(); refreshColorInputs();
         });
       });
 
-      // Цветовые схемы (Тема 1–4) → settings.theme
+      // Цветовые схемы: активная (design.colors) + design.altColors. Клик → design.colors = схема.
+      function schemesList() {
+        var d = designOf();
+        var def = d.colors || {};
+        var alt = Array.isArray(d.altColors) ? d.altColors : (d.altColors ? [d.altColors] : []);
+        return [def].concat(alt);
+      }
+      function sameScheme(a, b) { return JSON.stringify(a || {}) === JSON.stringify(b || {}); }
       function buildSchemes() {
         var box = document.getElementById('schemes'); box.innerHTML = '';
-        var current = settingsOf().theme || 'theme1';
-        THEMES.forEach(function (t) {
-          var c = t[mode()];
+        var list = schemesList();
+        var current = designOf().colors || {};
+        list.forEach(function (scheme, idx) {
+          var c = (scheme[mode()]) || {};
           var btn = document.createElement('button');
-          btn.className = 'scheme' + (t.key === current ? ' active' : '');
-          btn.title = t.label;
+          btn.className = 'scheme' + (sameScheme(scheme, current) ? ' active' : '');
+          btn.title = idx === 0 ? 'Основная' : 'Схема ' + (idx + 1);
           btn.style.background = 'linear-gradient(to right,'
-            + c.primary + ' 0% 25%,' + c.accent + ' 25% 50%,' + c.bg + ' 50% 75%,' + c.text + ' 75% 100%)';
+            + (c.background || '#fff') + ' 0% 34%,'
+            + (c.accent || c.primary || '#888') + ' 34% 67%,'
+            + (c.text || '#000') + ' 67% 100%)';
           btn.addEventListener('click', function () {
-            lastConfig.settings = lastConfig.settings || {}; lastConfig.settings.theme = t.key;
-            setSetting('settings.theme', t.key);
-            buildSchemes();
+            lastConfig.design = lastConfig.design || {};
+            lastConfig.design.colors = JSON.parse(JSON.stringify(scheme));
+            setSetting('design.colors', lastConfig.design.colors);
+            buildSchemes(); refreshColorInputs();
           });
           box.appendChild(btn);
         });
       }
 
-      // Тень → design.shadow (по умолчанию вкл.)
+      // Ручные пипетки (фон/текст/кнопка) для текущего режима → design.colors.{mode}.{role}
+      function refreshColorInputs() {
+        var c = colorsOf();
+        COLOR_ROLES.forEach(function (r) {
+          var inp = document.getElementById(r.id);
+          inp.value = hex6(c[r.key]);
+          inp.parentElement.style.background = inp.value;
+        });
+      }
+      COLOR_ROLES.forEach(function (r) {
+        var inp = document.getElementById(r.id);
+        inp.addEventListener('input', function () {
+          inp.parentElement.style.background = inp.value;
+          var slot = ensureColors();
+          slot[r.key] = inp.value;
+          if (r.key === 'accent') slot.primary = inp.value; // держим primary = accent
+          setSetting('design.colors.' + mode() + '.' + r.key, inp.value);
+          if (r.key === 'accent') setSetting('design.colors.' + mode() + '.primary', inp.value);
+          buildSchemes(); // ручной цвет мог совпасть/разойтись со схемой
+        });
+      });
+
+      // Тень → design.shadow
       var shadowTrack = document.getElementById('shadow-track');
       shadowTrack.addEventListener('click', function () {
         var on = !shadowTrack.classList.contains('on');
@@ -207,7 +299,7 @@
       // Логотип → design.hideLogo
       var logoTrack = document.getElementById('logo-track');
       logoTrack.addEventListener('click', function () {
-        var on = !logoTrack.classList.contains('on'); // on = логотип показан
+        var on = !logoTrack.classList.contains('on');
         logoTrack.classList.toggle('on', on);
         lastConfig.design = lastConfig.design || {}; lastConfig.design.hideLogo = !on;
         setSetting('design.hideLogo', !on);
@@ -218,32 +310,85 @@
       bindText('t-main', 'mainText');
       bindText('t-btn', 'buttonText');
 
-      // Раскладка → settings.layout
-      function buildLayout() { buildBtnGroup('layout-group', LAYOUTS, 'layout', 'floating'); }
-      // Плотность → settings.compact
-      function buildCompact() { buildBtnGroup('compact-group', COMPACTS, 'compact', 'auto'); }
-      function buildBtnGroup(boxId, options, key, def) {
-        var box = document.getElementById(boxId); box.innerHTML = '';
-        var current = settingsOf()[key] || def;
-        options.forEach(function (o) {
+      // Раскладка → settings.layout (переключает пикер позиции 8↔2)
+      function buildLayout() {
+        var box = document.getElementById('layout-group'); box.innerHTML = '';
+        var current = settingsOf().layout || 'floating';
+        LAYOUTS.forEach(function (o) {
           var btn = document.createElement('button');
           btn.className = 'opt-btn' + (o.value === current ? ' active' : '');
           btn.textContent = o.label;
           btn.addEventListener('click', function () {
             box.querySelectorAll('.opt-btn').forEach(function (x) { x.classList.remove('active'); });
             btn.classList.add('active');
-            lastConfig.settings = lastConfig.settings || {}; lastConfig.settings[key] = o.value;
-            setSetting('settings.' + key, o.value);
+            lastConfig.settings = lastConfig.settings || {}; lastConfig.settings.layout = o.value;
+            setSetting('settings.layout', o.value);
+            buildPosGrid();
           });
           box.appendChild(btn);
         });
       }
 
-      // Первичная отрисовка контролов сразу (на дефолтах), чтобы панель не пустела,
-      // если сообщение frameReady от превью не пришло.
-      buildSchemes();
-      buildLayout();
-      buildCompact();
+      // Плотность → settings.compact
+      function buildCompact() {
+        var box = document.getElementById('compact-group'); box.innerHTML = '';
+        var current = settingsOf().compact || 'auto';
+        COMPACTS.forEach(function (o) {
+          var btn = document.createElement('button');
+          btn.className = 'opt-btn' + (o.value === current ? ' active' : '');
+          btn.textContent = o.label;
+          btn.addEventListener('click', function () {
+            box.querySelectorAll('.opt-btn').forEach(function (x) { x.classList.remove('active'); });
+            btn.classList.add('active');
+            lastConfig.settings = lastConfig.settings || {}; lastConfig.settings.compact = o.value;
+            setSetting('settings.compact', o.value);
+          });
+          box.appendChild(btn);
+        });
+      }
+
+      // Расположение → settings.position. floating: сетка 3×3 (8 точек); full: верх/низ (2 точки).
+      function buildPosGrid() {
+        var grid = document.getElementById('posgrid'); grid.innerHTML = '';
+        var layout = settingsOf().layout || 'floating';
+        var current = settingsOf().position || 'bottom-center';
+        var isFull = layout === 'full';
+        grid.classList.toggle('full', isFull);
+        var cells = isFull ? POS_FULL : POS_FLOATING;
+        // в full подсветка: любая верхняя позиция → 'top-center', иначе 'bottom-center'
+        var effective = isFull ? (String(current).indexOf('top') === 0 ? 'top-center' : 'bottom-center') : current;
+        cells.forEach(function (p) {
+          var cell = document.createElement('button');
+          cell.className = 'pos-cell' + (p && p === effective ? ' active' : '');
+          cell.disabled = !p;
+          if (p) {
+            var d = document.createElement('span'); d.className = 'dot'; cell.appendChild(d);
+            cell.title = p;
+            cell.addEventListener('click', function () {
+              grid.querySelectorAll('.pos-cell').forEach(function (x) { x.classList.remove('active'); });
+              cell.classList.add('active');
+              lastConfig.settings = lastConfig.settings || {}; lastConfig.settings.position = p;
+              setSetting('settings.position', p);
+            });
+          }
+          grid.appendChild(cell);
+        });
+      }
+
+      // Отступы → settings.offsetX / offsetY
+      function bindOffset(id, valId, key) {
+        var el = document.getElementById(id), out = document.getElementById(valId);
+        el.addEventListener('input', function () {
+          out.textContent = el.value;
+          lastConfig.settings = lastConfig.settings || {}; lastConfig.settings[key] = Number(el.value);
+          setSetting('settings.' + key, Number(el.value));
+        });
+      }
+      bindOffset('off-x', 'off-x-val', 'offsetX');
+      bindOffset('off-y', 'off-y-val', 'offsetY');
+
+      // Первичная отрисовка (на дефолтах) — панель не пустеет без frameReady.
+      buildSchemes(); refreshColorInputs(); buildLayout(); buildCompact(); buildPosGrid();
 
       // Init из frameReady
       window.addEventListener('message', function (e) {
@@ -251,21 +396,25 @@
         lastConfig = e.data.currentConfig || {};
         post('wlab:dev:setEditMode', { editMode: editMode });
 
-        isDark = ((lastConfig.design) || {}).colorMode === 'dark';
+        isDark = (designOf().colorMode === 'dark');
         document.body.classList.toggle('dark', isDark);
+        document.getElementById('color-mode-label').textContent = isDark ? 'тёмная' : 'светлая';
         document.querySelectorAll('#theme-seg .seg__btn').forEach(function (x) { x.classList.toggle('active', x.dataset.mode === mode()); });
 
-        var d = lastConfig.design || {};
+        var d = designOf();
         shadowTrack.classList.toggle('on', d.shadow !== false);
         logoTrack.classList.toggle('on', d.hideLogo !== true);
 
-        var s = lastConfig.settings || {};
+        var s = settingsOf();
         document.getElementById('t-main').value = (typeof s.mainText === 'string' ? s.mainText : (lastConfig.texts || {}).mainText) || '';
         document.getElementById('t-btn').value = (typeof s.buttonText === 'string' ? s.buttonText : (lastConfig.texts || {}).buttonText) || '';
 
-        buildSchemes();
-        buildLayout();
-        buildCompact();
+        var ox = (typeof s.offsetX === 'number') ? s.offsetX : 24;
+        var oy = (typeof s.offsetY === 'number') ? s.offsetY : 24;
+        document.getElementById('off-x').value = ox; document.getElementById('off-x-val').textContent = ox;
+        document.getElementById('off-y').value = oy; document.getElementById('off-y-val').textContent = oy;
+
+        buildSchemes(); refreshColorInputs(); buildLayout(); buildCompact(); buildPosGrid();
       });
     })();
   </script>
