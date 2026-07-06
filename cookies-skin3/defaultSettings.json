@@ -5,21 +5,25 @@
   "widgetName": "Кукисы 3",
   "design": {
     "colors": {
-      "light": { "primary": "#FF4D00", "accent": "#FF4D00", "background": "#FFFFFF", "text": "#202020" },
-      "dark":  { "primary": "#FF7033", "accent": "#FF7033", "background": "#282828", "text": "#FFFFFF" }
+      "light": { "primary": "#0047F0", "accent": "#0047F0", "background": "#FFFFFF", "text": "#242424" },
+      "dark":  { "primary": "#A6BFFF", "accent": "#A6BFFF", "background": "#181818", "text": "#FFFFFF" }
     },
     "altColors": [
       {
-        "light": { "primary": "#9000FF", "accent": "#9000FF", "background": "#FFFFFF", "text": "#202020" },
-        "dark":  { "primary": "#CBA5FF", "accent": "#CBA5FF", "background": "#282828", "text": "#FFFFFF" }
+        "light": { "primary": "#00BB41", "accent": "#00BB41", "background": "#FFFFFF", "text": "#242424" },
+        "dark":  { "primary": "#D0FF73", "accent": "#D0FF73", "background": "#181818", "text": "#FFFFFF" }
       },
       {
-        "light": { "primary": "#FFC300", "accent": "#FFC300", "background": "#FFFFFF", "text": "#202020" },
-        "dark":  { "primary": "#FFE799", "accent": "#FFE799", "background": "#282828", "text": "#FFFFFF" }
+        "light": { "primary": "#8E3DFF", "accent": "#8E3DFF", "background": "#FFFFFF", "text": "#242424" },
+        "dark":  { "primary": "#CBA5FF", "accent": "#CBA5FF", "background": "#100E13", "text": "#FFFFFF" }
       },
       {
-        "light": { "primary": "#00BB41", "accent": "#00BB41", "background": "#FFFFFF", "text": "#202020" },
-        "dark":  { "primary": "#D0FF73", "accent": "#D0FF73", "background": "#282828", "text": "#FFFFFF" }
+        "light": { "primary": "#FF5500", "accent": "#FF5500", "background": "#FFFFFF", "text": "#242424" },
+        "dark":  { "primary": "#FFBA97", "accent": "#FFBA97", "background": "#111111", "text": "#FFFFFF" }
+      },
+      {
+        "light": { "primary": "#222222", "accent": "#222222", "background": "#FFFFFF", "text": "#242424" },
+        "dark":  { "primary": "#FFFFFF", "accent": "#FFFFFF", "background": "#222222", "text": "#FFFFFF" }
       }
     ],
     "colorMode": "light",
