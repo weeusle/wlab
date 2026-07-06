@@ -227,12 +227,20 @@
         });
       });
 
-      // Цветовые схемы: активная (design.colors) + design.altColors. Клик → design.colors = схема.
+      // Цветовые схемы: фиксированный набор [исходная design.colors, ...altColors].
+      // Набор «замораживается» при первом реальном конфиге, чтобы клик по схеме (он
+      // переписывает design.colors) не дублировал её первым свотчем и не терял исходную.
+      var CAPTURED_SCHEMES = null;
       function schemesList() {
+        if (CAPTURED_SCHEMES) return CAPTURED_SCHEMES;
         var d = designOf();
+        if (!d.colors && !d.altColors) return []; // конфиг ещё не пришёл
         var def = d.colors || {};
         var alt = Array.isArray(d.altColors) ? d.altColors : (d.altColors ? [d.altColors] : []);
-        return [def].concat(alt);
+        CAPTURED_SCHEMES = [JSON.parse(JSON.stringify(def))].concat(
+          alt.map(function (a) { return JSON.parse(JSON.stringify(a)); })
+        );
+        return CAPTURED_SCHEMES;
       }
       function sameScheme(a, b) { return JSON.stringify(a || {}) === JSON.stringify(b || {}); }
       function buildSchemes() {
