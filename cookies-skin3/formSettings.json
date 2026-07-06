@@ -75,27 +75,17 @@
         [
           {
             "type": "select",
-            "label": "Раскладка",
+            "label": "Форма",
             "destination": "settings.layout",
             "options": [
-              { "value": "floating", "label": "Плавающая" },
+              { "value": "floating", "label": "Компактно" },
               { "value": "full", "label": "Во всю ширину" }
-            ]
-          },
-          {
-            "type": "select",
-            "label": "Плотность",
-            "destination": "settings.compact",
-            "options": [
-              { "value": "auto", "label": "Авто" },
-              { "value": "expanded", "label": "Развёрнутая" },
-              { "value": "compact", "label": "Компактная" }
             ]
           }
         ],
         {
           "header": "Положение",
-          "headerHelp": "В раскладке «Во всю ширину» работают только верх и низ",
+          "headerHelp": "В форме «Во всю ширину» работают только верх и низ",
           "blocks": [
             {
               "type": "settings.position",

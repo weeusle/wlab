@@ -134,12 +134,8 @@
       <div class="section">
         <h2 class="section__title">Настройки</h2>
         <div class="field">
-          <label class="field__label">Раскладка</label>
+          <label class="field__label">Форма</label>
           <div class="btngroup" id="layout-group"></div>
-        </div>
-        <div class="field">
-          <label class="field__label">Плотность</label>
-          <div class="btngroup" id="compact-group"></div>
         </div>
         <div class="field">
           <label class="field__label">Расположение</label>
@@ -168,14 +164,11 @@
       var isDark = false;
       var lastConfig = {};
 
+      // Единый контрол «Форма»: плавающая таблетка ↔ полоса во всю ширину.
+      // Плотность плавающей таблетки подгоняется автоматически (settings.compact='auto').
       var LAYOUTS = [
-        { value: 'floating', label: 'Плавающая' },
+        { value: 'floating', label: 'Компактно' },
         { value: 'full',     label: 'Во всю ширину' }
-      ];
-      var COMPACTS = [
-        { value: 'auto',     label: 'Авто' },
-        { value: 'expanded', label: 'Развёрнутая' },
-        { value: 'compact',  label: 'Компактная' }
       ];
       // floating: 3×3 сетка, 8 точек (центр-центр не поддержан)
       var POS_FLOATING = [
@@ -329,24 +322,6 @@
         });
       }
 
-      // Плотность → settings.compact
-      function buildCompact() {
-        var box = document.getElementById('compact-group'); box.innerHTML = '';
-        var current = settingsOf().compact || 'auto';
-        COMPACTS.forEach(function (o) {
-          var btn = document.createElement('button');
-          btn.className = 'opt-btn' + (o.value === current ? ' active' : '');
-          btn.textContent = o.label;
-          btn.addEventListener('click', function () {
-            box.querySelectorAll('.opt-btn').forEach(function (x) { x.classList.remove('active'); });
-            btn.classList.add('active');
-            lastConfig.settings = lastConfig.settings || {}; lastConfig.settings.compact = o.value;
-            setSetting('settings.compact', o.value);
-          });
-          box.appendChild(btn);
-        });
-      }
-
       // Расположение → settings.position. floating: сетка 3×3 (8 точек); full: верх/низ (2 точки).
       function buildPosGrid() {
         var grid = document.getElementById('posgrid'); grid.innerHTML = '';
@@ -388,7 +363,7 @@
       bindOffset('off-y', 'off-y-val', 'offsetY');
 
       // Первичная отрисовка (на дефолтах) — панель не пустеет без frameReady.
-      buildSchemes(); refreshColorInputs(); buildLayout(); buildCompact(); buildPosGrid();
+      buildSchemes(); refreshColorInputs(); buildLayout(); buildPosGrid();
 
       // Init из frameReady
       window.addEventListener('message', function (e) {
@@ -414,7 +389,7 @@
         document.getElementById('off-x').value = ox; document.getElementById('off-x-val').textContent = ox;
         document.getElementById('off-y').value = oy; document.getElementById('off-y-val').textContent = oy;
 
-        buildSchemes(); refreshColorInputs(); buildLayout(); buildCompact(); buildPosGrid();
+        buildSchemes(); refreshColorInputs(); buildLayout(); buildPosGrid();
       });
     })();
   </script>
