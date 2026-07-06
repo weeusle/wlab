@@ -403,8 +403,12 @@
         });
       });
 
-      // Position grid — skin2 поддерживает только 4 угла (центры сторон отключены).
-      var POS = ['top-left', null, 'top-right', null, null, null, 'bottom-left', null, 'bottom-right'];
+      // Position grid — полная сетка 3×3 без центра-центра (8 якорей).
+      var POS = [
+        'top-left', 'top-center', 'top-right',
+        'center-left', null, 'center-right',
+        'bottom-left', 'bottom-center', 'bottom-right',
+      ];
       function buildPosGrid() {
         var grid = document.getElementById('posgrid'); grid.innerHTML = '';
         var current = (((lastConfig.settings) || {}).layout || {}).position || 'bottom-right';
