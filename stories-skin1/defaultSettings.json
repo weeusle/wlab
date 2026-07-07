@@ -1,0 +1,111 @@
+{
+  "widgetCode": "stories",
+  "skinCode": "skin1",
+  "version": "1.0.0",
+  "widgetName": "Истории",
+  "design": {
+    "colors": {
+      "light": {
+        "primary": "#0047F0",
+        "accent": "#0047F0",
+        "background": "#FFFFFF",
+        "text": "#FFFFFF"
+      },
+      "dark": {
+        "primary": "#A6BFFF",
+        "accent": "#A6BFFF",
+        "background": "#111111",
+        "text": "#FFFFFF"
+      }
+    },
+    "altColors": [
+      {
+        "light": {
+          "primary": "#00BB41",
+          "accent": "#00BB41",
+          "background": "#FFFFFF",
+          "text": "#FFFFFF"
+        },
+        "dark": {
+          "primary": "#D0FF73",
+          "accent": "#D0FF73",
+          "background": "#111111",
+          "text": "#FFFFFF"
+        }
+      },
+      {
+        "light": {
+          "primary": "#8E3DFF",
+          "accent": "#8E3DFF",
+          "background": "#FFFFFF",
+          "text": "#FFFFFF"
+        },
+        "dark": {
+          "primary": "#CBA5FF",
+          "accent": "#CBA5FF",
+          "background": "#111111",
+          "text": "#FFFFFF"
+        }
+      },
+      {
+        "light": {
+          "primary": "#FF5500",
+          "accent": "#FF5500",
+          "background": "#FFFFFF",
+          "text": "#FFFFFF"
+        },
+        "dark": {
+          "primary": "#FFBA97",
+          "accent": "#FFBA97",
+          "background": "#111111",
+          "text": "#FFFFFF"
+        }
+      },
+      {
+        "light": {
+          "primary": "#222222",
+          "accent": "#222222",
+          "background": "#FFFFFF",
+          "text": "#FFFFFF"
+        },
+        "dark": {
+          "primary": "#FFFFFF",
+          "accent": "#FFFFFF",
+          "background": "#111111",
+          "text": "#FFFFFF"
+        }
+      }
+    ],
+    "colorMode": "light",
+    "font": {
+      "family": "sans-serif",
+      "files": []
+    },
+    "hideLogo": false
+  },
+  "texts": {
+    "collectionTitle": "Необычная коллекция",
+    "storyTitle": "Пушистые диваны",
+    "storyDescription": "Необычный пушистый диван для вашего  интерьера уже у нас",
+    "buttonText": "Хочу такой же!",
+    "cardLabel": "Акция",
+    "formTitle": "Оставьте номер телефона",
+    "phonePlaceholder": "+7 (___) ___-__-__",
+    "submitText": "Отправить",
+    "successText": "Спасибо! Мы скоро свяжемся с вами."
+  },
+  "settings": {
+    "displayMode": "strip",
+    "showCardMeta": true,
+    "edgeFade": true,
+    "cta": {
+      "mode": "form",
+      "linkUrl": "https://t.me/widgetlab"
+    },
+    "layout": {
+      "position": "bottom-right",
+      "offsetX": 16,
+      "offsetY": 16
+    }
+  }
+}

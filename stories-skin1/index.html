@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Widget Skin Dev — Истории skin1</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; height: 100vh; display: flex; flex-direction: column;
+      background: #eef1f5; color: #0f172a; font-family: system-ui, sans-serif; font-size: 14px;
+    }
+    body.dark .preview { background: #6b7280; }
+    .topbar { flex-shrink: 0; display: flex; align-items: center; gap: 14px; background: #fff; border-bottom: 1px solid #e2e8f0; padding: 6px 12px; font-size: 13px; }
+    .toggle { display: inline-flex; align-items: center; gap: 6px; cursor: pointer; user-select: none; }
+    .toggle__track { width: 34px; height: 20px; border-radius: 10px; background: #cbd5e1; position: relative; transition: background .2s; }
+    .toggle__track.on { background: #2563eb; }
+    .toggle__track::after { content: ''; position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; border-radius: 50%; background: #fff; transition: transform .2s; }
+    .toggle__track.on::after { transform: translateX(14px); }
+    .viewport { display: flex; gap: 2px; margin-left: auto; }
+    .vp-btn { border: none; background: transparent; color: #64748b; font-size: 11px; padding: 4px 7px; border-radius: 6px; cursor: pointer; }
+    .vp-btn.active { background: #e2e8f0; color: #0f172a; }
+
+    .main { flex: 1; display: flex; min-height: 0; }
+    .preview { flex: 1; display: flex; justify-content: center; min-height: 0; background: #eef1f5; }
+    .preview iframe { height: 100%; border: none; display: block; transition: width .3s; box-shadow: 0 0 0 1px rgba(0,0,0,.1); background: #fff; }
+
+    .editor { width: 360px; flex-shrink: 0; background: #fff; border-left: 1px solid #e2e8f0; overflow-y: auto; padding: 18px 18px 60px; }
+    .section + .section { margin-top: 26px; border-top: 1px solid #eef1f5; padding-top: 22px; }
+    .section__title { font-size: 20px; font-weight: 800; margin: 0 0 16px; }
+    .field { margin-bottom: 16px; }
+    .field__label { display: block; font-size: 12px; font-weight: 600; color: #64748b; margin-bottom: 6px; }
+
+    .seg { display: flex; background: #f1f5f9; border-radius: 10px; padding: 4px; gap: 4px; }
+    .seg__btn { flex: 1; border: none; background: transparent; color: #475569; font-size: 13px; font-weight: 600; padding: 8px 6px; border-radius: 7px; cursor: pointer; }
+    .seg__btn.active { background: #fff; color: #0f172a; box-shadow: 0 1px 3px rgba(0,0,0,.12); }
+
+    .schemes { display: flex; gap: 8px; flex-wrap: wrap; }
+    .scheme { width: 40px; height: 38px; border-radius: 10px; border: 2px solid transparent; padding: 0; cursor: pointer; position: relative; }
+    .scheme.active { border-color: #2563eb; }
+    .scheme.active::after { content: '✓'; position: absolute; top: -3px; right: 1px; color: #2563eb; font-weight: 700; font-size: 13px; }
+
+    .colors { display: flex; flex-direction: column; gap: 10px; }
+    .color-row { display: flex; align-items: center; gap: 10px; }
+    .color-dot { width: 34px; height: 34px; border-radius: 50%; border: 1px solid #e2e8f0; padding: 0; cursor: pointer; overflow: hidden; }
+    .color-dot input { opacity: 0; width: 100%; height: 100%; cursor: pointer; border: none; }
+    .color-row span { font-weight: 600; }
+    .hint { font-size: 12px; color: #94a3b8; margin: -6px 0 10px; }
+
+    .inp { width: 100%; border: 1px solid #e2e8f0; border-radius: 9px; background: #f8fafc; padding: 9px 11px; font: inherit; color: inherit; }
+    .inp:focus { outline: 2px solid #93c5fd; border-color: #93c5fd; }
+    textarea.inp { resize: vertical; min-height: 62px; }
+
+    .posgrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; background: #f1f5f9; border-radius: 10px; padding: 10px; width: 150px; }
+    .pos-cell { height: 30px; border: none; border-radius: 7px; background: transparent; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+    .pos-cell:disabled { cursor: default; }
+    .pos-cell .dot { width: 7px; height: 7px; border-radius: 50%; background: #cbd5e1; }
+    .pos-cell:not(:disabled):hover .dot { background: #94a3b8; }
+    .pos-cell.active { background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,.12); }
+    .pos-cell.active .dot { background: #2563eb; width: 9px; height: 9px; }
+
+    .range-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+    .range-row__cap { flex: 0 0 96px; font-size: 12px; color: #64748b; }
+    .range-row .range { flex: 1; accent-color: #2563eb; }
+    .range-row__val { flex: 0 0 34px; text-align: right; font-variant-numeric: tabular-nums; font-weight: 600; color: #0f172a; }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <label class="toggle"><span>Edit Mode</span><span class="toggle__track on" id="edit-track"></span></label>
+    <div class="viewport" id="viewport">
+      <button class="vp-btn active" data-w="100%">100%</button>
+      <button class="vp-btn" data-w="1440px">1440</button>
+      <button class="vp-btn" data-w="1280px">1280</button>
+      <button class="vp-btn" data-w="1024px">1024</button>
+      <button class="vp-btn" data-w="768px">768</button>
+      <button class="vp-btn" data-w="600px">600</button>
+      <button class="vp-btn" data-w="480px">480</button>
+      <button class="vp-btn" data-w="375px">375</button>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="preview"><iframe id="frame" style="width:100%" src="./widget.html"></iframe></div>
+
+    <div class="editor">
+      <!-- ДИЗАЙН -->
+      <div class="section">
+        <h2 class="section__title">Дизайн</h2>
+        <div class="field">
+          <label class="field__label">Тема</label>
+          <div class="seg" id="theme-seg">
+            <button class="seg__btn active" data-mode="light">Светлая</button>
+            <button class="seg__btn" data-mode="dark">Тёмная</button>
+          </div>
+        </div>
+        <div class="field">
+          <label class="field__label">Цветовые схемы</label>
+          <div class="schemes" id="schemes"></div>
+        </div>
+        <div class="field">
+          <label class="field__label">Цвет</label>
+          <div class="colors">
+            <div class="color-row"><label class="color-dot"><input type="color" id="c-primary"></label><span>Основной (акцент)</span></div>
+          </div>
+          <div class="hint">Фон и текст в этом скине зависят от темы (Светлая/Тёмная) и не задаются вручную</div>
+        </div>
+        <div class="field">
+          <label class="field__label">Логотип WidgetLab</label>
+          <div class="seg" id="logo-seg">
+            <button class="seg__btn active" data-logo="1">Показывать</button>
+            <button class="seg__btn" data-logo="0">Скрыть</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ТЕКСТЫ -->
+      <div class="section">
+        <h2 class="section__title">Тексты</h2>
+        <div class="field">
+          <label class="field__label">Заголовок коллекции</label>
+          <input class="inp" id="t-collectionTitle">
+        </div>
+        <div class="field">
+          <label class="field__label">Заголовок сюжета</label>
+          <input class="inp" id="t-storyTitle">
+        </div>
+        <div class="field">
+          <label class="field__label">Описание сюжета</label>
+          <textarea class="inp" id="t-storyDescription"></textarea>
+        </div>
+        <div class="field">
+          <label class="field__label">Текст кнопки</label>
+          <input class="inp" id="t-buttonText">
+        </div>
+        <div class="field">
+          <label class="field__label">Лейбл карточки</label>
+          <input class="inp" id="t-cardLabel">
+        </div>
+        <div class="field">
+          <label class="field__label">Заголовок формы</label>
+          <input class="inp" id="t-formTitle">
+        </div>
+        <div class="field">
+          <label class="field__label">Плейсхолдер телефона</label>
+          <input class="inp" id="t-phonePlaceholder">
+        </div>
+        <div class="field">
+          <label class="field__label">Текст кнопки отправки</label>
+          <input class="inp" id="t-submitText">
+        </div>
+        <div class="field">
+          <label class="field__label">Сообщение после отправки</label>
+          <input class="inp" id="t-successText">
+        </div>
+      </div>
+
+      <!-- НАСТРОЙКИ -->
+      <div class="section">
+        <h2 class="section__title">Настройки</h2>
+        <div class="field">
+          <label class="field__label">Режим показа</label>
+          <div class="seg" id="mode-seg">
+            <button class="seg__btn active" data-dm="strip">Лента историй</button>
+            <button class="seg__btn" data-dm="launcher">Плавающая карточка</button>
+          </div>
+        </div>
+        <div class="field">
+          <label class="field__label">Иконки и подписи на карточках</label>
+          <div class="seg" id="meta-seg">
+            <button class="seg__btn active" data-v="1">Вкл</button>
+            <button class="seg__btn" data-v="0">Выкл</button>
+          </div>
+        </div>
+        <div class="field">
+          <label class="field__label">Выцветание краёв ленты</label>
+          <div class="seg" id="fade-seg">
+            <button class="seg__btn active" data-v="1">Вкл</button>
+            <button class="seg__btn" data-v="0">Выкл</button>
+          </div>
+        </div>
+        <div class="field">
+          <label class="field__label">Действие кнопки</label>
+          <div class="seg" id="cta-seg">
+            <button class="seg__btn active" data-cta="form">Форма с телефоном</button>
+            <button class="seg__btn" data-cta="link">Ссылка</button>
+          </div>
+        </div>
+        <div class="field" id="cta-link-field">
+          <label class="field__label">Ссылка кнопки (для режима «Ссылка»)</label>
+          <input class="inp" id="cta-linkUrl" placeholder="https://t.me/…">
+        </div>
+        <div class="field">
+          <label class="field__label">Расположение</label>
+          <div class="posgrid" id="posgrid"></div>
+        </div>
+        <div class="field">
+          <label class="field__label">Отступы от края</label>
+          <div class="range-row">
+            <span class="range-row__cap">По горизонтали</span>
+            <input type="range" class="range" id="off-x" min="0" max="100" step="4">
+            <output class="range-row__val" id="off-x-val">16</output>
+          </div>
+          <div class="range-row">
+            <span class="range-row__cap">По вертикали</span>
+            <input type="range" class="range" id="off-y" min="0" max="100" step="4">
+            <output class="range-row__val" id="off-y-val">16</output>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var frame = document.getElementById('frame');
+      var isDark = false;
+      var lastConfig = {};
+
+      // Замороженный набор цветовых схем: основная + альтернативные из defaultSettings.json.
+      // Заполняется один раз (fetch ниже / frameReady). Каждый элемент — { light:{…}, dark:{…} }.
+      var SCHEMES = [];
+      var activeScheme = 0;   // индекс активной схемы; -1 = ручной акцент
+
+      function post(type, payload) { if (frame.contentWindow) frame.contentWindow.postMessage(Object.assign({ type: type }, payload), '*'); }
+      function setSetting(key, value) { post('wlab:dev:setSetting', { key: key, value: value }); }
+      function mode() { return isDark ? 'dark' : 'light'; }
+      function hex6(v) { return /^#[0-9a-fA-F]{6}$/.test(v || '') ? v : '#000000'; }
+
+      // ── Edit mode ──────────────────────────────────────────────────────────
+      var editTrack = document.getElementById('edit-track');
+      var editMode = true;
+      editTrack.parentElement.addEventListener('click', function () {
+        editMode = !editMode; editTrack.classList.toggle('on', editMode);
+        post('wlab:dev:setEditMode', { editMode: editMode });
+      });
+
+      // ── Viewport ───────────────────────────────────────────────────────────
+      document.querySelectorAll('#viewport .vp-btn').forEach(function (b) {
+        b.addEventListener('click', function () {
+          document.querySelectorAll('#viewport .vp-btn').forEach(function (x) { x.classList.remove('active'); });
+          b.classList.add('active'); frame.style.width = b.dataset.w;
+        });
+      });
+
+      // ── Тема (light/dark) ────────────────────────────────────────────────────
+      document.querySelectorAll('#theme-seg .seg__btn').forEach(function (b) {
+        b.addEventListener('click', function () {
+          document.querySelectorAll('#theme-seg .seg__btn').forEach(function (x) { x.classList.remove('active'); });
+          b.classList.add('active');
+          isDark = b.dataset.mode === 'dark';
+          document.body.classList.toggle('dark', isDark);
+          post('wlab:dev:setColorMode', { colorMode: mode() });
+          buildSchemes(); refreshPrimary();
+        });
+      });
+
+      // ── Цветовые схемы ───────────────────────────────────────────────────────
+      // Свотч показывает акцент схемы для текущей темы; клик шлёт весь объект design.colors.
+      function accentOf(scheme) { return ((scheme[mode()] || {}).accent) || ((scheme[mode()] || {}).primary) || '#888888'; }
+      function currentAccent() { var c = ((lastConfig.design) || {}).colors || {}; return ((c[mode()] || {}).accent) || ((c[mode()] || {}).primary) || ''; }
+
+      function buildSchemes() {
+        var box = document.getElementById('schemes'); box.innerHTML = '';
+        SCHEMES.forEach(function (scheme, i) {
+          var btn = document.createElement('button');
+          btn.className = 'scheme' + (i === activeScheme ? ' active' : '');
+          btn.title = i === 0 ? 'Основная схема' : 'Схема ' + (i + 1);
+          btn.style.background = accentOf(scheme);
+          btn.addEventListener('click', function () {
+            activeScheme = i;
+            lastConfig.design = lastConfig.design || {};
+            lastConfig.design.colors = { light: Object.assign({}, scheme.light), dark: Object.assign({}, scheme.dark) };
+            setSetting('design.colors', lastConfig.design.colors);
+            buildSchemes(); refreshPrimary();
+          });
+          box.appendChild(btn);
+        });
+      }
+
+      // ── Ручной акцент (primary + accent для текущей темы) ─────────────────────
+      function refreshPrimary() {
+        var p = document.getElementById('c-primary');
+        var val = currentAccent() || (SCHEMES[0] ? accentOf(SCHEMES[0]) : '#0047F0');
+        p.value = hex6(val); p.parentElement.style.background = p.value;
+      }
+      document.getElementById('c-primary').addEventListener('input', function () {
+        this.parentElement.style.background = this.value;
+        activeScheme = -1;
+        lastConfig.design = lastConfig.design || {}; lastConfig.design.colors = lastConfig.design.colors || {};
+        lastConfig.design.colors[mode()] = lastConfig.design.colors[mode()] || {};
+        lastConfig.design.colors[mode()].primary = this.value;
+        lastConfig.design.colors[mode()].accent = this.value;
+        setSetting('design.colors.' + mode() + '.primary', this.value);
+        setSetting('design.colors.' + mode() + '.accent', this.value);
+        buildSchemes();
+      });
+
+      // ── Логотип (design.hideLogo) ────────────────────────────────────────────
+      document.querySelectorAll('#logo-seg .seg__btn').forEach(function (b) {
+        b.addEventListener('click', function () {
+          document.querySelectorAll('#logo-seg .seg__btn').forEach(function (x) { x.classList.remove('active'); });
+          b.classList.add('active');
+          setSetting('design.hideLogo', b.dataset.logo === '0');
+        });
+      });
+
+      // ── Тексты ────────────────────────────────────────────────────────────────
+      function bindText(id, key) {
+        var el = document.getElementById(id);
+        el.addEventListener('input', function () { setSetting('texts.' + key, el.value); });
+      }
+      var TEXT_KEYS = ['collectionTitle', 'storyTitle', 'storyDescription', 'buttonText',
+                       'cardLabel', 'formTitle', 'phonePlaceholder', 'submitText', 'successText'];
+      TEXT_KEYS.forEach(function (k) { bindText('t-' + k, k); });
+
+      // ── Режим показа (settings.displayMode) ──────────────────────────────────
+      document.querySelectorAll('#mode-seg .seg__btn').forEach(function (b) {
+        b.addEventListener('click', function () {
+          document.querySelectorAll('#mode-seg .seg__btn').forEach(function (x) { x.classList.remove('active'); });
+          b.classList.add('active');
+          setSetting('settings.displayMode', b.dataset.dm);
+        });
+      });
+
+      // ── Булевы сегменты (showCardMeta / edgeFade) ─────────────────────────────
+      function bindBoolSeg(segId, key) {
+        document.querySelectorAll('#' + segId + ' .seg__btn').forEach(function (b) {
+          b.addEventListener('click', function () {
+            document.querySelectorAll('#' + segId + ' .seg__btn').forEach(function (x) { x.classList.remove('active'); });
+            b.classList.add('active');
+            setSetting(key, b.dataset.v === '1');
+          });
+        });
+      }
+      bindBoolSeg('meta-seg', 'settings.showCardMeta');
+      bindBoolSeg('fade-seg', 'settings.edgeFade');
+
+      // ── Действие кнопки (settings.cta.mode) + ссылка ──────────────────────────
+      var ctaLinkField = document.getElementById('cta-link-field');
+      function syncCtaLinkVisibility(m) { ctaLinkField.style.display = (m === 'link') ? '' : 'none'; }
+      document.querySelectorAll('#cta-seg .seg__btn').forEach(function (b) {
+        b.addEventListener('click', function () {
+          document.querySelectorAll('#cta-seg .seg__btn').forEach(function (x) { x.classList.remove('active'); });
+          b.classList.add('active');
+          setSetting('settings.cta.mode', b.dataset.cta);
+          syncCtaLinkVisibility(b.dataset.cta);
+        });
+      });
+      var ctaLink = document.getElementById('cta-linkUrl');
+      ctaLink.addEventListener('input', function () { setSetting('settings.cta.linkUrl', ctaLink.value); });
+
+      // ── Расположение (settings.layout.position) — 4 угла ─────────────────────
+      var POS = [
+        'top-left',    null, 'top-right',
+        null,          null, null,
+        'bottom-left', null, 'bottom-right'
+      ];
+      function buildPosGrid() {
+        var grid = document.getElementById('posgrid'); grid.innerHTML = '';
+        var current = (((lastConfig.settings) || {}).layout || {}).position || 'bottom-right';
+        POS.forEach(function (p) {
+          var cell = document.createElement('button');
+          cell.className = 'pos-cell' + (p === current ? ' active' : '');
+          cell.disabled = !p;
+          if (p) {
+            var d = document.createElement('span'); d.className = 'dot'; cell.appendChild(d);
+            cell.addEventListener('click', function () {
+              grid.querySelectorAll('.pos-cell').forEach(function (x) { x.classList.remove('active'); });
+              cell.classList.add('active');
+              lastConfig.settings = lastConfig.settings || {}; lastConfig.settings.layout = lastConfig.settings.layout || {};
+              lastConfig.settings.layout.position = p;
+              setSetting('settings.layout.position', p);
+            });
+          }
+          grid.appendChild(cell);
+        });
+      }
+
+      // ── Отступы (settings.layout.offsetX / offsetY) ───────────────────────────
+      function bindOffset(id, valId, key) {
+        var el = document.getElementById(id), out = document.getElementById(valId);
+        el.addEventListener('input', function () {
+          out.textContent = el.value;
+          setSetting('settings.layout.' + key, Number(el.value));
+        });
+      }
+      bindOffset('off-x', 'off-x-val', 'offsetX');
+      bindOffset('off-y', 'off-y-val', 'offsetY');
+
+      // ── Применить весь конфиг к контролам ─────────────────────────────────────
+      function applyConfig(cfg) {
+        lastConfig = cfg || {};
+        var design = lastConfig.design || {};
+        var texts = lastConfig.texts || {};
+        var st = lastConfig.settings || {};
+
+        // Тема
+        isDark = design.colorMode === 'dark';
+        document.body.classList.toggle('dark', isDark);
+        document.querySelectorAll('#theme-seg .seg__btn').forEach(function (x) { x.classList.toggle('active', x.dataset.mode === mode()); });
+
+        // Схемы: заполнить SCHEMES один раз (заморозка) из основной + альтернативных
+        if (SCHEMES.length === 0 && design.colors) {
+          SCHEMES = [design.colors].concat(Array.isArray(design.altColors) ? design.altColors : []);
+        }
+        // Определить активную схему по совпадению акцента
+        activeScheme = -1;
+        var cur = currentAccent();
+        for (var i = 0; i < SCHEMES.length; i++) { if (accentOf(SCHEMES[i]) === cur) { activeScheme = i; break; } }
+        if (activeScheme === -1 && !cur) activeScheme = 0;
+        buildSchemes(); refreshPrimary();
+
+        // Логотип
+        var hideLogo = design.hideLogo === true;
+        document.querySelectorAll('#logo-seg .seg__btn').forEach(function (x) { x.classList.toggle('active', (x.dataset.logo === '0') === hideLogo); });
+
+        // Тексты
+        TEXT_KEYS.forEach(function (k) { document.getElementById('t-' + k).value = texts[k] != null ? texts[k] : ''; });
+
+        // Режим показа
+        var dm = st.displayMode === 'launcher' ? 'launcher' : 'strip';
+        document.querySelectorAll('#mode-seg .seg__btn').forEach(function (x) { x.classList.toggle('active', x.dataset.dm === dm); });
+
+        // Булевы
+        var meta = st.showCardMeta !== false;
+        document.querySelectorAll('#meta-seg .seg__btn').forEach(function (x) { x.classList.toggle('active', (x.dataset.v === '1') === meta); });
+        var fade = st.edgeFade !== false;
+        document.querySelectorAll('#fade-seg .seg__btn').forEach(function (x) { x.classList.toggle('active', (x.dataset.v === '1') === fade); });
+
+        // CTA
+        var ctaMode = ((st.cta || {}).mode === 'link') ? 'link' : 'form';
+        document.querySelectorAll('#cta-seg .seg__btn').forEach(function (x) { x.classList.toggle('active', x.dataset.cta === ctaMode); });
+        ctaLink.value = (st.cta || {}).linkUrl || '';
+        syncCtaLinkVisibility(ctaMode);
+
+        // Позиция
+        buildPosGrid();
+
+        // Отступы
+        var layout = st.layout || {};
+        var ox = (typeof layout.offsetX === 'number') ? layout.offsetX : 16;
+        var oy = (typeof layout.offsetY === 'number') ? layout.offsetY : 16;
+        document.getElementById('off-x').value = ox; document.getElementById('off-x-val').textContent = ox;
+        document.getElementById('off-y').value = oy; document.getElementById('off-y-val').textContent = oy;
+      }
+
+      // Первичная отрисовка сразу из defaultSettings.json — чтобы панель не была
+      // пустой, если frameReady от превью не пришёл (гонка/зависший iframe).
+      fetch('./defaultSettings.json')
+        .then(function (r) { return r.ok ? r.json() : null; })
+        .then(function (cfg) { if (cfg && SCHEMES.length === 0) applyConfig(cfg); })
+        .catch(function () {});
+
+      // frameReady уточняет значения актуальным конфигом превью.
+      window.addEventListener('message', function (e) {
+        if (!e.data || e.data.type !== 'wlab:dev:frameReady') return;
+        post('wlab:dev:setEditMode', { editMode: editMode });
+        applyConfig(e.data.currentConfig || {});
+      });
+    })();
+  </script>
+</body>
+</html>
