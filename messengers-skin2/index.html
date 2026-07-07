@@ -349,8 +349,9 @@
       bindText('t-qrhint', 'qrHintText');
       document.getElementById('t-phone').addEventListener('input', function () { setSetting('settings.phone', this.value); });
 
-      // Channels — skin2 хранит включённые каналы в массиве settings.showMessengers.
-      // Порядок в полосе = каноничный порядок ниже (фильтруем по включённым).
+      // Channels — вкл/выкл каналов хранится булевым объектом settings.channels.{key}
+      // (как skin1 — чтобы тумблеры боевого конструктора писали каждый свой boolean).
+      // Порядок в полосе — каноничный (виджет фильтрует DEFAULT_CHANNELS по channels).
       var CHAN_KEYS = ['telegram','whatsapp','max','vk','phone'];
       function grpOfChan(key) { return document.querySelector('.grp[data-chan="' + key + '"]'); }
       function enabledChannelKeys() {
@@ -359,7 +360,6 @@
           return tr && tr.classList.contains('on');
         });
       }
-      function pushChannels() { setSetting('settings.showMessengers', enabledChannelKeys()); }
       // Автоподстановка: ровно один канал → «QR по умолчанию» = этот канал (и блокируем
       // селект). ≥2 каналов — селект снова доступен.
       function syncQrToSingle() {
@@ -378,7 +378,7 @@
           var on = !tr.classList.contains('on');
           tr.classList.toggle('on', on);
           grpOfChan(key).classList.toggle('on', on);
-          pushChannels();
+          setSetting('settings.channels.' + key, on);
           syncQrToSingle();
         });
       });
@@ -456,10 +456,10 @@
         document.getElementById('t-qrhint').value = t.qrHintText || '';
 
         var s = lastConfig.settings || {};
-        var shown = Array.isArray(s.showMessengers) ? s.showMessengers : [];
+        var chans = s.channels || {};
         var urls = s.messengerUrls || {};
         CHAN_KEYS.forEach(function (k) {
-          var on = shown.indexOf(k) !== -1;
+          var on = chans[k] === true;
           var g = grpOfChan(k); if (g) { g.classList.toggle('on', on); var tr = g.querySelector('[data-chantoggle]'); if (tr) tr.classList.toggle('on', on); }
         });
         document.querySelectorAll('[data-chanurl]').forEach(function (el) { el.value = urls[el.dataset.chanurl] || ''; });

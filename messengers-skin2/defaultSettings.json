@@ -47,7 +47,13 @@
   "settings": {
     "layout": { "position": "bottom-right", "offsetX": 16, "offsetY": 16 },
     "orientation": "horizontal",
-    "showMessengers": ["telegram", "whatsapp", "max", "vk", "phone"],
+    "channels": {
+      "telegram": true,
+      "whatsapp": true,
+      "max": true,
+      "vk": true,
+      "phone": true
+    },
     "messenger": "max",
     "messengerUrls": {
       "telegram": "https://t.me/telegram",

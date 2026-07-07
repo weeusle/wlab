@@ -20,13 +20,6 @@
             "size": 1,
             "destination": "texts.qrHintText",
             "validator": { "maxLength": 80 }
-          },
-          {
-            "type": "textinput",
-            "label": "Телефон",
-            "size": 1,
-            "destination": "settings.phone",
-            "validator": { "maxLength": 30 }
           }
         ],
         {
@@ -103,31 +96,82 @@
           }
         ],
         {
-          "header": "Ссылки мессенджеров",
+          "header": "Telegram",
           "blocks": [
             {
+              "type": "toggler",
+              "label": "Показывать канал",
+              "destination": "settings.channels.telegram"
+            },
+            {
               "type": "textinput",
-              "label": "Telegram",
+              "label": "Ссылка на чат",
               "destination": "settings.messengerUrls.telegram",
               "validator": { "maxLength": 200 }
+            }
+          ]
+        },
+        {
+          "header": "WhatsApp",
+          "blocks": [
+            {
+              "type": "toggler",
+              "label": "Показывать канал",
+              "destination": "settings.channels.whatsapp"
             },
             {
               "type": "textinput",
-              "label": "WhatsApp",
+              "label": "Ссылка на чат",
               "destination": "settings.messengerUrls.whatsapp",
               "validator": { "maxLength": 200 }
+            }
+          ]
+        },
+        {
+          "header": "MAX",
+          "blocks": [
+            {
+              "type": "toggler",
+              "label": "Показывать канал",
+              "destination": "settings.channels.max"
             },
             {
               "type": "textinput",
-              "label": "MAX",
+              "label": "Ссылка на чат",
               "destination": "settings.messengerUrls.max",
               "validator": { "maxLength": 200 }
+            }
+          ]
+        },
+        {
+          "header": "ВКонтакте",
+          "blocks": [
+            {
+              "type": "toggler",
+              "label": "Показывать канал",
+              "destination": "settings.channels.vk"
             },
             {
               "type": "textinput",
-              "label": "ВКонтакте",
+              "label": "Ссылка на чат",
               "destination": "settings.messengerUrls.vk",
               "validator": { "maxLength": 200 }
+            }
+          ]
+        },
+        {
+          "header": "Звонок по телефону",
+          "blocks": [
+            {
+              "type": "toggler",
+              "label": "Показывать канал",
+              "destination": "settings.channels.phone"
+            },
+            {
+              "type": "textinput",
+              "label": "Номер телефона",
+              "destination": "settings.phone",
+              "validator": { "maxLength": 30 }
             }
           ]
         },
