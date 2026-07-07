@@ -1,0 +1,122 @@
+{
+  "steps": [
+    {
+      "id": "texts",
+      "header": "Тексты",
+      "icon": "type",
+      "blocks": [
+        [
+          {
+            "type": "textinput",
+            "label": "Текст кнопки",
+            "destination": "texts.buttonText",
+            "validator": { "required": true, "maxLength": 25 }
+          }
+        ]
+      ]
+    },
+    {
+      "id": "design",
+      "header": "Дизайн",
+      "icon": "palette",
+      "block": { "type": "design" }
+    },
+    {
+      "id": "settings",
+      "header": "Настройки",
+      "icon": "settings",
+      "blocks": [
+        [
+          {
+            "type": "textinput",
+            "label": "Ссылка на видео",
+            "destination": "settings.videoUrl",
+            "after": "Ссылка с YouTube, Vimeo, VK, RuTube или прямой файл (mp4/webm)",
+            "validator": { "required": true }
+          },
+          {
+            "type": "textinput",
+            "label": "Ссылка кнопки",
+            "destination": "settings.buttonUrl",
+            "after": "Куда ведёт кнопка «Оставить заявку»"
+          },
+          {
+            "type": "select",
+            "label": "Разворачивание виджета",
+            "destination": "settings.expandTrigger",
+            "options": [
+              { "value": "hover", "label": "При наведении" },
+              { "value": "click", "label": "По клику" }
+            ]
+          },
+          {
+            "type": "slider",
+            "label": "Задержка кнопки, сек",
+            "destination": "settings.ctaDelay",
+            "min": 0,
+            "max": 30,
+            "step": 1,
+            "after": "Через сколько секунд после разворачивания появляется кнопка",
+            "options": [
+              { "value": 0, "label": "Сразу" },
+              { "value": 5, "label": "5" },
+              { "value": 30, "label": "30" }
+            ]
+          }
+        ],
+        {
+          "header": "Расположение",
+          "blocks": [
+            {
+              "type": "settings.sizeposition",
+              "destination": "settings.layout",
+              "positions": ["top-left", "top-right", "bottom-left", "bottom-right"],
+              "features": { "showWidth": false, "showOffset": true }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "triggers",
+      "header": "Триггеры",
+      "icon": "lightning",
+      "blocks": [
+        [
+          { "type": "triggers.onReady" },
+          { "type": "triggers.button" },
+          { "type": "triggers.timer" },
+          { "type": "triggers.onExit" },
+          { "type": "triggers.javascript" },
+          { "type": "showTo" }
+        ]
+      ]
+    },
+    {
+      "id": "integrations",
+      "header": "Интеграции",
+      "icon": "code",
+      "blocks": [
+        [
+          { "type": "integrations.amo" },
+          { "type": "integrations.b24" },
+          { "type": "integrations.webhook" },
+          { "type": "integrations.sheets" },
+          { "type": "integrations.metrika" }
+        ]
+      ]
+    },
+    {
+      "id": "installation",
+      "header": "Установка",
+      "icon": "play-square",
+      "blocks": [
+        [
+          { "type": "installation.cloud" },
+          { "type": "installation.website" },
+          { "type": "installation.telegram" }
+        ]
+      ]
+    }
+  ]
+}

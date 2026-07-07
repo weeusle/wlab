@@ -1,0 +1,62 @@
+{
+  "widgetCode": "video",
+  "skinCode": "skin3",
+  "version": "1.0.0",
+  "widgetName": "Видео",
+  "design": {
+    "colors": {
+      "light": {
+        "primary": "#0047F0",
+        "accent": "#F6FF93",
+        "background": "#FFFFFF",
+        "text": "#FFFFFF"
+      },
+      "dark": {
+        "primary": "#0047F0",
+        "accent": "#F6FF93",
+        "background": "#1A1A1A",
+        "text": "#FFFFFF"
+      }
+    },
+    "altColors": [
+      {
+        "light": { "primary": "#16A34A", "accent": "#F6FF93", "background": "#FFFFFF", "text": "#FFFFFF" },
+        "dark":  { "primary": "#16A34A", "accent": "#F6FF93", "background": "#1A1A1A", "text": "#FFFFFF" }
+      },
+      {
+        "light": { "primary": "#7C3AED", "accent": "#F6FF93", "background": "#FFFFFF", "text": "#FFFFFF" },
+        "dark":  { "primary": "#7C3AED", "accent": "#F6FF93", "background": "#1A1A1A", "text": "#FFFFFF" }
+      },
+      {
+        "light": { "primary": "#F97316", "accent": "#F6FF93", "background": "#FFFFFF", "text": "#FFFFFF" },
+        "dark":  { "primary": "#F97316", "accent": "#F6FF93", "background": "#1A1A1A", "text": "#FFFFFF" }
+      }
+    ],
+    "colorMode": "light",
+    "font": {
+      "family": "Onest",
+      "files": [
+        {
+          "weight": 500,
+          "format": "woff2",
+          "url": "https://fonts.gstatic.com/s/onest/v9/gNMKW3F-SZuj7xmb-HYoEoeyxMI.woff2"
+        }
+      ]
+    },
+    "hideLogo": false
+  },
+  "texts": {
+    "buttonText": "Оставить заявку"
+  },
+  "settings": {
+    "layout": {
+      "position": "bottom-right",
+      "offsetX": 24,
+      "offsetY": 24
+    },
+    "videoUrl": "https://www.youtube.com/watch?v=aqz-KE-bpKQ",
+    "buttonUrl": "https://wlab.pro",
+    "expandTrigger": "hover",
+    "ctaDelay": 5
+  }
+}

@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Video Skin3 Dev</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background: #f0f0f0;
+      color: #333;
+      font-family: system-ui, sans-serif;
+      transition: background 0.3s, color 0.3s;
+    }
+    body.dark {
+      background: #777777;
+      color: #e0e0e0;
+    }
+    .dev-panel {
+      flex-shrink: 0;
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      background: rgba(128, 128, 128, 0.15);
+      backdrop-filter: blur(8px);
+      padding: 8px 12px;
+      font-size: 13px;
+      user-select: none;
+      flex-wrap: wrap;
+    }
+    .dev-panel__row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .dev-panel__track {
+      position: relative;
+      width: 40px;
+      height: 22px;
+      background: #f0f0f0;
+      border-radius: 11px;
+      cursor: pointer;
+      transition: background 0.3s;
+      flex-shrink: 0;
+    }
+    .dev-panel__track.active {
+      background: #BBBBBB;
+    }
+    .dev-panel__thumb {
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      width: 18px;
+      height: 18px;
+      background: #fff;
+      border-radius: 50%;
+      transition: transform 0.3s;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    }
+    .dev-panel__track.active .dev-panel__thumb {
+      transform: translateX(18px);
+    }
+    .dev-panel__theme-row { transition: opacity 0.3s; }
+    .dev-panel__theme-row.hidden { opacity: 0.3; pointer-events: none; }
+    .dev-panel__separator {
+      width: 1px;
+      height: 22px;
+      background: rgba(128, 128, 128, 0.3);
+      flex-shrink: 0;
+    }
+    .viewport-switcher {
+      flex-shrink: 0;
+      display: flex;
+      gap: 2px;
+      align-items: center;
+      overflow-x: auto;
+      max-width: 100%;
+    }
+    .viewport-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1px;
+      width: 36px;
+      height: 36px;
+      border: none;
+      border-radius: 6px;
+      background: transparent;
+      cursor: pointer;
+      color: inherit;
+      opacity: 0.4;
+      transition: opacity 0.2s, background 0.2s;
+      padding: 0;
+    }
+    .viewport-btn:hover { opacity: 0.7; }
+    .viewport-btn.active { opacity: 1; background: rgba(128, 128, 128, 0.2); }
+    .viewport-btn svg { width: 14px; height: 14px; fill: currentColor; flex-shrink: 0; }
+    .viewport-btn__label { font-size: 8px; line-height: 1; opacity: 0.8; }
+    .pos-btn {
+      width: 36px;
+      height: 26px;
+      padding: 3px 4px;
+      border: 1.5px solid currentColor;
+      background: transparent;
+      cursor: pointer;
+      color: inherit;
+      opacity: 0.5;
+      transition: opacity 0.2s, background 0.2s;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .pos-btn:hover { opacity: 0.8; }
+    .pos-btn.active { opacity: 1; background: rgba(128,128,128,0.2); }
+    .pos-btn svg { width: 100%; height: 100%; }
+    .color-scheme-btn {
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      border: 2px solid transparent;
+      padding: 0;
+      cursor: pointer;
+      overflow: hidden;
+      opacity: 0.6;
+      transition: opacity 0.2s, border-color 0.2s;
+      flex-shrink: 0;
+    }
+    .color-scheme-btn:hover { opacity: 0.85; }
+    .color-scheme-btn.active { opacity: 1; border-color: rgba(128,128,128,0.6); }
+    .dev-form-input {
+      font-size: 13px;
+      border-radius: 4px;
+      border: 1px solid rgba(128,128,128,0.3);
+      background: transparent;
+      color: inherit;
+      padding: 2px 6px;
+      width: 120px;
+    }
+    .dev-form-select {
+      font-size: 13px;
+      border-radius: 4px;
+      border: 1px solid rgba(128,128,128,0.3);
+      background: transparent;
+      color: inherit;
+      padding: 2px 4px;
+    }
+    .dev-form-color {
+      width: 32px;
+      height: 22px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      padding: 0;
+      background: none;
+    }
+    .dev-form-slider { width: 80px; cursor: pointer; }
+    .dev-form-slider-val { min-width: 24px; text-align: right; opacity: 0.6; font-size: 12px; }
+    .dev-form-btngroup { display: flex; gap: 2px; flex-wrap: wrap; }
+    .dev-form-btn {
+      font-size: 11px;
+      padding: 2px 6px;
+      border: 1px solid rgba(128,128,128,0.4);
+      border-radius: 4px;
+      background: transparent;
+      color: inherit;
+      cursor: pointer;
+      opacity: 0.5;
+    }
+    .dev-form-btn:hover { opacity: 0.75; }
+    .dev-form-btn.active { opacity: 1; background: rgba(128,128,128,0.2); }
+    .widget-frame-wrap {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      min-height: 0;
+    }
+    .widget-frame {
+      height: 100%;
+      border: none;
+      display: block;
+      transition: width 0.3s;
+      box-shadow: 0 0 0 1px rgba(0,0,0,0.12), 0 4px 32px rgba(0,0,0,0.08);
+    }
+  </style>
+  <script>
+    // position-picker — reusable 3×3 position grid component (inlined so the
+    // editor is self-contained; a classic external <script src> would 404 in the
+    // Vite prod bundle, and this control is used by settings.sizeposition below).
+    (function () {
+      var STYLES_ID = 'position-picker-styles';
+      var GRID = [
+        'top-left',    'top-center',    'top-right',
+        'center-left',  null,           'center-right',
+        'bottom-left', 'bottom-center', 'bottom-right',
+      ];
+      var CSS = [
+        '.position-picker{',
+          'display:grid;',
+          'grid-template-columns:repeat(3,10px);',
+          'grid-template-rows:repeat(3,10px);',
+          'gap:4px;',
+          'padding:5px;',
+          'border:1.5px solid currentColor;',
+          'border-radius:5px;',
+          'opacity:0.6;',
+          'transition:opacity 0.2s;',
+          'cursor:default;',
+        '}',
+        '.position-picker:hover{opacity:0.9;}',
+        '.position-dot{',
+          'width:10px;height:10px;',
+          'border-radius:50%;',
+          'border:none;',
+          'background:currentColor;',
+          'opacity:0.2;',
+          'cursor:pointer;',
+          'padding:0;',
+          'transition:opacity 0.15s,transform 0.15s;',
+        '}',
+        '.position-dot:hover{opacity:0.6;transform:scale(1.3);}',
+        '.position-dot.active{opacity:1;transform:scale(1.2);}',
+        '.position-dot--empty{background:transparent;cursor:default;pointer-events:none;}',
+      ].join('');
+
+      function injectStyles() {
+        if (document.getElementById(STYLES_ID)) return;
+        var style = document.createElement('style');
+        style.id = STYLES_ID;
+        style.textContent = CSS;
+        document.head.appendChild(style);
+      }
+
+      window.createPositionPicker = function (currentValue, onSelect) {
+        injectStyles();
+        var picker = document.createElement('div');
+        picker.className = 'position-picker';
+        GRID.forEach(function (pos) {
+          var dot = document.createElement('button');
+          if (!pos) {
+            dot.className = 'position-dot position-dot--empty';
+            picker.appendChild(dot);
+            return;
+          }
+          dot.className = 'position-dot';
+          dot.title = pos;
+          if (pos === currentValue) dot.classList.add('active');
+          dot.addEventListener('click', function () {
+            picker.querySelectorAll('.position-dot').forEach(function (d) {
+              d.classList.remove('active');
+            });
+            dot.classList.add('active');
+            onSelect(pos);
+          });
+          picker.appendChild(dot);
+        });
+        return picker;
+      };
+    })();
+  </script>
+</head>
+<body>
+  <div class="dev-panel">
+    <div class="dev-panel__row">
+      <span>Edit Mode</span>
+      <div class="dev-panel__track active" id="edit-track">
+        <div class="dev-panel__thumb"></div>
+      </div>
+    </div>
+    <div class="dev-panel__row dev-panel__theme-row" id="theme-row">
+      <span>Light</span>
+      <div class="dev-panel__track" id="theme-track">
+        <div class="dev-panel__thumb"></div>
+      </div>
+      <span>Dark</span>
+    </div>
+    <div class="dev-panel__row" id="logo-row" style="display:none;">
+      <span>Лого</span>
+      <div class="dev-panel__track" id="logo-track">
+        <div class="dev-panel__thumb"></div>
+      </div>
+    </div>
+    <!-- Color scheme switcher (shown when altColors present) -->
+    <div id="color-schemes" style="display:none;align-items:center;gap:4px;"></div>
+    <!-- Layout mode switcher (shown when settings.layout.mode present) -->
+    <div id="layout-mode-row" style="display:none;align-items:center;gap:4px;"></div>
+    <!-- Dynamic controls built from formSettings.json (display:contents makes children direct flex items) -->
+    <div id="form-controls" style="display:contents;"></div>
+    <div class="dev-panel__separator"></div>
+    <div class="viewport-switcher" id="viewport-switcher">
+      <button class="viewport-btn active" data-width="100%" title="100%">
+        <svg viewBox="0 0 24 24"><path d="M21 2H3a1 1 0 0 0-1 1v13a1 1 0 0 0 1 1h7l-1 3H7v1h10v-1h-2l-1-3h7a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1zm-1 13H4V4h16v11z"/></svg>
+        <span class="viewport-btn__label">100%</span>
+      </button>
+      <button class="viewport-btn" data-width="1440px" title="1440px">
+        <svg viewBox="0 0 24 24"><path d="M21 2H3a1 1 0 0 0-1 1v13a1 1 0 0 0 1 1h7l-1 3H7v1h10v-1h-2l-1-3h7a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1zm-1 13H4V4h16v11z"/></svg>
+        <span class="viewport-btn__label">1440</span>
+      </button>
+      <button class="viewport-btn" data-width="1280px" title="1280px">
+        <svg viewBox="0 0 24 24"><path d="M20 3H4a1 1 0 0 0-1 1v11h18V4a1 1 0 0 0-1-1zm-1 10H5V5h14v8zM1 17h22a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1z"/></svg>
+        <span class="viewport-btn__label">1280</span>
+      </button>
+      <button class="viewport-btn" data-width="1024px" title="1024px">
+        <svg viewBox="0 0 24 24"><path d="M20 3H4a1 1 0 0 0-1 1v11h18V4a1 1 0 0 0-1-1zm-1 10H5V5h14v8zM1 17h22a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1z"/></svg>
+        <span class="viewport-btn__label">1024</span>
+      </button>
+      <button class="viewport-btn" data-width="768px" title="768px">
+        <svg viewBox="0 0 24 24"><path d="M18 1H6a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2zm-3 20H9v-1h6v1zm3-3H6V4h12v14z"/></svg>
+        <span class="viewport-btn__label">768</span>
+      </button>
+      <button class="viewport-btn" data-width="600px" title="600px">
+        <svg viewBox="0 0 24 24"><path d="M18 1H6a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2zm-3 20H9v-1h6v1zm3-3H6V4h12v14z"/></svg>
+        <span class="viewport-btn__label">600</span>
+      </button>
+      <button class="viewport-btn" data-width="480px" title="480px">
+        <svg viewBox="0 0 24 24"><path d="M16 1H8a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2zm-3 20h-2v-1h2v1zm3-3H8V4h8v14z"/></svg>
+        <span class="viewport-btn__label">480</span>
+      </button>
+      <button class="viewport-btn" data-width="375px" title="375px">
+        <svg viewBox="0 0 24 24"><path d="M16 1H8a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2zm-3 20h-2v-1h2v1zm3-3H8V4h8v14z"/></svg>
+        <span class="viewport-btn__label">375</span>
+      </button>
+      <button class="viewport-btn" data-width="320px" title="320px">
+        <svg viewBox="0 0 24 24"><path d="M16 1H8a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2zm-3 20h-2v-1h2v1zm3-3H8V4h8v14z"/></svg>
+        <span class="viewport-btn__label">320</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="widget-frame-wrap">
+    <iframe id="widget-frame" class="widget-frame" style="width:100%" src="./widget.html"></iframe>
+  </div>
+
+  <script>
+    (function() {
+      var editMode = true;
+      var isDark = false;
+      var isLogoShown = true;
+      var editTrack = document.getElementById('edit-track');
+      var themeTrack = document.getElementById('theme-track');
+      var themeRow = document.getElementById('theme-row');
+      var logoTrack = document.getElementById('logo-track');
+      var logoRow = document.getElementById('logo-row');
+      var frame = document.getElementById('widget-frame');
+
+      function postToFrame(type, payload) {
+        if (!frame.contentWindow) return;
+        frame.contentWindow.postMessage(Object.assign({ type: type }, payload), '*');
+      }
+
+      function sendEditMode() {
+        postToFrame('wlab:dev:setEditMode', { editMode: editMode });
+      }
+
+      function sendColorMode() {
+        postToFrame('wlab:dev:setColorMode', { colorMode: isDark ? 'dark' : 'light' });
+      }
+
+      // Build color scheme switcher when altColors are present in design config.
+      // Stripes order: primary, accent, background, text.
+      // Supports altColors as a single object or an array of objects.
+      function buildColorSchemes(config) {
+        var container = document.getElementById('color-schemes');
+        container.innerHTML = '';
+
+        var design = config.design || {};
+        var defaultColors = design.colors || {};
+        var altColors = design.altColors;
+
+        if (!altColors) return;
+
+        container.style.display = 'flex';
+
+        var activeSchemeId = 'default';
+
+        // Normalize altColors: supports both a single object and an array of objects
+        var altArray = Array.isArray(altColors) ? altColors : [altColors];
+        var schemes = [{ id: 'default', colors: defaultColors }];
+        altArray.forEach(function(alt, i) {
+          schemes.push({ id: 'alt_' + i, colors: alt });
+        });
+
+        schemes.forEach(function(scheme) {
+          var btn = document.createElement('button');
+          btn.className = 'color-scheme-btn' + (scheme.id === activeSchemeId ? ' active' : '');
+          var isDefault = scheme.id === 'default';
+          btn.title = isDefault
+            ? 'Основная схема'
+            : 'Альтернативная схема ' + (parseInt(scheme.id.split('_')[1], 10) + 1);
+
+          var lightColors = scheme.colors.light || scheme.colors;
+          var stripeKeys = ['primary', 'accent', 'background', 'text'];
+          var stripes = stripeKeys.filter(function(k) { return !!lightColors[k]; });
+          var pct = 100 / stripes.length;
+          var stops = [];
+          stripes.forEach(function(k, i) {
+            var from = (i * pct).toFixed(2) + '%';
+            var to   = ((i + 1) * pct).toFixed(2) + '%';
+            stops.push(lightColors[k] + ' ' + from + ' ' + to);
+          });
+          btn.style.background = 'linear-gradient(to right, ' + stops.join(', ') + ')';
+
+          btn.addEventListener('click', function() {
+            container.querySelectorAll('.color-scheme-btn').forEach(function(b) {
+              b.classList.remove('active');
+            });
+            btn.classList.add('active');
+            activeSchemeId = scheme.id;
+            postToFrame('wlab:dev:setSetting', { key: 'design.colors', value: scheme.colors });
+          });
+
+          container.appendChild(btn);
+        });
+      }
+
+      // Init logo toggle state from config and show the row
+      function initLogoToggle(config) {
+        var hideLogo = ((config.design) || {}).hideLogo === true;
+        isLogoShown = !hideLogo;
+        logoTrack.classList.toggle('active', isLogoShown);
+        logoRow.style.display = 'flex';
+      }
+
+      logoTrack.addEventListener('click', function() {
+        isLogoShown = !isLogoShown;
+        logoTrack.classList.toggle('active', isLogoShown);
+        postToFrame('wlab:dev:setSetting', { key: 'design.hideLogo', value: !isLogoShown });
+      });
+
+      // When iframe is ready, sync initial state and build color scheme switcher
+      window.addEventListener('message', function(e) {
+        if (e.data && e.data.type === 'wlab:dev:frameReady') {
+          var cfg = e.data.currentConfig || {};
+          sendEditMode();
+          initLogoToggle(cfg);
+          buildColorSchemes(cfg);
+          initLayoutMode(cfg);
+          tryInitFormControls(cfg);
+        }
+      });
+
+      // Show icon-switcher for settings.layout.mode when the widget config has that key.
+      // SVG icons: compact = page outline with a small floating bar; fullwidth = bar spanning full width.
+      function initLayoutMode(config) {
+        var container = document.getElementById('layout-mode-row');
+        container.innerHTML = '';
+
+        var layout = ((config.settings) || {}).layout;
+        if (!layout || typeof layout !== 'object' || !('mode' in layout)) return;
+
+        container.style.display = 'flex';
+
+        var layoutModeIcons = {
+          'compact':   '<svg viewBox="0 0 20 14" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="0.75" y="0.75" width="18.5" height="12.5" rx="1.25" stroke="currentColor" stroke-width="1.5"/><rect x="12.5" y="8.5" width="6.25" height="4.25" rx="0.75" fill="currentColor"/></svg>',
+          'fullwidth': '<svg viewBox="0 0 20 14" fill="none" xmlns="http://www.w3.org/2000/svg"><line x1="1" y1="3" x2="1" y2="11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="19" y1="3" x2="19" y2="11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="3" y1="7" x2="17" y2="7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><polyline points="6,4 3,7 6,10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/><polyline points="14,4 17,7 14,10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>'
+        };
+        var layoutModeTitles = { 'compact': 'Компактно', 'fullwidth': 'На всю ширину' };
+        var currentMode = layout.mode || 'compact';
+
+        ['compact', 'fullwidth'].forEach(function(mode) {
+          var btn = document.createElement('button');
+          btn.className = 'pos-btn' + (mode === currentMode ? ' active' : '');
+          btn.innerHTML = layoutModeIcons[mode];
+          btn.title = layoutModeTitles[mode];
+          btn.addEventListener('click', function() {
+            container.querySelectorAll('.pos-btn').forEach(function(b) { b.classList.remove('active'); });
+            btn.classList.add('active');
+            postToFrame('wlab:dev:setSetting', { key: 'settings.layout.mode', value: mode });
+          });
+          container.appendChild(btn);
+        });
+      }
+
+      editTrack.addEventListener('click', function() {
+        editMode = !editMode;
+        editTrack.classList.toggle('active', editMode);
+        themeRow.classList.toggle('hidden', !editMode);
+        sendEditMode();
+      });
+
+      themeTrack.addEventListener('click', function() {
+        if (!editMode) return;
+        isDark = !isDark;
+        document.body.classList.toggle('dark', isDark);
+        themeTrack.classList.toggle('active', isDark);
+        sendColorMode();
+      });
+
+      // Viewport switcher
+      var viewportBtns = document.querySelectorAll('.viewport-btn');
+      viewportBtns.forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          viewportBtns.forEach(function(b) { b.classList.remove('active'); });
+          btn.classList.add('active');
+          frame.style.width = btn.dataset.width;
+        });
+      });
+      // ── FORM CONTROLS from formSettings.json ─────────────────────────────────
+      // Fetch formSettings.json and render renderable blocks in the dev panel.
+      // Renderable types: textinput, select, toggler, colorpicker, slider,
+      //                   settings.position, settings.shape, settings.sizeposition.
+      // All others (design, fortune, triggers.*, integrations.*, installation.*)
+      // are skipped — they have no destination or are not useful in the preview panel.
+
+      var formSettingsData = null;
+      var frameInitialConfig = null;
+
+      fetch('./formSettings.json')
+        .then(function(r) { return r.ok ? r.json() : null; })
+        .then(function(data) {
+          formSettingsData = data;
+          if (frameInitialConfig) buildFormControls();
+        })
+        .catch(function() { /* formSettings.json absent — no dynamic controls */ });
+
+      function tryInitFormControls(config) {
+        frameInitialConfig = config;
+        if (formSettingsData) buildFormControls();
+      }
+
+      // Walk formSettings steps and collect all blocks that can be rendered in the dev panel
+      function collectRenderableBlocks(steps) {
+        var RENDERABLE = ['textinput', 'select', 'toggler', 'colorpicker', 'slider',
+                          'settings.position', 'settings.shape', 'settings.sizeposition'];
+        var items = [];
+
+        function visitBlock(block) {
+          if (RENDERABLE.indexOf(block.type) >= 0) items.push(block);
+        }
+
+        steps.forEach(function(step) {
+          if (step.block) visitBlock(step.block);
+          if (step.blocks) {
+            step.blocks.forEach(function(group) {
+              if (Array.isArray(group)) {
+                group.forEach(visitBlock);
+              } else if (group.blocks) {
+                group.blocks.forEach(visitBlock);
+              }
+            });
+          }
+        });
+
+        return items;
+      }
+
+      function getValueByPath(obj, path) {
+        return path.split('.').reduce(function(cur, k) {
+          return cur != null ? cur[k] : undefined;
+        }, obj);
+      }
+
+      function buildFormControls() {
+        var container = document.getElementById('form-controls');
+        container.innerHTML = '';
+        if (!formSettingsData || !formSettingsData.steps) return;
+
+        var blocks = collectRenderableBlocks(formSettingsData.steps);
+        if (blocks.length === 0) return;
+
+        var sep = document.createElement('div');
+        sep.className = 'dev-panel__separator';
+        container.appendChild(sep);
+
+        blocks.forEach(function(block) {
+          var el = createControlElement(block);
+          if (el) container.appendChild(el);
+        });
+      }
+
+      function createControlElement(block) {
+        var val = block.destination ? getValueByPath(frameInitialConfig, block.destination) : undefined;
+        if (block.type === 'textinput')  return makeTextInput(block, val);
+        if (block.type === 'select')     return makeSelect(block, val);
+        if (block.type === 'toggler')    return makeToggler(block, val);
+        if (block.type === 'colorpicker') return makeColorPicker(block, val);
+        if (block.type === 'slider')     return makeSlider(block, val);
+        if (block.type === 'settings.position' || block.type === 'settings.shape') return makeButtonGroup(block, val);
+        if (block.type === 'settings.sizeposition') return makeSizePosition(block, val);
+        return null;
+      }
+
+      function makeRow(labelText) {
+        var row = document.createElement('div');
+        row.className = 'dev-panel__row';
+        if (labelText) {
+          var span = document.createElement('span');
+          span.textContent = labelText;
+          row.appendChild(span);
+        }
+        return row;
+      }
+
+      function makeTextInput(block, val) {
+        var row = makeRow(block.label || block.destination);
+        var input = document.createElement('input');
+        input.type = 'text';
+        input.value = val != null ? String(val) : '';
+        input.className = 'dev-form-input';
+        input.addEventListener('input', function() {
+          postToFrame('wlab:dev:setSetting', { key: block.destination, value: input.value });
+        });
+        row.appendChild(input);
+        return row;
+      }
+
+      function makeSelect(block, val) {
+        var row = makeRow(block.label || block.destination);
+        var select = document.createElement('select');
+        select.className = 'dev-form-select';
+        (block.options || []).forEach(function(opt) {
+          var option = document.createElement('option');
+          option.value = String(opt.value);
+          option.textContent = opt.label;
+          if (opt.value === val) option.selected = true;
+          select.appendChild(option);
+        });
+        select.addEventListener('change', function() {
+          postToFrame('wlab:dev:setSetting', { key: block.destination, value: select.value });
+        });
+        row.appendChild(select);
+        return row;
+      }
+
+      function makeToggler(block, val) {
+        var row = makeRow(block.label || block.destination);
+        var isOn = !!val;
+        var track = document.createElement('div');
+        track.className = 'dev-panel__track' + (isOn ? ' active' : '');
+        var thumb = document.createElement('div');
+        thumb.className = 'dev-panel__thumb';
+        track.appendChild(thumb);
+        track.addEventListener('click', function() {
+          isOn = !isOn;
+          track.classList.toggle('active', isOn);
+          postToFrame('wlab:dev:setSetting', { key: block.destination, value: isOn });
+        });
+        row.appendChild(track);
+        return row;
+      }
+
+      function makeColorPicker(block, val) {
+        var row = makeRow(block.label || block.destination);
+        var input = document.createElement('input');
+        input.type = 'color';
+        input.value = val || '#000000';
+        input.className = 'dev-form-color';
+        input.addEventListener('input', function() {
+          postToFrame('wlab:dev:setSetting', { key: block.destination, value: input.value });
+        });
+        row.appendChild(input);
+        return row;
+      }
+
+      function makeSlider(block, val) {
+        var row = makeRow(block.label || block.destination);
+        var min = block.min !== undefined ? block.min : 0;
+        var max = block.max !== undefined ? block.max : 100;
+        var step = block.step !== undefined ? block.step : 1;
+        var current = val !== undefined ? val : min;
+
+        var input = document.createElement('input');
+        input.type = 'range';
+        input.min = String(min);
+        input.max = String(max);
+        input.step = String(step);
+        input.value = String(current);
+        input.className = 'dev-form-slider';
+
+        var display = document.createElement('span');
+        display.className = 'dev-form-slider-val';
+        display.textContent = String(current);
+
+        input.addEventListener('input', function() {
+          var newVal = parseFloat(input.value);
+          display.textContent = String(newVal);
+          postToFrame('wlab:dev:setSetting', { key: block.destination, value: newVal });
+        });
+
+        row.appendChild(input);
+        row.appendChild(display);
+        return row;
+      }
+
+      function makeButtonGroup(block, val) {
+        var row = makeRow(block.label || block.destination);
+        var group = document.createElement('div');
+        group.className = 'dev-form-btngroup';
+        (block.options || []).forEach(function(opt) {
+          var btn = document.createElement('button');
+          btn.textContent = opt.label;
+          btn.className = 'dev-form-btn' + (opt.value === val ? ' active' : '');
+          btn.addEventListener('click', function() {
+            group.querySelectorAll('.dev-form-btn').forEach(function(b) { b.classList.remove('active'); });
+            btn.classList.add('active');
+            postToFrame('wlab:dev:setSetting', { key: block.destination, value: opt.value });
+          });
+          group.appendChild(btn);
+        });
+        row.appendChild(group);
+        return row;
+      }
+
+      // sizeposition: renders position picker + optional offset sliders.
+      // destination points to the layout object (e.g. "settings.layout"),
+      // so position lives at destination+".position", offsets at +".offsetX"/".offsetY".
+      function makeSizePosition(block, val) {
+        var layoutVal = val || {};
+        var currentPos = layoutVal.position || 'bottom-right';
+        var features = block.features || {};
+        var wrapper = document.createElement('div');
+        wrapper.style.display = 'contents';
+
+        if (typeof createPositionPicker === 'function') {
+          var posRow = makeRow('Позиция');
+          var picker = createPositionPicker(currentPos, function(pos) {
+            postToFrame('wlab:dev:setSetting', { key: block.destination + '.position', value: pos });
+          });
+          posRow.appendChild(picker);
+          wrapper.appendChild(posRow);
+        }
+
+        if (features.showOffset) {
+          if (layoutVal.offsetX !== undefined) {
+            var blkX = { label: 'Отступ X', destination: block.destination + '.offsetX', min: 0, max: 200, step: 4 };
+            wrapper.appendChild(makeSlider(blkX, layoutVal.offsetX));
+          }
+          if (layoutVal.offsetY !== undefined) {
+            var blkY = { label: 'Отступ Y', destination: block.destination + '.offsetY', min: 0, max: 200, step: 4 };
+            wrapper.appendChild(makeSlider(blkY, layoutVal.offsetY));
+          }
+        }
+
+        return wrapper;
+      }
+      // ── END FORM CONTROLS ────────────────────────────────────────────────────
+
+    })();
+  </script>
+</body>
+</html>

@@ -26,6 +26,7 @@ done
 build_one "/home/am/wlab/new widgets/Messengers/skin1" "messengers-skin1"
 build_one "/home/am/wlab/new widgets/Messengers/skin2" "messengers-skin2"
 build_one "/home/am/wlab/new widgets/Video/skin1" "video-skin1"
+build_one "/home/am/wlab/new widgets/Video/skin 2" "video-skin2"
 
 cd "$PAGES"
 git add -A
