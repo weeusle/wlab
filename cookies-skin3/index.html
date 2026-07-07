@@ -164,13 +164,13 @@
       var isDark = false;
       var lastConfig = {};
 
-      // Единый контрол «Форма»: плавающая таблетка ↔ полоса во всю ширину.
-      // Плотность плавающей таблетки подгоняется автоматически (settings.compact='auto').
-      var LAYOUTS = [
-        { value: 'floating', label: 'Компактно' },
-        { value: 'full',     label: 'Во всю ширину' }
+      // Единый контрол «Форма» (= settings.layout.mode виджета «Размер и позиция»):
+      // Компактно (плавающая) ↔ Во всю ширину (полоса). Плотность плавающей подгоняется авто.
+      var MODES = [
+        { value: 'compact',   label: 'Компактно' },
+        { value: 'fullwidth', label: 'Во всю ширину' }
       ];
-      // floating: 3×3 сетка, 8 точек (центр-центр не поддержан)
+      // компактная форма: 3×3 сетка, 8 точек (центр-центр не поддержан)
       var POS_FLOATING = [
         'top-left', 'top-center', 'top-right',
         'center-left', null, 'center-right',
@@ -189,6 +189,12 @@
       function mode() { return isDark ? 'dark' : 'light'; }
       function hex6(v) { return /^#[0-9a-fA-F]{6}$/.test(v || '') ? v : '#000000'; }
       function settingsOf() { return (lastConfig.settings) || {}; }
+      function layoutObj() { var l = settingsOf().layout; return (l && typeof l === 'object') ? l : {}; }
+      function ensureLayout() {
+        lastConfig.settings = lastConfig.settings || {};
+        if (!lastConfig.settings.layout || typeof lastConfig.settings.layout !== 'object') lastConfig.settings.layout = {};
+        return lastConfig.settings.layout;
+      }
       function designOf() { return (lastConfig.design) || {}; }
       function colorsOf(m) { return ((designOf().colors) || {})[m || mode()] || {}; }
       function ensureColors() {
@@ -311,34 +317,33 @@
       bindText('t-main', 'mainText');
       bindText('t-btn', 'buttonText');
 
-      // Раскладка → settings.layout (переключает пикер позиции 8↔2)
+      // Форма → settings.layout.mode (переключает пикер позиции 8↔2)
       function buildLayout() {
         var box = document.getElementById('layout-group'); box.innerHTML = '';
-        var current = settingsOf().layout || 'floating';
-        LAYOUTS.forEach(function (o) {
+        var current = layoutObj().mode || 'compact';
+        MODES.forEach(function (o) {
           var btn = document.createElement('button');
           btn.className = 'opt-btn' + (o.value === current ? ' active' : '');
           btn.textContent = o.label;
           btn.addEventListener('click', function () {
             box.querySelectorAll('.opt-btn').forEach(function (x) { x.classList.remove('active'); });
             btn.classList.add('active');
-            lastConfig.settings = lastConfig.settings || {}; lastConfig.settings.layout = o.value;
-            setSetting('settings.layout', o.value);
+            ensureLayout().mode = o.value;
+            setSetting('settings.layout.mode', o.value);
             buildPosGrid();
           });
           box.appendChild(btn);
         });
       }
 
-      // Расположение → settings.position. floating: сетка 3×3 (8 точек); full: верх/низ (2 точки).
+      // Расположение → settings.layout.position. compact: сетка 3×3 (8 точек); fullwidth: верх/низ (2 точки).
       function buildPosGrid() {
         var grid = document.getElementById('posgrid'); grid.innerHTML = '';
-        var layout = settingsOf().layout || 'floating';
-        var current = settingsOf().position || 'bottom-center';
-        var isFull = layout === 'full';
+        var isFull = (layoutObj().mode || 'compact') === 'fullwidth';
+        var current = layoutObj().position || 'bottom-center';
         grid.classList.toggle('full', isFull);
         var cells = isFull ? POS_FULL : POS_FLOATING;
-        // в full подсветка: любая верхняя позиция → 'top-center', иначе 'bottom-center'
+        // в fullwidth подсветка: любая верхняя позиция → 'top-center', иначе 'bottom-center'
         var effective = isFull ? (String(current).indexOf('top') === 0 ? 'top-center' : 'bottom-center') : current;
         cells.forEach(function (p) {
           var cell = document.createElement('button');
@@ -350,21 +355,21 @@
             cell.addEventListener('click', function () {
               grid.querySelectorAll('.pos-cell').forEach(function (x) { x.classList.remove('active'); });
               cell.classList.add('active');
-              lastConfig.settings = lastConfig.settings || {}; lastConfig.settings.position = p;
-              setSetting('settings.position', p);
+              ensureLayout().position = p;
+              setSetting('settings.layout.position', p);
             });
           }
           grid.appendChild(cell);
         });
       }
 
-      // Отступы → settings.offsetX / offsetY
+      // Отступы → settings.layout.offsetX / offsetY
       function bindOffset(id, valId, key) {
         var el = document.getElementById(id), out = document.getElementById(valId);
         el.addEventListener('input', function () {
           out.textContent = el.value;
-          lastConfig.settings = lastConfig.settings || {}; lastConfig.settings[key] = Number(el.value);
-          setSetting('settings.' + key, Number(el.value));
+          ensureLayout()[key] = Number(el.value);
+          setSetting('settings.layout.' + key, Number(el.value));
         });
       }
       bindOffset('off-x', 'off-x-val', 'offsetX');
@@ -392,8 +397,9 @@
         document.getElementById('t-main').value = (typeof s.mainText === 'string' ? s.mainText : (lastConfig.texts || {}).mainText) || '';
         document.getElementById('t-btn').value = (typeof s.buttonText === 'string' ? s.buttonText : (lastConfig.texts || {}).buttonText) || '';
 
-        var ox = (typeof s.offsetX === 'number') ? s.offsetX : 24;
-        var oy = (typeof s.offsetY === 'number') ? s.offsetY : 24;
+        var L = layoutObj();
+        var ox = (typeof L.offsetX === 'number') ? L.offsetX : 24;
+        var oy = (typeof L.offsetY === 'number') ? L.offsetY : 24;
         document.getElementById('off-x').value = ox; document.getElementById('off-x-val').textContent = ox;
         document.getElementById('off-y').value = oy; document.getElementById('off-y-val').textContent = oy;
 

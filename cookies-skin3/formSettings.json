@@ -74,69 +74,11 @@
       "blocks": [
         [
           {
-            "type": "select",
-            "label": "Форма",
+            "type": "settings.sizeposition",
             "destination": "settings.layout",
-            "options": [
-              { "value": "floating", "label": "Компактно" },
-              { "value": "full", "label": "Во всю ширину" }
-            ]
+            "features": { "showWidth": false }
           }
-        ],
-        {
-          "header": "Положение",
-          "headerHelp": "В форме «Во всю ширину» работают только верх и низ",
-          "blocks": [
-            {
-              "type": "settings.position",
-              "destination": "settings.position",
-              "options": [
-                { "value": "top-left", "label": "Сверху слева" },
-                { "value": "top-center", "label": "Сверху по центру" },
-                { "value": "top-right", "label": "Сверху справа" },
-                { "value": "center-left", "label": "По центру слева" },
-                { "value": "center-right", "label": "По центру справа" },
-                { "value": "bottom-left", "label": "Снизу слева" },
-                { "value": "bottom-center", "label": "Снизу по центру" },
-                { "value": "bottom-right", "label": "Снизу справа" }
-              ]
-            }
-          ]
-        },
-        {
-          "header": "Отступы от края",
-          "headerHelp": "Отступ баннера от края экрана по горизонтали и вертикали",
-          "blocks": [
-            [
-              {
-                "type": "slider",
-                "label": "По горизонтали",
-                "destination": "settings.offsetX",
-                "min": 0,
-                "max": 100,
-                "step": 4,
-                "options": [
-                  { "value": 0, "label": "0" },
-                  { "value": 50, "label": "" },
-                  { "value": 100, "label": "100" }
-                ]
-              },
-              {
-                "type": "slider",
-                "label": "По вертикали",
-                "destination": "settings.offsetY",
-                "min": 0,
-                "max": 100,
-                "step": 4,
-                "options": [
-                  { "value": 0, "label": "0" },
-                  { "value": 50, "label": "" },
-                  { "value": 100, "label": "100" }
-                ]
-              }
-            ]
-          ]
-        }
+        ]
       ]
     },
     {

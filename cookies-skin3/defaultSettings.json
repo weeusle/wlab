@@ -50,12 +50,41 @@
     "buttonText": "Окей"
   },
   "settings": {
-    "layout": "floating",
-    "compact": "auto",
-    "position": "bottom-center",
-    "offsetX": 24,
-    "offsetY": 24,
+    "layout": {
+      "mode": "compact",
+      "position": "bottom-center",
+      "offsetX": 24,
+      "offsetY": 24
+    },
     "mainText": "Мы используем cookie, чтобы сделать сайт удобнее и полезнее",
     "buttonText": "Окей"
+  },
+  "settings-variants": {
+    "settings.layout.mode": [
+      "fullwidth",
+      "compact"
+    ],
+    "settings.layout.position": [
+      "bottom-right",
+      "bottom-center",
+      "bottom-left",
+      "center-right",
+      "center-left",
+      "top-right",
+      "top-center",
+      "top-left"
+    ],
+    "settings.layout.offsetX": {
+      "type": "range",
+      "minFn": "offset-x-min",
+      "maxFn": "vw/3",
+      "step": 4
+    },
+    "settings.layout.offsetY": {
+      "type": "range",
+      "minFn": "offset-y-min",
+      "maxFn": "vh/3",
+      "step": 4
+    }
   }
 }
