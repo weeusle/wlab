@@ -6,24 +6,24 @@
   "design": {
     "colors": {
       "light": { "primary": "#0047F0", "text": "#FFFFFF" },
-      "dark":  { "primary": "#0047F0", "text": "#FFFFFF" }
+      "dark":  { "primary": "#A6BFFF", "text": "#FFFFFF" }
     },
     "altColors": [
       {
         "light": { "primary": "#00BB41", "text": "#FFFFFF" },
-        "dark":  { "primary": "#00BB41", "text": "#FFFFFF" }
+        "dark":  { "primary": "#D0FF73", "text": "#FFFFFF" }
       },
       {
         "light": { "primary": "#8E3DFF", "text": "#FFFFFF" },
-        "dark":  { "primary": "#8E3DFF", "text": "#FFFFFF" }
+        "dark":  { "primary": "#CBA5FF", "text": "#FFFFFF" }
       },
       {
         "light": { "primary": "#FF5500", "text": "#FFFFFF" },
-        "dark":  { "primary": "#FF5500", "text": "#FFFFFF" }
+        "dark":  { "primary": "#FFBA97", "text": "#FFFFFF" }
       },
       {
         "light": { "primary": "#222222", "text": "#FFFFFF" },
-        "dark":  { "primary": "#222222", "text": "#FFFFFF" }
+        "dark":  { "primary": "#FFFFFF", "text": "#FFFFFF" }
       }
     ],
     "colorMode": "light",
