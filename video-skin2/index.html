@@ -142,13 +142,6 @@
           <div class="hint">Куда ведёт кнопка «Оставить заявку»</div>
         </div>
         <div class="field">
-          <label class="field__label">Разворачивание виджета</label>
-          <div class="seg" id="expand-seg">
-            <button class="seg__btn active" data-trg="hover">При наведении</button>
-            <button class="seg__btn" data-trg="click">По клику</button>
-          </div>
-        </div>
-        <div class="field">
           <label class="field__label">Задержка кнопки, сек</label>
           <div class="range-row">
             <span class="range-row__cap">Через, сек</span>
@@ -315,14 +308,6 @@
         setSetting('settings.buttonUrl', this.value.trim());
       });
 
-      // ── Разворачивание (settings.expandTrigger) ───────────────────────────────
-      document.querySelectorAll('#expand-seg .seg__btn').forEach(function (b) {
-        b.addEventListener('click', function () {
-          setActiveSeg('#expand-seg', b);
-          setSetting('settings.expandTrigger', b.dataset.trg);
-        });
-      });
-
       // ── Задержка кнопки (settings.ctaDelay) ───────────────────────────────────
       (function () {
         var el = document.getElementById('cta-delay'), out = document.getElementById('cta-delay-val');
@@ -387,9 +372,6 @@
         var s = lastConfig.settings || {};
         document.getElementById('s-video').value = s.videoUrl || '';
         document.getElementById('s-button').value = s.buttonUrl || '';
-
-        var trg = s.expandTrigger === 'click' ? 'click' : 'hover';
-        document.querySelectorAll('#expand-seg .seg__btn').forEach(function (x) { x.classList.toggle('active', x.dataset.trg === trg); });
 
         var delay = (typeof s.ctaDelay === 'number') ? s.ctaDelay : 5;
         document.getElementById('cta-delay').value = delay;

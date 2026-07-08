@@ -75,10 +75,7 @@
       "blocks": [
         [
           { "type": "triggers.onReady" },
-          { "type": "triggers.button" },
           { "type": "triggers.timer" },
-          { "type": "triggers.onExit" },
-          { "type": "triggers.javascript" },
           { "type": "showTo" }
         ]
       ]
@@ -89,10 +86,6 @@
       "icon": "code",
       "blocks": [
         [
-          { "type": "integrations.amo" },
-          { "type": "integrations.b24" },
-          { "type": "integrations.webhook" },
-          { "type": "integrations.sheets" },
           { "type": "integrations.metrika" }
         ]
       ]
@@ -103,9 +96,7 @@
       "icon": "play-square",
       "blocks": [
         [
-          { "type": "installation.cloud" },
-          { "type": "installation.website" },
-          { "type": "installation.telegram" }
+          { "type": "installation.website" }
         ]
       ]
     }
