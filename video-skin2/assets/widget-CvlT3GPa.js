@@ -120,7 +120,7 @@
         </g>
         <circle class="progress-ring__frame progress-ring__frame--inner" cx="50" cy="50" r="45.25"/>
       </svg>
-    `}render(){if(!this.isOpen)return h`${d}`;const e=this._stateKey,t=e==="collapsed",i=!t,s=e==="muted",r=e==="playing",n=e==="cta-reveal",a=e==="cta",l=n||a,u=this._isEmbed,p=this._hasControls,c=p,f=(r||l)&&p,g=i&&!this._muted&&p,$=this.config?.design?.hideLogo===!0,B=this._layout,xe=this.config?.texts?.buttonText||"Оставить заявку",J=this._buttonUrl,Ae={"video-widget":!0,"is-collapsed":t,"is-expanded":i,"is-muted":s,"is-playing":r,"is-cta-reveal":n,"is-cta":a,"is-paused":this._paused},Q=h`
+    `}render(){if(!this.isOpen)return h`${d}`;const e=this._stateKey,t=e==="collapsed",i=!t,s=e==="muted",r=e==="playing",n=e==="cta-reveal",a=e==="cta",l=n||a,u=this._isEmbed,p=this._hasControls,c=p,f=(s||r||l)&&p,g=i&&!this._muted&&p,$=this.config?.design?.hideLogo===!0,B=this._layout,xe=this.config?.texts?.buttonText||"Оставить заявку",J=this._buttonUrl,Ae={"video-widget":!0,"is-collapsed":t,"is-expanded":i,"is-muted":s,"is-playing":r,"is-cta-reveal":n,"is-cta":a,"is-paused":this._paused},Q=h`
       <span class="cta__text">${xe}</span>
     `;return h`
       <div
