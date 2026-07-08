@@ -248,11 +248,11 @@
       function schemePrimary(scheme) {
         return schemeColor(scheme, 'primary') || '#999999';
       }
-      // Two-tone swatch: brand (primary) + text colour, split diagonally.
+      // Two-tone swatch: brand (primary) + text colour, split vertically (left|right).
       function schemeSwatch(scheme) {
         var p = schemePrimary(scheme);
         var t = schemeColor(scheme, 'text') || '#FFFFFF';
-        return 'linear-gradient(135deg, ' + p + ' 0 50%, ' + t + ' 50% 100%)';
+        return 'linear-gradient(90deg, ' + p + ' 0 50%, ' + t + ' 50% 100%)';
       }
 
       function buildSchemes() {
