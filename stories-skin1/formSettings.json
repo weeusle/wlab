@@ -18,7 +18,7 @@
             { "type": "textinput", "label": "Ссылка на видео", "destination": "settings.stories.0.videoUrl", "validator": { "maxLength": 500 } },
             { "type": "textinput", "label": "Постер (ссылка на изображение)", "destination": "settings.stories.0.poster", "validator": { "maxLength": 500 } },
             { "type": "imagepicker", "label": "Иконка", "destination": "settings.stories.0.icon", "imageType": "icon", "buttonText": "Выбрать иконку", "modalTitle": "Иконка истории" },
-            { "type": "textinput", "label": "Название истории", "destination": "settings.stories.0.name", "validator": { "maxLength": 40 } },
+            { "type": "textinput", "label": "Название истории", "destination": "settings.stories.0.name", "validator": { "maxLength": 12 } },
             { "type": "textinput", "label": "Заголовок", "destination": "settings.stories.0.title", "validator": { "maxLength": 40 } },
             { "type": "textinput", "label": "Подзаголовок", "destination": "settings.stories.0.subtitle", "size": 2, "validator": { "maxLength": 120 } }
           ]
@@ -30,7 +30,7 @@
             { "type": "textinput", "label": "Ссылка на видео", "destination": "settings.stories.1.videoUrl", "validator": { "maxLength": 500 } },
             { "type": "textinput", "label": "Постер (ссылка на изображение)", "destination": "settings.stories.1.poster", "validator": { "maxLength": 500 } },
             { "type": "imagepicker", "label": "Иконка", "destination": "settings.stories.1.icon", "imageType": "icon", "buttonText": "Выбрать иконку", "modalTitle": "Иконка истории" },
-            { "type": "textinput", "label": "Название истории", "destination": "settings.stories.1.name", "validator": { "maxLength": 40 } },
+            { "type": "textinput", "label": "Название истории", "destination": "settings.stories.1.name", "validator": { "maxLength": 12 } },
             { "type": "textinput", "label": "Заголовок", "destination": "settings.stories.1.title", "validator": { "maxLength": 40 } },
             { "type": "textinput", "label": "Подзаголовок", "destination": "settings.stories.1.subtitle", "size": 2, "validator": { "maxLength": 120 } }
           ]
@@ -42,7 +42,7 @@
             { "type": "textinput", "label": "Ссылка на видео", "destination": "settings.stories.2.videoUrl", "validator": { "maxLength": 500 } },
             { "type": "textinput", "label": "Постер (ссылка на изображение)", "destination": "settings.stories.2.poster", "validator": { "maxLength": 500 } },
             { "type": "imagepicker", "label": "Иконка", "destination": "settings.stories.2.icon", "imageType": "icon", "buttonText": "Выбрать иконку", "modalTitle": "Иконка истории" },
-            { "type": "textinput", "label": "Название истории", "destination": "settings.stories.2.name", "validator": { "maxLength": 40 } },
+            { "type": "textinput", "label": "Название истории", "destination": "settings.stories.2.name", "validator": { "maxLength": 12 } },
             { "type": "textinput", "label": "Заголовок", "destination": "settings.stories.2.title", "validator": { "maxLength": 40 } },
             { "type": "textinput", "label": "Подзаголовок", "destination": "settings.stories.2.subtitle", "size": 2, "validator": { "maxLength": 120 } }
           ]
@@ -54,7 +54,7 @@
             { "type": "textinput", "label": "Ссылка на видео", "destination": "settings.stories.3.videoUrl", "validator": { "maxLength": 500 } },
             { "type": "textinput", "label": "Постер (ссылка на изображение)", "destination": "settings.stories.3.poster", "validator": { "maxLength": 500 } },
             { "type": "imagepicker", "label": "Иконка", "destination": "settings.stories.3.icon", "imageType": "icon", "buttonText": "Выбрать иконку", "modalTitle": "Иконка истории" },
-            { "type": "textinput", "label": "Название истории", "destination": "settings.stories.3.name", "validator": { "maxLength": 40 } },
+            { "type": "textinput", "label": "Название истории", "destination": "settings.stories.3.name", "validator": { "maxLength": 12 } },
             { "type": "textinput", "label": "Заголовок", "destination": "settings.stories.3.title", "validator": { "maxLength": 40 } },
             { "type": "textinput", "label": "Подзаголовок", "destination": "settings.stories.3.subtitle", "size": 2, "validator": { "maxLength": 120 } }
           ]
@@ -66,7 +66,7 @@
             { "type": "textinput", "label": "Ссылка на видео", "destination": "settings.stories.4.videoUrl", "validator": { "maxLength": 500 } },
             { "type": "textinput", "label": "Постер (ссылка на изображение)", "destination": "settings.stories.4.poster", "validator": { "maxLength": 500 } },
             { "type": "imagepicker", "label": "Иконка", "destination": "settings.stories.4.icon", "imageType": "icon", "buttonText": "Выбрать иконку", "modalTitle": "Иконка истории" },
-            { "type": "textinput", "label": "Название истории", "destination": "settings.stories.4.name", "validator": { "maxLength": 40 } },
+            { "type": "textinput", "label": "Название истории", "destination": "settings.stories.4.name", "validator": { "maxLength": 12 } },
             { "type": "textinput", "label": "Заголовок", "destination": "settings.stories.4.title", "validator": { "maxLength": 40 } },
             { "type": "textinput", "label": "Подзаголовок", "destination": "settings.stories.4.subtitle", "size": 2, "validator": { "maxLength": 120 } }
           ]
@@ -78,7 +78,7 @@
             { "type": "textinput", "label": "Ссылка на видео", "destination": "settings.stories.5.videoUrl", "validator": { "maxLength": 500 } },
             { "type": "textinput", "label": "Постер (ссылка на изображение)", "destination": "settings.stories.5.poster", "validator": { "maxLength": 500 } },
             { "type": "imagepicker", "label": "Иконка", "destination": "settings.stories.5.icon", "imageType": "icon", "buttonText": "Выбрать иконку", "modalTitle": "Иконка истории" },
-            { "type": "textinput", "label": "Название истории", "destination": "settings.stories.5.name", "validator": { "maxLength": 40 } },
+            { "type": "textinput", "label": "Название истории", "destination": "settings.stories.5.name", "validator": { "maxLength": 12 } },
             { "type": "textinput", "label": "Заголовок", "destination": "settings.stories.5.title", "validator": { "maxLength": 40 } },
             { "type": "textinput", "label": "Подзаголовок", "destination": "settings.stories.5.subtitle", "size": 2, "validator": { "maxLength": 120 } }
           ]

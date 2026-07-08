@@ -304,7 +304,7 @@
         { key: 'videoUrl', label: 'Ссылка на видео', ph: 'https://…/video.mp4' },
         { key: 'poster',   label: 'Постер (ссылка на изображение)', ph: 'https://…/poster.jpg' },
         { key: 'icon',     label: 'Иконка (ссылка на изображение)', ph: 'https://…/icon.png' },
-        { key: 'name',     label: 'Название истории', ph: '' },
+        { key: 'name',     label: 'Название истории', ph: '', max: 12 },
         { key: 'title',    label: 'Заголовок', ph: '' },
         { key: 'subtitle', label: 'Подзаголовок', ph: '', textarea: true }
       ];
@@ -347,6 +347,7 @@
             STORY_FIELDS.forEach(function (fdef) {
               var el = fdef.textarea ? document.createElement('textarea') : document.createElement('input');
               el.className = 'inp'; if (fdef.ph) el.placeholder = fdef.ph;
+              if (fdef.max) el.maxLength = fdef.max;
               el.addEventListener('input', function () { setSetting('settings.stories.' + idx + '.' + fdef.key, el.value); });
               inputs[fdef.key] = el;
               card.appendChild(makeField(fdef.label, el));

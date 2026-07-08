@@ -41,15 +41,6 @@
             "after": "Куда ведёт кнопка «Оставить заявку»"
           },
           {
-            "type": "select",
-            "label": "Разворачивание виджета",
-            "destination": "settings.expandTrigger",
-            "options": [
-              { "value": "hover", "label": "При наведении" },
-              { "value": "click", "label": "По клику" }
-            ]
-          },
-          {
             "type": "slider",
             "label": "Задержка кнопки, сек",
             "destination": "settings.ctaDelay",
