@@ -103,7 +103,7 @@
       "linkUrl": "https://t.me/widgetlab"
     },
     "layout": {
-      "position": "bottom-right",
+      "position": "bottom",
       "offsetX": 16,
       "offsetY": 16
     }

@@ -51,13 +51,14 @@
     .inp:focus { outline: 2px solid #93c5fd; border-color: #93c5fd; }
     textarea.inp { resize: vertical; min-height: 62px; }
 
-    .posgrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; background: #f1f5f9; border-radius: 10px; padding: 10px; width: 150px; }
-    .pos-cell { height: 30px; border: none; border-radius: 7px; background: transparent; cursor: pointer; display: flex; align-items: center; justify-content: center; }
-    .pos-cell:disabled { cursor: default; }
-    .pos-cell .dot { width: 7px; height: 7px; border-radius: 50%; background: #cbd5e1; }
-    .pos-cell:not(:disabled):hover .dot { background: #94a3b8; }
-    .pos-cell.active { background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,.12); }
-    .pos-cell.active .dot { background: #2563eb; width: 9px; height: 9px; }
+    /* Позиция: 2 варианта — сверху / снизу. Виджет — во всю ширину, поэтому
+       активная позиция показывается как полноширинная «плашка», как в конструкторе. */
+    .posbar { width: 100%; background: #f1f5f9; border-radius: 14px; padding: 10px; display: flex; flex-direction: column; gap: 10px; height: 118px; }
+    .posbar__slot { flex: 1; border: none; border-radius: 10px; background: transparent; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0; }
+    .posbar__slot:not(.active):hover .dot { background: #94a3b8; }
+    .posbar__slot.active { background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,.12); }
+    .posbar__slot .dot { width: 8px; height: 8px; border-radius: 50%; background: #cbd5e1; transition: background .15s; }
+    .posbar__slot.active .dot { width: 10px; height: 10px; background: #2563eb; }
 
     .range-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
     .range-row__cap { flex: 0 0 96px; font-size: 12px; color: #64748b; }
@@ -192,7 +193,10 @@
         </div>
         <div class="field">
           <label class="field__label">Расположение</label>
-          <div class="posgrid" id="posgrid"></div>
+          <div class="posbar" id="posbar">
+            <button class="posbar__slot" data-pos="top"><span class="dot"></span></button>
+            <button class="posbar__slot" data-pos="bottom"><span class="dot"></span></button>
+          </div>
         </div>
         <div class="field">
           <label class="field__label">Отступы от края</label>
@@ -350,32 +354,23 @@
       var ctaLink = document.getElementById('cta-linkUrl');
       ctaLink.addEventListener('input', function () { setSetting('settings.cta.linkUrl', ctaLink.value); });
 
-      // ── Расположение (settings.layout.position) — 4 угла ─────────────────────
-      var POS = [
-        'top-left',    null, 'top-right',
-        null,          null, null,
-        'bottom-left', null, 'bottom-right'
-      ];
-      function buildPosGrid() {
-        var grid = document.getElementById('posgrid'); grid.innerHTML = '';
-        var current = (((lastConfig.settings) || {}).layout || {}).position || 'bottom-right';
-        POS.forEach(function (p) {
-          var cell = document.createElement('button');
-          cell.className = 'pos-cell' + (p === current ? ' active' : '');
-          cell.disabled = !p;
-          if (p) {
-            var d = document.createElement('span'); d.className = 'dot'; cell.appendChild(d);
-            cell.addEventListener('click', function () {
-              grid.querySelectorAll('.pos-cell').forEach(function (x) { x.classList.remove('active'); });
-              cell.classList.add('active');
-              lastConfig.settings = lastConfig.settings || {}; lastConfig.settings.layout = lastConfig.settings.layout || {};
-              lastConfig.settings.layout.position = p;
-              setSetting('settings.layout.position', p);
-            });
-          }
-          grid.appendChild(cell);
+      // ── Расположение (settings.layout.position) — сверху / снизу ─────────────
+      // Один размер (во всю ширину) ⇒ всего 2 положения: top и bottom.
+      function buildPosBar() {
+        var current = (((lastConfig.settings) || {}).layout || {}).position === 'top' ? 'top' : 'bottom';
+        document.querySelectorAll('#posbar .posbar__slot').forEach(function (b) {
+          b.classList.toggle('active', b.dataset.pos === current);
         });
       }
+      document.querySelectorAll('#posbar .posbar__slot').forEach(function (b) {
+        b.addEventListener('click', function () {
+          document.querySelectorAll('#posbar .posbar__slot').forEach(function (x) { x.classList.remove('active'); });
+          b.classList.add('active');
+          lastConfig.settings = lastConfig.settings || {}; lastConfig.settings.layout = lastConfig.settings.layout || {};
+          lastConfig.settings.layout.position = b.dataset.pos;
+          setSetting('settings.layout.position', b.dataset.pos);
+        });
+      });
 
       // ── Отступы (settings.layout.offsetX / offsetY) ───────────────────────────
       function bindOffset(id, valId, key) {
@@ -435,7 +430,7 @@
         syncCtaLinkVisibility(ctaMode);
 
         // Позиция
-        buildPosGrid();
+        buildPosBar();
 
         // Отступы
         var layout = st.layout || {};
