@@ -1,116 +1,110 @@
 {
   "steps": [
     {
-      "id": "texts",
-      "header": "Тексты",
-      "icon": "type",
-      "blocks": [
-        [
-          {
-            "type": "textinput",
-            "label": "Заголовок коллекции",
-            "destination": "texts.collectionTitle",
-            "validator": { "required": true, "maxLength": 40 }
-          },
-          {
-            "type": "textinput",
-            "label": "Заголовок сюжета",
-            "destination": "texts.storyTitle",
-            "validator": { "required": true, "maxLength": 40 }
-          },
-          {
-            "type": "textinput",
-            "label": "Описание сюжета",
-            "destination": "texts.storyDescription",
-            "size": 2,
-            "validator": { "maxLength": 120 }
-          },
-          {
-            "type": "textinput",
-            "label": "Текст кнопки",
-            "destination": "texts.buttonText",
-            "validator": { "required": true, "maxLength": 30 }
-          },
-          {
-            "type": "textinput",
-            "label": "Лейбл карточки",
-            "destination": "texts.cardLabel",
-            "validator": { "maxLength": 20 }
-          },
-          {
-            "type": "textinput",
-            "label": "Заголовок формы",
-            "destination": "texts.formTitle",
-            "validator": { "maxLength": 40 }
-          },
-          {
-            "type": "textinput",
-            "label": "Плейсхолдер телефона",
-            "destination": "texts.phonePlaceholder",
-            "validator": { "maxLength": 30 }
-          },
-          {
-            "type": "textinput",
-            "label": "Текст кнопки отправки",
-            "destination": "texts.submitText",
-            "validator": { "maxLength": 20 }
-          },
-          {
-            "type": "textinput",
-            "label": "Сообщение после отправки",
-            "destination": "texts.successText",
-            "validator": { "maxLength": 80 }
-          }
-        ]
-      ]
-    },
-    {
       "id": "design",
       "header": "Дизайн",
       "icon": "palette",
       "block": { "type": "design" }
     },
     {
+      "id": "stories",
+      "header": "Истории",
+      "icon": "image",
+      "blocks": [
+        {
+          "header": "История 1",
+          "blocks": [
+            { "type": "toggler", "label": "Показывать историю", "destination": "settings.stories.0.enabled" },
+            { "type": "textinput", "label": "Ссылка на видео", "destination": "settings.stories.0.videoUrl", "validator": { "maxLength": 500 } },
+            { "type": "textinput", "label": "Постер (ссылка на изображение)", "destination": "settings.stories.0.poster", "validator": { "maxLength": 500 } },
+            { "type": "imagepicker", "label": "Иконка", "destination": "settings.stories.0.icon", "imageType": "icon", "buttonText": "Выбрать иконку", "modalTitle": "Иконка истории" },
+            { "type": "textinput", "label": "Название истории", "destination": "settings.stories.0.name", "validator": { "maxLength": 40 } },
+            { "type": "textinput", "label": "Заголовок", "destination": "settings.stories.0.title", "validator": { "maxLength": 40 } },
+            { "type": "textinput", "label": "Подзаголовок", "destination": "settings.stories.0.subtitle", "size": 2, "validator": { "maxLength": 120 } }
+          ]
+        },
+        {
+          "header": "История 2",
+          "blocks": [
+            { "type": "toggler", "label": "Показывать историю", "destination": "settings.stories.1.enabled" },
+            { "type": "textinput", "label": "Ссылка на видео", "destination": "settings.stories.1.videoUrl", "validator": { "maxLength": 500 } },
+            { "type": "textinput", "label": "Постер (ссылка на изображение)", "destination": "settings.stories.1.poster", "validator": { "maxLength": 500 } },
+            { "type": "imagepicker", "label": "Иконка", "destination": "settings.stories.1.icon", "imageType": "icon", "buttonText": "Выбрать иконку", "modalTitle": "Иконка истории" },
+            { "type": "textinput", "label": "Название истории", "destination": "settings.stories.1.name", "validator": { "maxLength": 40 } },
+            { "type": "textinput", "label": "Заголовок", "destination": "settings.stories.1.title", "validator": { "maxLength": 40 } },
+            { "type": "textinput", "label": "Подзаголовок", "destination": "settings.stories.1.subtitle", "size": 2, "validator": { "maxLength": 120 } }
+          ]
+        },
+        {
+          "header": "История 3",
+          "blocks": [
+            { "type": "toggler", "label": "Показывать историю", "destination": "settings.stories.2.enabled" },
+            { "type": "textinput", "label": "Ссылка на видео", "destination": "settings.stories.2.videoUrl", "validator": { "maxLength": 500 } },
+            { "type": "textinput", "label": "Постер (ссылка на изображение)", "destination": "settings.stories.2.poster", "validator": { "maxLength": 500 } },
+            { "type": "imagepicker", "label": "Иконка", "destination": "settings.stories.2.icon", "imageType": "icon", "buttonText": "Выбрать иконку", "modalTitle": "Иконка истории" },
+            { "type": "textinput", "label": "Название истории", "destination": "settings.stories.2.name", "validator": { "maxLength": 40 } },
+            { "type": "textinput", "label": "Заголовок", "destination": "settings.stories.2.title", "validator": { "maxLength": 40 } },
+            { "type": "textinput", "label": "Подзаголовок", "destination": "settings.stories.2.subtitle", "size": 2, "validator": { "maxLength": 120 } }
+          ]
+        },
+        {
+          "header": "История 4",
+          "blocks": [
+            { "type": "toggler", "label": "Показывать историю", "destination": "settings.stories.3.enabled" },
+            { "type": "textinput", "label": "Ссылка на видео", "destination": "settings.stories.3.videoUrl", "validator": { "maxLength": 500 } },
+            { "type": "textinput", "label": "Постер (ссылка на изображение)", "destination": "settings.stories.3.poster", "validator": { "maxLength": 500 } },
+            { "type": "imagepicker", "label": "Иконка", "destination": "settings.stories.3.icon", "imageType": "icon", "buttonText": "Выбрать иконку", "modalTitle": "Иконка истории" },
+            { "type": "textinput", "label": "Название истории", "destination": "settings.stories.3.name", "validator": { "maxLength": 40 } },
+            { "type": "textinput", "label": "Заголовок", "destination": "settings.stories.3.title", "validator": { "maxLength": 40 } },
+            { "type": "textinput", "label": "Подзаголовок", "destination": "settings.stories.3.subtitle", "size": 2, "validator": { "maxLength": 120 } }
+          ]
+        },
+        {
+          "header": "История 5",
+          "blocks": [
+            { "type": "toggler", "label": "Показывать историю", "destination": "settings.stories.4.enabled" },
+            { "type": "textinput", "label": "Ссылка на видео", "destination": "settings.stories.4.videoUrl", "validator": { "maxLength": 500 } },
+            { "type": "textinput", "label": "Постер (ссылка на изображение)", "destination": "settings.stories.4.poster", "validator": { "maxLength": 500 } },
+            { "type": "imagepicker", "label": "Иконка", "destination": "settings.stories.4.icon", "imageType": "icon", "buttonText": "Выбрать иконку", "modalTitle": "Иконка истории" },
+            { "type": "textinput", "label": "Название истории", "destination": "settings.stories.4.name", "validator": { "maxLength": 40 } },
+            { "type": "textinput", "label": "Заголовок", "destination": "settings.stories.4.title", "validator": { "maxLength": 40 } },
+            { "type": "textinput", "label": "Подзаголовок", "destination": "settings.stories.4.subtitle", "size": 2, "validator": { "maxLength": 120 } }
+          ]
+        },
+        {
+          "header": "История 6",
+          "blocks": [
+            { "type": "toggler", "label": "Показывать историю", "destination": "settings.stories.5.enabled" },
+            { "type": "textinput", "label": "Ссылка на видео", "destination": "settings.stories.5.videoUrl", "validator": { "maxLength": 500 } },
+            { "type": "textinput", "label": "Постер (ссылка на изображение)", "destination": "settings.stories.5.poster", "validator": { "maxLength": 500 } },
+            { "type": "imagepicker", "label": "Иконка", "destination": "settings.stories.5.icon", "imageType": "icon", "buttonText": "Выбрать иконку", "modalTitle": "Иконка истории" },
+            { "type": "textinput", "label": "Название истории", "destination": "settings.stories.5.name", "validator": { "maxLength": 40 } },
+            { "type": "textinput", "label": "Заголовок", "destination": "settings.stories.5.title", "validator": { "maxLength": 40 } },
+            { "type": "textinput", "label": "Подзаголовок", "destination": "settings.stories.5.subtitle", "size": 2, "validator": { "maxLength": 120 } }
+          ]
+        }
+      ]
+    },
+    {
       "id": "settings",
       "header": "Настройки",
       "icon": "settings",
       "blocks": [
-        [
-          {
-            "type": "select",
-            "label": "Режим показа",
-            "destination": "settings.displayMode",
-            "options": [
-              { "value": "strip", "label": "Лента историй" },
-              { "value": "launcher", "label": "Плавающая карточка" }
-            ]
-          },
-          {
-            "type": "toggler",
-            "label": "Иконки и подписи на карточках",
-            "destination": "settings.showCardMeta"
-          },
-          {
-            "type": "toggler",
-            "label": "Выцветание краёв ленты",
-            "destination": "settings.edgeFade"
-          },
-          {
-            "type": "select",
-            "label": "Действие кнопки",
-            "destination": "settings.cta.mode",
-            "options": [
-              { "value": "form", "label": "Форма с телефоном" },
-              { "value": "link", "label": "Ссылка (напр. Telegram)" }
-            ]
-          },
-          {
-            "type": "textinput",
-            "label": "Ссылка кнопки (для режима «Ссылка»)",
-            "destination": "settings.cta.linkUrl",
-            "validator": { "maxLength": 200 }
-          }
-        ],
+        {
+          "header": "Кнопка",
+          "blocks": [
+            { "type": "textinput", "label": "Текст кнопки", "destination": "settings.button.text", "validator": { "maxLength": 30 } },
+            { "type": "textinput", "label": "Ссылка в кнопке", "destination": "settings.button.link", "validator": { "maxLength": 200 } }
+          ]
+        },
+        {
+          "header": "Воспроизведение",
+          "blocks": [
+            { "type": "toggler", "label": "Выцветание по краям ленты", "destination": "settings.playback.edgeFade" },
+            { "type": "toggler", "label": "Автозапуск видео", "destination": "settings.playback.autoplay" },
+            { "type": "toggler", "label": "Без звука", "destination": "settings.playback.muted" }
+          ]
+        },
         {
           "header": "Расположение",
           "blocks": [
@@ -118,7 +112,7 @@
               "type": "settings.sizeposition",
               "destination": "settings.layout",
               "positions": ["top", "bottom"],
-              "features": { "showWidth": false, "showOffset": true }
+              "features": { "showWidth": false, "showLayoutMode": false, "showOffset": true }
             }
           ]
         }
@@ -130,12 +124,9 @@
       "icon": "lightning",
       "blocks": [
         [
+          { "type": "showTo" },
           { "type": "triggers.onReady" },
-          { "type": "triggers.button" },
-          { "type": "triggers.timer" },
-          { "type": "triggers.onExit" },
-          { "type": "triggers.javascript" },
-          { "type": "showTo" }
+          { "type": "triggers.timer" }
         ]
       ]
     },
@@ -145,10 +136,6 @@
       "icon": "code",
       "blocks": [
         [
-          { "type": "integrations.amo" },
-          { "type": "integrations.b24" },
-          { "type": "integrations.webhook" },
-          { "type": "integrations.sheets" },
           { "type": "integrations.metrika" }
         ]
       ]
@@ -159,9 +146,7 @@
       "icon": "play-square",
       "blocks": [
         [
-          { "type": "installation.cloud" },
-          { "type": "installation.website" },
-          { "type": "installation.telegram" }
+          { "type": "installation.website" }
         ]
       ]
     }

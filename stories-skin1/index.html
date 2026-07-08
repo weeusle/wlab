@@ -25,15 +25,18 @@
     .preview { flex: 1; display: flex; justify-content: center; min-height: 0; background: #eef1f5; }
     .preview iframe { height: 100%; border: none; display: block; transition: width .3s; box-shadow: 0 0 0 1px rgba(0,0,0,.1); background: #fff; }
 
-    .editor { width: 360px; flex-shrink: 0; background: #fff; border-left: 1px solid #e2e8f0; overflow-y: auto; padding: 18px 18px 60px; }
+    .editor { width: 372px; flex-shrink: 0; background: #fff; border-left: 1px solid #e2e8f0; overflow-y: auto; padding: 18px 18px 60px; }
     .section + .section { margin-top: 26px; border-top: 1px solid #eef1f5; padding-top: 22px; }
     .section__title { font-size: 20px; font-weight: 800; margin: 0 0 16px; }
     .field { margin-bottom: 16px; }
     .field__label { display: block; font-size: 12px; font-weight: 600; color: #64748b; margin-bottom: 6px; }
+    .subhead { font-size: 13px; font-weight: 700; color: #0f172a; margin: 18px 0 10px; }
 
     .seg { display: flex; background: #f1f5f9; border-radius: 10px; padding: 4px; gap: 4px; }
     .seg__btn { flex: 1; border: none; background: transparent; color: #475569; font-size: 13px; font-weight: 600; padding: 8px 6px; border-radius: 7px; cursor: pointer; }
     .seg__btn.active { background: #fff; color: #0f172a; box-shadow: 0 1px 3px rgba(0,0,0,.12); }
+    .seg--sm { display: inline-flex; width: auto; padding: 3px; }
+    .seg--sm .seg__btn { flex: 0 0 auto; font-size: 11px; padding: 4px 10px; }
 
     .schemes { display: flex; gap: 8px; flex-wrap: wrap; }
     .scheme { width: 40px; height: 38px; border-radius: 10px; border: 2px solid transparent; padding: 0; cursor: pointer; position: relative; }
@@ -50,9 +53,15 @@
     .inp { width: 100%; border: 1px solid #e2e8f0; border-radius: 9px; background: #f8fafc; padding: 9px 11px; font: inherit; color: inherit; }
     .inp:focus { outline: 2px solid #93c5fd; border-color: #93c5fd; }
     textarea.inp { resize: vertical; min-height: 62px; }
+    select.inp { cursor: pointer; }
 
-    /* Позиция: 2 варианта — сверху / снизу. Виджет — во всю ширину, поэтому
-       активная позиция показывается как полноширинная «плашка», как в конструкторе. */
+    /* История N — карточка настроек одной истории */
+    .story { border: 1px solid #e6ebf2; border-radius: 12px; padding: 12px 12px 4px; margin-bottom: 12px; background: #fbfcfe; }
+    .story__head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+    .story__head b { font-size: 14px; }
+    .story.off { opacity: .55; }
+
+    /* Позиция: 2 варианта — сверху / снизу (виджет во всю ширину). */
     .posbar { width: 100%; background: #f1f5f9; border-radius: 14px; padding: 10px; display: flex; flex-direction: column; gap: 10px; height: 118px; }
     .posbar__slot { flex: 1; border: none; border-radius: 10px; background: transparent; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0; }
     .posbar__slot:not(.active):hover .dot { background: #94a3b8; }
@@ -96,7 +105,7 @@
           </div>
         </div>
         <div class="field">
-          <label class="field__label">Цветовые схемы</label>
+          <label class="field__label">Цветовая схема</label>
           <div class="schemes" id="schemes"></div>
         </div>
         <div class="field">
@@ -107,6 +116,19 @@
           <div class="hint">Фон и текст в этом скине зависят от темы (Светлая/Тёмная) и не задаются вручную</div>
         </div>
         <div class="field">
+          <label class="field__label">Шрифт</label>
+          <select class="inp" id="font-select">
+            <option value="sans-serif">Sans-serif (по умолчанию)</option>
+            <option value="serif">Serif</option>
+            <option value="monospace">Monospace</option>
+            <option value="system-ui">System UI</option>
+            <option value="Arial">Arial</option>
+            <option value="Georgia">Georgia</option>
+            <option value="Verdana">Verdana</option>
+            <option value="Tahoma">Tahoma</option>
+          </select>
+        </div>
+        <div class="field">
           <label class="field__label">Логотип WidgetLab</label>
           <div class="seg" id="logo-seg">
             <button class="seg__btn active" data-logo="1">Показывать</button>
@@ -115,84 +137,51 @@
         </div>
       </div>
 
-      <!-- ТЕКСТЫ -->
+      <!-- ИСТОРИИ -->
       <div class="section">
-        <h2 class="section__title">Тексты</h2>
-        <div class="field">
-          <label class="field__label">Заголовок коллекции</label>
-          <input class="inp" id="t-collectionTitle">
-        </div>
-        <div class="field">
-          <label class="field__label">Заголовок сюжета</label>
-          <input class="inp" id="t-storyTitle">
-        </div>
-        <div class="field">
-          <label class="field__label">Описание сюжета</label>
-          <textarea class="inp" id="t-storyDescription"></textarea>
-        </div>
-        <div class="field">
-          <label class="field__label">Текст кнопки</label>
-          <input class="inp" id="t-buttonText">
-        </div>
-        <div class="field">
-          <label class="field__label">Лейбл карточки</label>
-          <input class="inp" id="t-cardLabel">
-        </div>
-        <div class="field">
-          <label class="field__label">Заголовок формы</label>
-          <input class="inp" id="t-formTitle">
-        </div>
-        <div class="field">
-          <label class="field__label">Плейсхолдер телефона</label>
-          <input class="inp" id="t-phonePlaceholder">
-        </div>
-        <div class="field">
-          <label class="field__label">Текст кнопки отправки</label>
-          <input class="inp" id="t-submitText">
-        </div>
-        <div class="field">
-          <label class="field__label">Сообщение после отправки</label>
-          <input class="inp" id="t-successText">
-        </div>
+        <h2 class="section__title">Истории</h2>
+        <div id="stories-container"></div>
       </div>
 
       <!-- НАСТРОЙКИ -->
       <div class="section">
         <h2 class="section__title">Настройки</h2>
+
+        <div class="subhead">Кнопка</div>
         <div class="field">
-          <label class="field__label">Режим показа</label>
-          <div class="seg" id="mode-seg">
-            <button class="seg__btn active" data-dm="strip">Лента историй</button>
-            <button class="seg__btn" data-dm="launcher">Плавающая карточка</button>
-          </div>
+          <label class="field__label">Текст кнопки</label>
+          <input class="inp" id="btn-text">
         </div>
         <div class="field">
-          <label class="field__label">Иконки и подписи на карточках</label>
-          <div class="seg" id="meta-seg">
-            <button class="seg__btn active" data-v="1">Вкл</button>
-            <button class="seg__btn" data-v="0">Выкл</button>
-          </div>
+          <label class="field__label">Ссылка в кнопке</label>
+          <input class="inp" id="btn-link" placeholder="https://t.me/…">
         </div>
+
+        <div class="subhead">Воспроизведение</div>
         <div class="field">
-          <label class="field__label">Выцветание краёв ленты</label>
+          <label class="field__label">Выцветание по краям ленты</label>
           <div class="seg" id="fade-seg">
             <button class="seg__btn active" data-v="1">Вкл</button>
             <button class="seg__btn" data-v="0">Выкл</button>
           </div>
         </div>
         <div class="field">
-          <label class="field__label">Действие кнопки</label>
-          <div class="seg" id="cta-seg">
-            <button class="seg__btn active" data-cta="form">Форма с телефоном</button>
-            <button class="seg__btn" data-cta="link">Ссылка</button>
+          <label class="field__label">Автозапуск видео</label>
+          <div class="seg" id="autoplay-seg">
+            <button class="seg__btn active" data-v="1">Вкл</button>
+            <button class="seg__btn" data-v="0">Выкл</button>
           </div>
         </div>
-        <div class="field" id="cta-link-field">
-          <label class="field__label">Ссылка кнопки (для режима «Ссылка»)</label>
-          <input class="inp" id="cta-linkUrl" placeholder="https://t.me/…">
-        </div>
         <div class="field">
-          <label class="field__label">Расположение</label>
+          <label class="field__label">Без звука</label>
+          <div class="seg" id="muted-seg">
+            <button class="seg__btn active" data-v="1">Вкл</button>
+            <button class="seg__btn" data-v="0">Выкл</button>
+          </div>
+        </div>
+
+        <div class="subhead">Расположение</div>
+        <div class="field">
           <div class="posbar" id="posbar">
             <button class="posbar__slot" data-pos="top"><span class="dot"></span></button>
             <button class="posbar__slot" data-pos="bottom"><span class="dot"></span></button>
@@ -221,9 +210,7 @@
       var isDark = false;
       var lastConfig = {};
 
-      // Замороженный набор цветовых схем: основная + альтернативные из defaultSettings.json.
-      // Заполняется один раз (fetch ниже / frameReady). Каждый элемент — { light:{…}, dark:{…} }.
-      var SCHEMES = [];
+      var SCHEMES = [];       // замороженный набор [design.colors, ...altColors]
       var activeScheme = 0;   // индекс активной схемы; -1 = ручной акцент
 
       function post(type, payload) { if (frame.contentWindow) frame.contentWindow.postMessage(Object.assign({ type: type }, payload), '*'); }
@@ -260,7 +247,6 @@
       });
 
       // ── Цветовые схемы ───────────────────────────────────────────────────────
-      // Свотч показывает акцент схемы для текущей темы; клик шлёт весь объект design.colors.
       function accentOf(scheme) { return ((scheme[mode()] || {}).accent) || ((scheme[mode()] || {}).primary) || '#888888'; }
       function currentAccent() { var c = ((lastConfig.design) || {}).colors || {}; return ((c[mode()] || {}).accent) || ((c[mode()] || {}).primary) || ''; }
 
@@ -282,7 +268,7 @@
         });
       }
 
-      // ── Ручной акцент (primary + accent для текущей темы) ─────────────────────
+      // ── Ручной акцент ─────────────────────────────────────────────────────────
       function refreshPrimary() {
         var p = document.getElementById('c-primary');
         var val = currentAccent() || (SCHEMES[0] ? accentOf(SCHEMES[0]) : '#0047F0');
@@ -300,6 +286,10 @@
         buildSchemes();
       });
 
+      // ── Шрифт ─────────────────────────────────────────────────────────────────
+      var fontSelect = document.getElementById('font-select');
+      fontSelect.addEventListener('change', function () { setSetting('design.font.family', fontSelect.value); });
+
       // ── Логотип (design.hideLogo) ────────────────────────────────────────────
       document.querySelectorAll('#logo-seg .seg__btn').forEach(function (b) {
         b.addEventListener('click', function () {
@@ -309,25 +299,84 @@
         });
       });
 
-      // ── Тексты ────────────────────────────────────────────────────────────────
-      function bindText(id, key) {
-        var el = document.getElementById(id);
-        el.addEventListener('input', function () { setSetting('texts.' + key, el.value); });
+      // ── ИСТОРИИ (динамические группы) ─────────────────────────────────────────
+      var STORY_FIELDS = [
+        { key: 'videoUrl', label: 'Ссылка на видео', ph: 'https://…/video.mp4' },
+        { key: 'poster',   label: 'Постер (ссылка на изображение)', ph: 'https://…/poster.jpg' },
+        { key: 'icon',     label: 'Иконка (ссылка на изображение)', ph: 'https://…/icon.png' },
+        { key: 'name',     label: 'Название истории', ph: '' },
+        { key: 'title',    label: 'Заголовок', ph: '' },
+        { key: 'subtitle', label: 'Подзаголовок', ph: '', textarea: true }
+      ];
+      var storyControls = [];   // storyControls[i] = { card, enableBtns, inputs:{key->el} }
+      var storiesBuilt = false;
+
+      function makeField(labelText, inputEl) {
+        var f = document.createElement('div'); f.className = 'field';
+        var l = document.createElement('label'); l.className = 'field__label'; l.textContent = labelText;
+        f.appendChild(l); f.appendChild(inputEl);
+        return f;
       }
-      var TEXT_KEYS = ['collectionTitle', 'storyTitle', 'storyDescription', 'buttonText',
-                       'cardLabel', 'formTitle', 'phonePlaceholder', 'submitText', 'successText'];
-      TEXT_KEYS.forEach(function (k) { bindText('t-' + k, k); });
 
-      // ── Режим показа (settings.displayMode) ──────────────────────────────────
-      document.querySelectorAll('#mode-seg .seg__btn').forEach(function (b) {
-        b.addEventListener('click', function () {
-          document.querySelectorAll('#mode-seg .seg__btn').forEach(function (x) { x.classList.remove('active'); });
-          b.classList.add('active');
-          setSetting('settings.displayMode', b.dataset.dm);
-        });
-      });
+      function buildStories(stories) {
+        var container = document.getElementById('stories-container');
+        container.innerHTML = ''; storyControls = [];
+        var count = Math.max(6, stories.length);
+        for (var i = 0; i < count; i++) {
+          (function (idx) {
+            var st = stories[idx] || {};
+            var card = document.createElement('div'); card.className = 'story';
 
-      // ── Булевы сегменты (showCardMeta / edgeFade) ─────────────────────────────
+            var head = document.createElement('div'); head.className = 'story__head';
+            var title = document.createElement('b'); title.textContent = 'История ' + (idx + 1);
+            var seg = document.createElement('div'); seg.className = 'seg seg--sm';
+            var onBtn = document.createElement('button'); onBtn.className = 'seg__btn'; onBtn.textContent = 'Вкл'; onBtn.dataset.v = '1';
+            var offBtn = document.createElement('button'); offBtn.className = 'seg__btn'; offBtn.textContent = 'Выкл'; offBtn.dataset.v = '0';
+            seg.appendChild(onBtn); seg.appendChild(offBtn);
+            head.appendChild(title); head.appendChild(seg);
+            card.appendChild(head);
+
+            function setEnabled(on) {
+              onBtn.classList.toggle('active', on); offBtn.classList.toggle('active', !on);
+              card.classList.toggle('off', !on);
+            }
+            onBtn.addEventListener('click', function () { setEnabled(true); setSetting('settings.stories.' + idx + '.enabled', true); });
+            offBtn.addEventListener('click', function () { setEnabled(false); setSetting('settings.stories.' + idx + '.enabled', false); });
+
+            var inputs = {};
+            STORY_FIELDS.forEach(function (fdef) {
+              var el = fdef.textarea ? document.createElement('textarea') : document.createElement('input');
+              el.className = 'inp'; if (fdef.ph) el.placeholder = fdef.ph;
+              el.addEventListener('input', function () { setSetting('settings.stories.' + idx + '.' + fdef.key, el.value); });
+              inputs[fdef.key] = el;
+              card.appendChild(makeField(fdef.label, el));
+            });
+
+            container.appendChild(card);
+            storyControls[idx] = { card: card, setEnabled: setEnabled, inputs: inputs };
+            // начальные значения
+            setEnabled(st.enabled !== false);
+            STORY_FIELDS.forEach(function (fdef) { inputs[fdef.key].value = st[fdef.key] != null ? st[fdef.key] : ''; });
+          })(i);
+        }
+        storiesBuilt = true;
+      }
+
+      function updateStories(stories) {
+        for (var i = 0; i < storyControls.length; i++) {
+          var st = stories[i] || {}; var c = storyControls[i]; if (!c) continue;
+          c.setEnabled(st.enabled !== false);
+          STORY_FIELDS.forEach(function (fdef) { c.inputs[fdef.key].value = st[fdef.key] != null ? st[fdef.key] : ''; });
+        }
+      }
+
+      // ── Кнопка ────────────────────────────────────────────────────────────────
+      var btnText = document.getElementById('btn-text');
+      var btnLink = document.getElementById('btn-link');
+      btnText.addEventListener('input', function () { setSetting('settings.button.text', btnText.value); });
+      btnLink.addEventListener('input', function () { setSetting('settings.button.link', btnLink.value); });
+
+      // ── Воспроизведение (булевы сегменты) ─────────────────────────────────────
       function bindBoolSeg(segId, key) {
         document.querySelectorAll('#' + segId + ' .seg__btn').forEach(function (b) {
           b.addEventListener('click', function () {
@@ -337,25 +386,11 @@
           });
         });
       }
-      bindBoolSeg('meta-seg', 'settings.showCardMeta');
-      bindBoolSeg('fade-seg', 'settings.edgeFade');
-
-      // ── Действие кнопки (settings.cta.mode) + ссылка ──────────────────────────
-      var ctaLinkField = document.getElementById('cta-link-field');
-      function syncCtaLinkVisibility(m) { ctaLinkField.style.display = (m === 'link') ? '' : 'none'; }
-      document.querySelectorAll('#cta-seg .seg__btn').forEach(function (b) {
-        b.addEventListener('click', function () {
-          document.querySelectorAll('#cta-seg .seg__btn').forEach(function (x) { x.classList.remove('active'); });
-          b.classList.add('active');
-          setSetting('settings.cta.mode', b.dataset.cta);
-          syncCtaLinkVisibility(b.dataset.cta);
-        });
-      });
-      var ctaLink = document.getElementById('cta-linkUrl');
-      ctaLink.addEventListener('input', function () { setSetting('settings.cta.linkUrl', ctaLink.value); });
+      bindBoolSeg('fade-seg', 'settings.playback.edgeFade');
+      bindBoolSeg('autoplay-seg', 'settings.playback.autoplay');
+      bindBoolSeg('muted-seg', 'settings.playback.muted');
 
       // ── Расположение (settings.layout.position) — сверху / снизу ─────────────
-      // Один размер (во всю ширину) ⇒ всего 2 положения: top и bottom.
       function buildPosBar() {
         var current = (((lastConfig.settings) || {}).layout || {}).position === 'top' ? 'top' : 'bottom';
         document.querySelectorAll('#posbar .posbar__slot').forEach(function (b) {
@@ -387,7 +422,6 @@
       function applyConfig(cfg) {
         lastConfig = cfg || {};
         var design = lastConfig.design || {};
-        var texts = lastConfig.texts || {};
         var st = lastConfig.settings || {};
 
         // Тема
@@ -395,44 +429,41 @@
         document.body.classList.toggle('dark', isDark);
         document.querySelectorAll('#theme-seg .seg__btn').forEach(function (x) { x.classList.toggle('active', x.dataset.mode === mode()); });
 
-        // Схемы: заполнить SCHEMES один раз (заморозка) из основной + альтернативных
+        // Схемы (заморозка один раз)
         if (SCHEMES.length === 0 && design.colors) {
           SCHEMES = [design.colors].concat(Array.isArray(design.altColors) ? design.altColors : []);
         }
-        // Определить активную схему по совпадению акцента
         activeScheme = -1;
         var cur = currentAccent();
         for (var i = 0; i < SCHEMES.length; i++) { if (accentOf(SCHEMES[i]) === cur) { activeScheme = i; break; } }
         if (activeScheme === -1 && !cur) activeScheme = 0;
         buildSchemes(); refreshPrimary();
 
+        // Шрифт
+        fontSelect.value = (design.font && design.font.family) || 'sans-serif';
+
         // Логотип
         var hideLogo = design.hideLogo === true;
         document.querySelectorAll('#logo-seg .seg__btn').forEach(function (x) { x.classList.toggle('active', (x.dataset.logo === '0') === hideLogo); });
 
-        // Тексты
-        TEXT_KEYS.forEach(function (k) { document.getElementById('t-' + k).value = texts[k] != null ? texts[k] : ''; });
+        // Истории
+        var stories = Array.isArray(st.stories) ? st.stories : (st.stories ? Object.keys(st.stories).sort(function(a,b){return a-b;}).map(function(k){return st.stories[k];}) : []);
+        if (!storiesBuilt) buildStories(stories); else updateStories(stories);
 
-        // Режим показа
-        var dm = st.displayMode === 'launcher' ? 'launcher' : 'strip';
-        document.querySelectorAll('#mode-seg .seg__btn').forEach(function (x) { x.classList.toggle('active', x.dataset.dm === dm); });
+        // Кнопка
+        var btn = st.button || {};
+        btnText.value = btn.text || '';
+        btnLink.value = btn.link || '';
 
-        // Булевы
-        var meta = st.showCardMeta !== false;
-        document.querySelectorAll('#meta-seg .seg__btn').forEach(function (x) { x.classList.toggle('active', (x.dataset.v === '1') === meta); });
-        var fade = st.edgeFade !== false;
+        // Воспроизведение
+        var pb = st.playback || {};
+        var fade = pb.edgeFade !== false, auto = pb.autoplay !== false, muted = pb.muted !== false;
         document.querySelectorAll('#fade-seg .seg__btn').forEach(function (x) { x.classList.toggle('active', (x.dataset.v === '1') === fade); });
+        document.querySelectorAll('#autoplay-seg .seg__btn').forEach(function (x) { x.classList.toggle('active', (x.dataset.v === '1') === auto); });
+        document.querySelectorAll('#muted-seg .seg__btn').forEach(function (x) { x.classList.toggle('active', (x.dataset.v === '1') === muted); });
 
-        // CTA
-        var ctaMode = ((st.cta || {}).mode === 'link') ? 'link' : 'form';
-        document.querySelectorAll('#cta-seg .seg__btn').forEach(function (x) { x.classList.toggle('active', x.dataset.cta === ctaMode); });
-        ctaLink.value = (st.cta || {}).linkUrl || '';
-        syncCtaLinkVisibility(ctaMode);
-
-        // Позиция
+        // Позиция + отступы
         buildPosBar();
-
-        // Отступы
         var layout = st.layout || {};
         var ox = (typeof layout.offsetX === 'number') ? layout.offsetX : 16;
         var oy = (typeof layout.offsetY === 'number') ? layout.offsetY : 16;
@@ -440,14 +471,12 @@
         document.getElementById('off-y').value = oy; document.getElementById('off-y-val').textContent = oy;
       }
 
-      // Первичная отрисовка сразу из defaultSettings.json — чтобы панель не была
-      // пустой, если frameReady от превью не пришёл (гонка/зависший iframe).
+      // Первичная отрисовка сразу из defaultSettings.json (устойчивость к потере frameReady)
       fetch('./defaultSettings.json')
         .then(function (r) { return r.ok ? r.json() : null; })
         .then(function (cfg) { if (cfg && SCHEMES.length === 0) applyConfig(cfg); })
         .catch(function () {});
 
-      // frameReady уточняет значения актуальным конфигом превью.
       window.addEventListener('message', function (e) {
         if (!e.data || e.data.type !== 'wlab:dev:frameReady') return;
         post('wlab:dev:setEditMode', { editMode: editMode });
