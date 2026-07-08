@@ -157,24 +157,9 @@
           <input class="inp" id="btn-link" placeholder="https://t.me/…">
         </div>
 
-        <div class="subhead">Воспроизведение</div>
         <div class="field">
           <label class="field__label">Выцветание по краям ленты</label>
           <div class="seg" id="fade-seg">
-            <button class="seg__btn active" data-v="1">Вкл</button>
-            <button class="seg__btn" data-v="0">Выкл</button>
-          </div>
-        </div>
-        <div class="field">
-          <label class="field__label">Автозапуск видео</label>
-          <div class="seg" id="autoplay-seg">
-            <button class="seg__btn active" data-v="1">Вкл</button>
-            <button class="seg__btn" data-v="0">Выкл</button>
-          </div>
-        </div>
-        <div class="field">
-          <label class="field__label">Без звука</label>
-          <div class="seg" id="muted-seg">
             <button class="seg__btn active" data-v="1">Вкл</button>
             <button class="seg__btn" data-v="0">Выкл</button>
           </div>
@@ -388,8 +373,6 @@
         });
       }
       bindBoolSeg('fade-seg', 'settings.playback.edgeFade');
-      bindBoolSeg('autoplay-seg', 'settings.playback.autoplay');
-      bindBoolSeg('muted-seg', 'settings.playback.muted');
 
       // ── Расположение (settings.layout.position) — сверху / снизу ─────────────
       function buildPosBar() {
@@ -456,12 +439,10 @@
         btnText.value = btn.text || '';
         btnLink.value = btn.link || '';
 
-        // Воспроизведение
+        // Выцветание по краям ленты
         var pb = st.playback || {};
-        var fade = pb.edgeFade !== false, auto = pb.autoplay !== false, muted = pb.muted !== false;
+        var fade = pb.edgeFade !== false;
         document.querySelectorAll('#fade-seg .seg__btn').forEach(function (x) { x.classList.toggle('active', (x.dataset.v === '1') === fade); });
-        document.querySelectorAll('#autoplay-seg .seg__btn').forEach(function (x) { x.classList.toggle('active', (x.dataset.v === '1') === auto); });
-        document.querySelectorAll('#muted-seg .seg__btn').forEach(function (x) { x.classList.toggle('active', (x.dataset.v === '1') === muted); });
 
         // Позиция + отступы
         buildPosBar();

@@ -35,7 +35,7 @@
       { "enabled": false, "videoUrl": "", "poster": "", "icon": "", "name": "Аксессуары",       "title": "Аксессуары",       "subtitle": "Детали, которые завершают образ комнаты" }
     ],
     "button": { "text": "Хочу такой же!", "link": "https://t.me/widgetlab" },
-    "playback": { "edgeFade": true, "autoplay": true, "muted": true },
+    "playback": { "edgeFade": true },
     "layout": { "mode": "fullwidth", "position": "bottom", "offsetX": 16, "offsetY": 16 }
   },
   "triggers": {

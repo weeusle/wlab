@@ -97,14 +97,9 @@
             { "type": "textinput", "label": "Ссылка в кнопке", "destination": "settings.button.link", "validator": { "maxLength": 200 } }
           ]
         },
-        {
-          "header": "Воспроизведение",
-          "blocks": [
-            { "type": "toggler", "label": "Выцветание по краям ленты", "destination": "settings.playback.edgeFade" },
-            { "type": "toggler", "label": "Автозапуск видео", "destination": "settings.playback.autoplay" },
-            { "type": "toggler", "label": "Без звука", "destination": "settings.playback.muted" }
-          ]
-        },
+        [
+          { "type": "toggler", "label": "Выцветание по краям ленты", "destination": "settings.playback.edgeFade" }
+        ],
         {
           "header": "Расположение",
           "blocks": [
