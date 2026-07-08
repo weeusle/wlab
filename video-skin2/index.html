@@ -39,7 +39,7 @@
     .seg__btn.active { background: #fff; color: #0f172a; box-shadow: 0 1px 3px rgba(0,0,0,.12); }
 
     .schemes { display: flex; gap: 8px; flex-wrap: wrap; }
-    .scheme { width: 40px; height: 38px; border-radius: 10px; border: 2px solid transparent; padding: 0; cursor: pointer; position: relative; }
+    .scheme { width: 40px; height: 38px; border-radius: 10px; border: 2px solid transparent; padding: 0; cursor: pointer; position: relative; box-shadow: inset 0 0 0 1px rgba(0,0,0,.12); }
     .scheme.active { border-color: #2563eb; }
     .scheme.active::after { content: '✓'; position: absolute; top: -3px; right: 1px; color: #2563eb; font-weight: 700; font-size: 13px; }
 
@@ -241,9 +241,18 @@
         SCHEMES = [base].concat(alts);
       }
 
-      function schemePrimary(scheme) {
+      function schemeColor(scheme, role) {
         var mc = scheme[mode()] || scheme.light || scheme || {};
-        return mc.primary || mc.accent || mc.background || '#999999';
+        return mc[role];
+      }
+      function schemePrimary(scheme) {
+        return schemeColor(scheme, 'primary') || '#999999';
+      }
+      // Two-tone swatch: brand (primary) + text colour, split diagonally.
+      function schemeSwatch(scheme) {
+        var p = schemePrimary(scheme);
+        var t = schemeColor(scheme, 'text') || '#FFFFFF';
+        return 'linear-gradient(135deg, ' + p + ' 0 50%, ' + t + ' 50% 100%)';
       }
 
       function buildSchemes() {
@@ -253,7 +262,7 @@
           var btn = document.createElement('button');
           btn.className = 'scheme' + (i === activeScheme ? ' active' : '');
           btn.title = i === 0 ? 'Основная схема' : 'Схема ' + (i + 1);
-          btn.style.background = schemePrimary(scheme);
+          btn.style.background = schemeSwatch(scheme);
           btn.addEventListener('click', function () {
             activeScheme = i;
             // send the whole {light,dark} object so both themes switch together
