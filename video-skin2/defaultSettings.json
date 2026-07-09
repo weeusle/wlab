@@ -23,7 +23,7 @@
       },
       {
         "light": { "primary": "#222222", "text": "#FFFFFF" },
-        "dark":  { "primary": "#FFFFFF", "text": "#FFFFFF" }
+        "dark":  { "primary": "#C7CDD9", "text": "#FFFFFF" }
       }
     ],
     "colorMode": "light",
