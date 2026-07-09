@@ -1,21 +1,6 @@
 {
   "steps": [
     {
-      "id": "texts",
-      "header": "Тексты",
-      "icon": "type",
-      "blocks": [
-        [
-          {
-            "type": "textinput",
-            "label": "Текст кнопки",
-            "destination": "texts.buttonText",
-            "validator": { "required": true, "maxLength": 25 }
-          }
-        ]
-      ]
-    },
-    {
       "id": "design",
       "header": "Дизайн",
       "icon": "palette",
@@ -26,37 +11,51 @@
       "header": "Настройки",
       "icon": "settings",
       "blocks": [
-        [
-          {
-            "type": "textinput",
-            "label": "Ссылка на видео",
-            "destination": "settings.videoUrl",
-            "after": "Ссылка с YouTube, Vimeo, VK, RuTube или прямой файл (mp4/webm)",
-            "validator": { "required": true }
-          },
-          {
-            "type": "textinput",
-            "label": "Ссылка кнопки",
-            "destination": "settings.buttonUrl",
-            "after": "Куда ведёт кнопка «Оставить заявку»"
-          },
-          {
-            "type": "slider",
-            "label": "Задержка кнопки, сек",
-            "destination": "settings.ctaDelay",
-            "min": 0,
-            "max": 30,
-            "step": 1,
-            "after": "Через сколько секунд после разворачивания появляется кнопка",
-            "options": [
-              { "value": 0, "label": "Сразу" },
-              { "value": 5, "label": "5" },
-              { "value": 30, "label": "30" }
-            ]
-          }
-        ],
         {
-          "header": "Расположение",
+          "header": "Контент",
+          "blocks": [
+            {
+              "type": "textinput",
+              "label": "Ссылка на видео",
+              "destination": "settings.videoUrl",
+              "after": "Ссылка с YouTube, Vimeo, VK, RuTube или прямой файл (mp4/webm)",
+              "validator": { "required": true }
+            }
+          ]
+        },
+        {
+          "header": "Кнопка",
+          "blocks": [
+            {
+              "type": "textinput",
+              "label": "Текст кнопки",
+              "destination": "texts.buttonText",
+              "validator": { "required": true, "maxLength": 25 }
+            },
+            {
+              "type": "textinput",
+              "label": "Ссылка кнопки",
+              "destination": "settings.buttonUrl",
+              "after": "Куда ведёт кнопка «Оставить заявку»"
+            },
+            {
+              "type": "slider",
+              "label": "Таймер появления кнопки, сек",
+              "destination": "settings.ctaDelay",
+              "min": 0,
+              "max": 30,
+              "step": 1,
+              "after": "Через сколько секунд после разворачивания появляется кнопка",
+              "options": [
+                { "value": 0, "label": "Сразу" },
+                { "value": 5, "label": "5" },
+                { "value": 30, "label": "30" }
+              ]
+            }
+          ]
+        },
+        {
+          "header": "Положение",
           "blocks": [
             {
               "type": "settings.sizeposition",

@@ -119,22 +119,21 @@
         </div>
       </div>
 
-      <!-- ТЕКСТЫ -->
-      <div class="section">
-        <h2 class="section__title">Тексты</h2>
-        <div class="field">
-          <label class="field__label">Текст кнопки</label>
-          <input class="inp" id="t-button" placeholder="Оставить заявку" maxlength="25">
-        </div>
-      </div>
-
       <!-- НАСТРОЙКИ -->
       <div class="section">
         <h2 class="section__title">Настройки</h2>
+
+        <div class="subhead">Контент</div>
         <div class="field">
           <label class="field__label">Ссылка на видео</label>
           <input class="inp" id="s-video" placeholder="YouTube / Vimeo / VK / RuTube или mp4/webm">
           <div class="hint">YouTube, Vimeo, VK, RuTube или прямой файл (mp4/webm)</div>
+        </div>
+
+        <div class="subhead">Кнопка</div>
+        <div class="field">
+          <label class="field__label">Текст кнопки</label>
+          <input class="inp" id="t-button" placeholder="Оставить заявку" maxlength="25">
         </div>
         <div class="field">
           <label class="field__label">Ссылка кнопки</label>
@@ -142,7 +141,7 @@
           <div class="hint">Куда ведёт кнопка «Оставить заявку»</div>
         </div>
         <div class="field">
-          <label class="field__label">Задержка кнопки, сек</label>
+          <label class="field__label">Таймер появления кнопки, сек</label>
           <div class="range-row">
             <span class="range-row__cap">Через, сек</span>
             <input type="range" class="range" id="cta-delay" min="0" max="30" step="1">
@@ -151,7 +150,7 @@
           <div class="hint">Через сколько секунд после разворачивания появляется кнопка</div>
         </div>
 
-        <div class="subhead">Расположение</div>
+        <div class="subhead">Положение</div>
         <div class="field">
           <label class="field__label">Угол экрана</label>
           <div class="posgrid" id="posgrid"></div>
