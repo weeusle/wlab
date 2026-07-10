@@ -44,9 +44,9 @@
   },
   "settings": {
     "layout": {
-      "position": "bottom-right",
-      "offsetX": 24,
-      "offsetY": 24
+      "position": "bottom-center",
+      "offsetX": 40,
+      "offsetY": 40
     },
     "videoUrl": "https://www.youtube.com/watch?v=aqz-KE-bpKQ",
     "buttonUrl": "https://wlab.pro",

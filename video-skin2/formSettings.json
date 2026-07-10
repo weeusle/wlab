@@ -75,6 +75,9 @@
         [
           { "type": "triggers.onReady" },
           { "type": "triggers.timer" }
+        ],
+        [
+          { "type": "showTo" }
         ]
       ]
     },
