@@ -61,7 +61,7 @@
               "type": "settings.sizeposition",
               "destination": "settings.layout",
               "positions": ["top-left", "top-center", "top-right", "center-left", "center-right", "bottom-left", "bottom-center", "bottom-right"],
-              "features": { "showWidth": false, "showOffset": true }
+              "features": { "showLayoutMode": false, "showWidth": false, "showOffset": true }
             }
           ]
         }
@@ -74,8 +74,7 @@
       "blocks": [
         [
           { "type": "triggers.onReady" },
-          { "type": "triggers.timer" },
-          { "type": "showTo" }
+          { "type": "triggers.timer" }
         ]
       ]
     },

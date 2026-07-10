@@ -51,5 +51,10 @@
     "videoUrl": "https://www.youtube.com/watch?v=aqz-KE-bpKQ",
     "buttonUrl": "https://wlab.pro",
     "ctaDelay": 5
-  }
+  },
+  "triggers": {
+    "onReady": { "enabled": true }
+  },
+  "integrations": {},
+  "installation": {}
 }
