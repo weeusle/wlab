@@ -1,0 +1,1 @@
+function t(n){const r=n.match(/\[IMP:(\d+)\]/);return r===null?5:parseInt(r[1],10)}function c(n){return{log:r=>{const o=t(r),e=`[${n}] ${r}`;if(o<=6){console.debug(e);return}if(o<=8){console.log(e);return}if(o===9){console.warn(e);return}console.error(e)}}}export{c};

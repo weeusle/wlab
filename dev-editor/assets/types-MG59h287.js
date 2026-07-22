@@ -1,0 +1,1 @@
+const a={telegram:"tg",whatsapp:"wa",max:"max",vk:"vk",phone:"tel"},t={telegram:"Telegram",whatsapp:"WhatsApp",max:"Max",vk:"Вконтакте",phone:"Телефон"},e=["telegram","whatsapp","max","vk","phone"],p=10,A=50,o=10;export{p as BAR_PADDING,A as BUBBLE_SIZE,t as CHANNEL_FALLBACK_LABELS,a as CHANNEL_MODIFIERS,e as DEFAULT_CHANNELS,o as ICON_GAP};

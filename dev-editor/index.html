@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Widget Skin Dev</title>
+  <script type="module" crossorigin src="./assets/main-DkdOE93_.js"></script>
+  <link rel="modulepreload" crossorigin href="./assets/types-BVo2fm5H.js">
+  <link rel="modulepreload" crossorigin href="./assets/preload-helper-PPVm8Dsz.js">
+  <link rel="stylesheet" crossorigin href="./assets/main-CYsOYHsX.css">
+</head>
+<body>
+
+  <!-- ── LEFT NAVIGATOR: widget + skin selection (populated by dev-ui.ts) ── -->
+  <aside class="dev-leftbar">
+    <div class="dl-nav">
+      <label class="dl-field">
+        <span class="dl-field__label">Виджет</span>
+        <select class="dp-input dp-select" id="widget-select"></select>
+      </label>
+      <label class="dl-field">
+        <span class="dl-field__label">Скин</span>
+        <select class="dp-input dp-select" id="skin-select"></select>
+      </label>
+    </div>
+  </aside>
+
+  <!-- ── PREVIEW STAGE: widget iframe is injected here by dev-ui.ts ── -->
+  <main class="stage">
+    <div class="widget-frame-wrap" id="frame-wrap"></div>
+  </main>
+
+  <!-- ── RIGHT DEV SIDEBAR ── -->
+  <aside class="dev-sidebar">
+
+    <!-- Top controls: edit mode, theme, viewport switcher, widget actions -->
+    <div class="dp-controls">
+      <div class="dp-controls__row dp-modes">
+        <div class="dp-modes__item">
+          <span>Edit Mode</span>
+          <div class="dp-track dp-track--active" id="edit-track">
+            <div class="dp-thumb"></div>
+          </div>
+        </div>
+
+        <div class="dp-modes__item" id="theme-row">
+          <span>Light</span>
+          <div class="dp-track" id="theme-track">
+            <div class="dp-thumb"></div>
+          </div>
+          <span>Dark</span>
+        </div>
+      </div>
+
+      <div class="viewport-switcher" id="viewport-switcher">
+        <button class="viewport-btn active" data-width="100%" title="100%">
+          <svg viewBox="0 0 24 24"><path d="M21 2H3a1 1 0 0 0-1 1v13a1 1 0 0 0 1 1h7l-1 3H7v1h10v-1h-2l-1-3h7a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1zm-1 13H4V4h16v11z"/></svg>
+          <span class="viewport-btn__label">100%</span>
+        </button>
+        <button class="viewport-btn" data-width="1280px" title="1280px">
+          <svg viewBox="0 0 24 24"><path d="M20 3H4a1 1 0 0 0-1 1v11h18V4a1 1 0 0 0-1-1zm-1 10H5V5h14v8zM1 17h22a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1z"/></svg>
+          <span class="viewport-btn__label">1280</span>
+        </button>
+        <button class="viewport-btn" data-width="1024px" title="1024px">
+          <svg viewBox="0 0 24 24"><path d="M20 3H4a1 1 0 0 0-1 1v11h18V4a1 1 0 0 0-1-1zm-1 10H5V5h14v8zM1 17h22a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1z"/></svg>
+          <span class="viewport-btn__label">1024</span>
+        </button>
+        <button class="viewport-btn" data-width="768px" title="768px">
+          <svg viewBox="0 0 24 24"><path d="M18 1H6a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2zm-3 20H9v-1h6v1zm3-3H6V4h12v14z"/></svg>
+          <span class="viewport-btn__label">768</span>
+        </button>
+        <button class="viewport-btn" data-width="600px" title="600px">
+          <svg viewBox="0 0 24 24"><path d="M18 1H6a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2zm-3 20H9v-1h6v1zm3-3H6V4h12v14z"/></svg>
+          <span class="viewport-btn__label">600</span>
+        </button>
+        <button class="viewport-btn" data-width="480px" title="480px">
+          <svg viewBox="0 0 24 24"><path d="M16 1H8a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2zm-3 20h-2v-1h2v1zm3-3H8V4h8v14z"/></svg>
+          <span class="viewport-btn__label">480</span>
+        </button>
+        <button class="viewport-btn" data-width="375px" title="375px">
+          <svg viewBox="0 0 24 24"><path d="M16 1H8a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2zm-3 20h-2v-1h2v1zm3-3H8V4h8v14z"/></svg>
+          <span class="viewport-btn__label">375</span>
+        </button>
+        <button class="viewport-btn" data-width="320px" title="320px">
+          <svg viewBox="0 0 24 24"><path d="M16 1H8a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2zm-3 20h-2v-1h2v1zm3-3H8V4h8v14z"/></svg>
+          <span class="viewport-btn__label">320</span>
+        </button>
+      </div>
+
+      <div id="widget-actions"></div>
+    </div>
+
+    <!-- formSettings-driven settings form — populated by dev-ui.ts on frameReady -->
+    <div class="dp-form" id="settings-form"></div>
+
+  </aside>
+
+</body>
+</html>

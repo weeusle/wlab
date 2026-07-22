@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Widget Frame</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      color: var(--site-text, #1a1a2e);
+      background: var(--site-bg, #ffffff);
+      min-height: 100vh;
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    /* ── SITE COLOR TOKENS ── */
+    :root {
+      --site-primary: #0047ff;
+      --site-text:    #1a1a2e;
+      --site-bg:      #ffffff;
+      --site-primary-tint: color-mix(in srgb, var(--site-primary) 10%, var(--site-bg));
+      --site-border:  color-mix(in srgb, var(--site-text) 10%, var(--site-bg));
+    }
+
+    /* ── HEADER ── */
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--site-bg, #ffffff);
+      border-bottom: 1px solid var(--site-border, #e8e8f0);
+      padding: 0 24px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+    .site-logo {
+      font-weight: 700;
+      font-size: 18px;
+      color: var(--site-text, #1a1a2e);
+      letter-spacing: -0.3px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .site-logo__dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--site-primary, #0047ff);
+    }
+    .site-nav {
+      display: flex;
+      gap: 4px;
+      align-items: center;
+    }
+    .site-nav a {
+      text-decoration: none;
+      color: color-mix(in srgb, var(--site-text) 60%, var(--site-bg));
+      font-size: 14px;
+      padding: 6px 12px;
+      border-radius: 6px;
+      transition: background 0.15s, color 0.15s;
+    }
+    .site-nav a:hover {
+      background: color-mix(in srgb, var(--site-text) 5%, var(--site-bg));
+      color: var(--site-text, #1a1a2e);
+    }
+    .site-header__cta {
+      background: var(--site-text, #1a1a2e);
+      color: var(--site-bg, #ffffff);
+      border: none;
+      border-radius: 8px;
+      padding: 8px 16px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    /* ── HERO ── */
+    .site-hero {
+      padding: 64px 24px 56px;
+      max-width: 800px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .site-hero__badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--site-primary-tint, #eff3ff);
+      color: var(--site-primary, #0047ff);
+      border-radius: 999px;
+      padding: 4px 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      letter-spacing: 0.3px;
+    }
+    .site-hero h1 {
+      font-size: clamp(26px, 4vw, 44px);
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      line-height: 1.15;
+      color: var(--site-text, #1a1a2e);
+      margin-bottom: 16px;
+    }
+    .site-hero h1 span { color: var(--site-primary, #0047ff); }
+    .site-hero p {
+      color: color-mix(in srgb, var(--site-text) 55%, var(--site-bg));
+      font-size: 16px;
+      max-width: 520px;
+      margin: 0 auto 32px;
+    }
+    .site-hero__actions {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .btn-primary {
+      background: var(--site-primary, #0047ff);
+      color: var(--site-bg, #ffffff);
+      border: none;
+      border-radius: 10px;
+      padding: 12px 24px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .btn-secondary {
+      background: transparent;
+      color: var(--site-text, #1a1a2e);
+      border: 1.5px solid var(--site-border, #e0e0e8);
+      border-radius: 10px;
+      padding: 12px 24px;
+      font-size: 15px;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    /* ── STATS ── */
+    .site-stats {
+      background: color-mix(in srgb, var(--site-text) 3%, var(--site-bg));
+      border-top: 1px solid var(--site-border, #e8e8f0);
+      border-bottom: 1px solid var(--site-border, #e8e8f0);
+      padding: 28px 24px;
+      display: flex;
+      justify-content: center;
+      gap: 48px;
+      flex-wrap: wrap;
+    }
+    .site-stat { text-align: center; }
+    .site-stat__num {
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--site-text, #1a1a2e);
+      letter-spacing: -0.5px;
+    }
+    .site-stat__label {
+      font-size: 13px;
+      color: color-mix(in srgb, var(--site-text) 45%, var(--site-bg));
+      margin-top: 2px;
+    }
+
+    /* ── CARDS ── */
+    .site-section {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 56px 24px;
+    }
+    .site-section__title {
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+      margin-bottom: 6px;
+      color: var(--site-text, #1a1a2e);
+    }
+    .site-section__sub {
+      color: color-mix(in srgb, var(--site-text) 45%, var(--site-bg));
+      font-size: 14px;
+      margin-bottom: 32px;
+    }
+    .site-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 16px;
+    }
+    .site-card {
+      border: 1px solid var(--site-border, #e8e8f0);
+      border-radius: 14px;
+      padding: 24px;
+      background: var(--site-bg, #ffffff);
+    }
+    .site-card__icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      margin-bottom: 16px;
+      background: var(--site-primary-tint, #eff3ff);
+    }
+    .site-card h3 {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: var(--site-text, #1a1a2e);
+    }
+    .site-card p {
+      font-size: 13px;
+      color: color-mix(in srgb, var(--site-text) 50%, var(--site-bg));
+      line-height: 1.55;
+    }
+
+    /* ── CONTENT ROW ── */
+    .site-content-row {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 24px 56px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      align-items: center;
+    }
+    .site-content-row__image {
+      border-radius: 16px;
+      background: linear-gradient(135deg, var(--site-primary-tint, #eff3ff) 0%, color-mix(in srgb, var(--site-primary) 18%, var(--site-bg)) 100%);
+      height: 220px;
+    }
+    .site-content-row h2 {
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+      margin-bottom: 12px;
+      color: var(--site-text, #1a1a2e);
+    }
+    .site-content-row p {
+      color: color-mix(in srgb, var(--site-text) 55%, var(--site-bg));
+      font-size: 14px;
+      margin-bottom: 20px;
+    }
+    .site-content-row a {
+      color: var(--site-primary, #0047ff);
+      font-size: 14px;
+      font-weight: 500;
+      text-decoration: none;
+    }
+
+    /* ── PROMO BAND ── */
+    .site-promo {
+      background: var(--site-text, #1a1a2e);
+      color: var(--site-bg, #ffffff);
+      padding: 48px 24px;
+      text-align: center;
+    }
+    .site-promo h2 {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .site-promo p {
+      color: color-mix(in srgb, var(--site-bg) 65%, var(--site-text));
+      font-size: 14px;
+      margin-bottom: 24px;
+    }
+    .site-promo .btn-primary {
+      background: var(--site-bg, #ffffff);
+      color: var(--site-text, #1a1a2e);
+    }
+
+    /* ── FOOTER ── */
+    .site-footer {
+      background: color-mix(in srgb, var(--site-text) 3%, var(--site-bg));
+      border-top: 1px solid var(--site-border, #e8e8f0);
+      padding: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .site-footer__copy {
+      font-size: 13px;
+      color: color-mix(in srgb, var(--site-text) 40%, var(--site-bg));
+    }
+    .site-footer__links { display: flex; gap: 16px; }
+    .site-footer__links a {
+      font-size: 13px;
+      color: color-mix(in srgb, var(--site-text) 40%, var(--site-bg));
+      text-decoration: none;
+    }
+    .site-footer__links a:hover {
+      color: color-mix(in srgb, var(--site-text) 80%, var(--site-bg));
+    }
+
+    @media (max-width: 600px) {
+      .site-nav { display: none; }
+      .site-content-row { grid-template-columns: 1fr; }
+      .site-stats { gap: 24px; }
+    }
+  </style>
+
+  <!-- Isolated: applies widget brand colors to mock site from wlab:widgets:applySettings -->
+  <script>
+    (function () {
+      var storedColors = null;
+      var currentMode = 'light';
+
+      // BUG_FIX_CONTEXT: --site-bg is now hardcoded per mode, not taken from color scheme.
+      // Reason: background must stay #001240 (dark) / #ffffff (light) regardless of altColors.
+      var SITE_BG = { light: '#fafafa', dark: '#222222' };
+
+      function applyCurrentMode() {
+        var root = document.documentElement;
+        root.style.setProperty('--site-bg', SITE_BG[currentMode] || '#ffffff');
+        if (!storedColors) return;
+        var colors = storedColors[currentMode] || {};
+        if (colors.primary) root.style.setProperty('--site-primary', colors.primary);
+        if (colors.text)    root.style.setProperty('--site-text',    colors.text);
+        console.log('[SiteColors][IMP:7][applyCurrentMode][SetVars][StepComplete] mode=' + currentMode + ' primary=' + colors.primary + ' [SUCCESS]');
+      }
+
+      window.addEventListener('message', function (e) {
+        if (!e.data) return;
+
+        if (e.data.type === 'wlab:widgets:applySettings') {
+          console.debug('[SiteColors][IMP:5][messageHandler][applySettings][ConditionCheck] message received [INFO]');
+          var design = (e.data.payload || {}).design;
+          if (!design || !design.colors) {
+            console.warn('[SiteColors][IMP:9][messageHandler][applySettings][ConditionCheck] no design.colors in payload [FAIL]');
+            return;
+          }
+          storedColors = design.colors;
+          currentMode = design.colorMode || 'light';
+          console.debug('[SiteColors][IMP:6][messageHandler][applySettings][Params] colorMode=' + currentMode + ' [INFO]');
+          applyCurrentMode();
+          return;
+        }
+
+        if (e.data.type === 'wlab:dev:setColorMode') {
+          currentMode = e.data.colorMode || 'light';
+          console.debug('[SiteColors][IMP:6][messageHandler][setColorMode][Params] colorMode=' + currentMode + ' [INFO]');
+          applyCurrentMode();
+          return;
+        }
+
+        if (e.data.type === 'wlab:dev:setSetting' && e.data.key === 'design.colors') {
+          console.debug('[SiteColors][IMP:5][messageHandler][setSetting][ConditionCheck] design.colors changed [INFO]');
+          storedColors = e.data.value;
+          applyCurrentMode();
+        }
+      });
+    })();
+  </script>
+  <script type="module" crossorigin src="./assets/widget-B-kgskEA.js"></script>
+  <link rel="modulepreload" crossorigin href="./assets/types-BVo2fm5H.js">
+  <link rel="modulepreload" crossorigin href="./assets/preload-helper-PPVm8Dsz.js">
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="site-header">
+    <div class="site-logo">
+      <div class="site-logo__dot"></div>
+      Brandname
+    </div>
+    <nav class="site-nav">
+      <a href="#">Продукт</a>
+      <a href="#">Решения</a>
+      <a href="#">Цены</a>
+      <a href="#">Блог</a>
+    </nav>
+    <button class="site-header__cta">Попробовать</button>
+  </header>
+
+  <!-- HERO -->
+  <section class="site-hero">
+    <div class="site-hero__badge">✦ Новинка сезона</div>
+    <h1>Лучший способ <span>управлять</span><br>вашим бизнесом</h1>
+    <p>Простой и мощный инструмент для команд любого размера. Начните бесплатно, масштабируйтесь по мере роста.</p>
+    <div class="site-hero__actions">
+      <button class="btn-primary">Начать бесплатно</button>
+      <button class="btn-secondary">Смотреть демо</button>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <div class="site-stats">
+    <div class="site-stat"><div class="site-stat__num">12 000+</div><div class="site-stat__label">активных клиентов</div></div>
+    <div class="site-stat"><div class="site-stat__num">98%</div><div class="site-stat__label">удовлетворённость</div></div>
+    <div class="site-stat"><div class="site-stat__num">4.9 ★</div><div class="site-stat__label">средний рейтинг</div></div>
+    <div class="site-stat"><div class="site-stat__num">40+</div><div class="site-stat__label">интеграций</div></div>
+  </div>
+
+  <!-- CARDS -->
+  <section class="site-section">
+    <div class="site-section__title">Всё что нужно</div>
+    <div class="site-section__sub">Инструменты для роста вашего бизнеса в одном месте</div>
+    <div class="site-cards">
+      <div class="site-card">
+        <div class="site-card__icon"></div>
+        <h3>Аналитика в реальном времени</h3>
+        <p>Следите за ключевыми метриками и принимайте решения на основе данных.</p>
+      </div>
+      <div class="site-card">
+        <div class="site-card__icon"></div>
+        <h3>Автоматизация процессов</h3>
+        <p>Освободите время команды от рутины с помощью умных сценариев.</p>
+      </div>
+      <div class="site-card">
+        <div class="site-card__icon"></div>
+        <h3>Управление клиентами</h3>
+        <p>Централизованная база клиентов с историей взаимодействий и тегами.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTENT ROW -->
+  <div class="site-content-row">
+    <div class="site-content-row__image"></div>
+    <div>
+      <h2>Растите быстрее вместе с нами</h2>
+      <p>Наша платформа адаптируется под ваш бизнес — от стартапа до корпорации. Подключайте нужные модули по мере необходимости.</p>
+      <a href="#">Узнать подробнее →</a>
+    </div>
+  </div>
+
+  <!-- PROMO BAND -->
+  <div class="site-promo">
+    <h2>Готовы начать?</h2>
+    <p>14 дней бесплатно, без привязки карты</p>
+    <button class="btn-primary">Создать аккаунт</button>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="site-footer__copy">© 2025 Brandname. Все права защищены.</div>
+    <div class="site-footer__links">
+      <a href="#">Конфиденциальность</a>
+      <a href="#">Условия</a>
+      <a href="#">Поддержка</a>
+    </div>
+  </footer>
+
+</body>
+</html>
