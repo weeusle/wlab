@@ -37,9 +37,9 @@ import{A as e,b as o}from"./lit-element-Cn7T8F1W.js";import{e as i}from"./class-
       </g>
       <circle class="progress-ring__frame progress-ring__frame--inner" cx="50" cy="50" r="45.25"/>
     </svg>
-  `}function R(t){if(!t.isOpen)return o`${e}`;const s=t._stateKey,n=s==="collapsed",d=!n,c=s==="muted",u=s==="playing",r=s==="cta-reveal",p=s==="cta",g=r||p,a=t._hasVideo,C=a,_=t._playback,v=a&&!_.muted,w=(c||u||g)&&v,m=d&&!t._muted&&a,b=t.config?.design?.hideLogo===!0,l=t._layout,f=t.config?.texts?.buttonText||"Оставить заявку",h=t._buttonUrl,k={"video-widget":!0,"is-collapsed":n,"is-expanded":d,"is-muted":c,"is-playing":u,"is-cta-reveal":r,"is-cta":p,"is-paused":t._paused},$=o`<span class="cta__text">${f}</span>`;return o`
+  `}function R(t){if(!t.isOpen)return o`${e}`;const s=t._stateKey,n=s==="collapsed",d=!n,c=s==="muted",u=s==="playing",r=s==="cta-reveal",p=s==="cta",g=r||p,a=t._hasVideo,C=a,_=t._playback,v=a&&!_.muted,w=(c||u||g)&&v,m=d&&!t._muted&&a,b=t.config?.design?.hideLogo===!0,l=t._layout,k=t.config?.texts?.buttonText||"Оставить заявку",h=t._buttonUrl,f={"video-widget":!0,"is-collapsed":n,"is-expanded":d,"is-muted":c,"is-playing":u,"is-cta-reveal":r,"is-cta":p,"is-paused":t._paused},$=o`<span class="cta__text">${k}</span>`;return o`
     <div
-      class=${i(k)}
+      class=${i(f)}
       data-state=${s}
       data-position=${l.position}
       style=${x({"--vs2-offset-x":`${l.offsetX}px`,"--vs2-offset-y":`${l.offsetY}px`})}
@@ -77,72 +77,79 @@ import{A as e,b as o}from"./lit-element-Cn7T8F1W.js";import{e as i}from"./class-
 
         ${C?H():e}
 
-        ${m?o`
-          <button
-            class="video-tap"
-            aria-label=${t._paused?"Продолжить видео":"Поставить видео на паузу"}
-            @click=${()=>t._togglePause()}
-          ></button>
-        `:e}
-
         ${n?o`
           <button
             class="circle__expand"
             aria-label="Развернуть видео"
             @click=${()=>t._expand()}
           ></button>
-        `:o`
-          <div class="collapse-wrap">
-            <button class="pill pill--collapse" aria-label="Свернуть видео" @click=${()=>t._collapse()}>
-              <span class="pill__icon-rotor">${V()}</span>
-            </button>
-          </div>
+        `:e}
 
-          ${a?o`
+        <!-- Слой органов управления: обрезан по ВНУТРЕННЕЙ рамке кольца (см. .controls
+             в skin2.scss), поэтому подложки пилюль и CTA упираются в обводку, а не
+             наезжают на неё — как на макете. -->
+        <div class="controls">
+          ${m?o`
             <button
-              class="pill pill--pause"
-              aria-label=${t._paused?"Продолжить":"Пауза"}
+              class="video-tap"
+              aria-label=${t._paused?"Продолжить видео":"Поставить видео на паузу"}
               @click=${()=>t._togglePause()}
+            ></button>
+          `:e}
+
+          ${n?e:o`
+            <div class="collapse-wrap">
+              <button class="pill pill--collapse" aria-label="Свернуть видео" @click=${()=>t._collapse()}>
+                <span class="pill__icon-rotor">${V()}</span>
+              </button>
+            </div>
+
+            ${a?o`
+              <button
+                class="pill pill--pause"
+                aria-label=${t._paused?"Продолжить":"Пауза"}
+                @click=${()=>t._togglePause()}
+              >
+                <span class="pill__icon pause-icon" aria-hidden="true">
+                  <span class="pause-icon__bar"></span>
+                  <span class="pause-icon__bar"></span>
+                </span>
+              </button>
+            `:e}
+          `}
+
+          ${w?o`
+            <button
+              class="pill pill--volume"
+              aria-label=${t._muted?"Включить звук":"Выключить звук"}
+              @click=${()=>t._toggleMute()}
             >
-              <span class="pill__icon pause-icon" aria-hidden="true">
-                <span class="pause-icon__bar"></span>
-                <span class="pause-icon__bar"></span>
-              </span>
+              ${t._muted?L(20):B()}
             </button>
           `:e}
-        `}
 
-        ${w?o`
-          <button
-            class="pill pill--volume"
-            aria-label=${t._muted?"Включить звук":"Выключить звук"}
-            @click=${()=>t._toggleMute()}
-          >
-            ${t._muted?L(20):B()}
-          </button>
-        `:e}
+          ${c&&v?o`
+            <button class="unmute-overlay" aria-label="Смотреть со звуком" @click=${()=>t._unmute()}>
+              ${M()}
+            </button>
+          `:e}
 
-        ${c&&v?o`
-          <button class="unmute-overlay" aria-label="Смотреть со звуком" @click=${()=>t._unmute()}>
-            ${M()}
-          </button>
-        `:e}
-
-        ${g&&_.showButton?h?o`
-                  <a
-                    class=${i({cta:!0,"cta--peek":r})}
-                    href=${h}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    @click=${()=>t._onCtaActivate()}
-                  >${$}</a>
-                `:o`
-                  <button
-                    class=${i({cta:!0,"cta--peek":r})}
-                    type="button"
-                    @click=${()=>t._onCtaActivate()}
-                  >${$}</button>
-                `:e}
+          ${g&&_.showButton?h?o`
+                    <a
+                      class=${i({cta:!0,"cta--peek":r})}
+                      href=${h}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      @click=${()=>t._onCtaActivate()}
+                    >${$}</a>
+                  `:o`
+                    <button
+                      class=${i({cta:!0,"cta--peek":r})}
+                      type="button"
+                      @click=${()=>t._onCtaActivate()}
+                    >${$}</button>
+                  `:e}
+        </div>
       </div>
     </div>
   `}export{R as renderRoot};
