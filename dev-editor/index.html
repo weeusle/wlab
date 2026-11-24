@@ -4,15 +4,17 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Widget Skin Dev</title>
-  <script type="module" crossorigin src="./assets/main-7UkjahxQ.js"></script>
-  <link rel="modulepreload" crossorigin href="./assets/types-BVo2fm5H.js">
+  <script type="module" crossorigin src="./assets/main-SkhX_zyZ.js"></script>
+  <link rel="modulepreload" crossorigin href="./assets/types-rhHiLeSB.js">
   <link rel="modulepreload" crossorigin href="./assets/preload-helper-PPVm8Dsz.js">
-  <link rel="stylesheet" crossorigin href="./assets/main-CYsOYHsX.css">
+  <link rel="modulepreload" crossorigin href="./assets/defaultSettings-vtqGw7Uw.js">
+  <link rel="modulepreload" crossorigin href="./assets/formula-DvqN6Xg2.js">
+  <link rel="stylesheet" crossorigin href="./assets/main-huhCQ3sd.css">
 </head>
 <body>
 
-  <!-- ── LEFT NAVIGATOR: widget + skin selection (populated by dev-ui.ts) ── -->
-  <aside class="dev-leftbar">
+  <!-- Preview toolbar: widget selection, viewport and preview actions. -->
+  <header class="dev-toolbar" aria-label="Инструменты превью">
     <div class="dl-nav">
       <label class="dl-field">
         <span class="dl-field__label">Виджет</span>
@@ -23,32 +25,21 @@
         <select class="dp-input dp-select" id="skin-select"></select>
       </label>
     </div>
-  </aside>
-
-  <!-- ── PREVIEW STAGE: widget iframe is injected here by dev-ui.ts ── -->
-  <main class="stage">
-    <div class="widget-frame-wrap" id="frame-wrap"></div>
-  </main>
-
-  <!-- ── RIGHT DEV SIDEBAR ── -->
-  <aside class="dev-sidebar">
-
-    <!-- Top controls: edit mode, theme, viewport switcher, widget actions -->
     <div class="dp-controls">
       <div class="dp-controls__row dp-modes">
         <div class="dp-modes__item">
-          <span>Edit Mode</span>
+          <span>Режим правки</span>
           <div class="dp-track dp-track--active" id="edit-track">
             <div class="dp-thumb"></div>
           </div>
         </div>
 
         <div class="dp-modes__item" id="theme-row">
-          <span>Light</span>
+          <span>Светлая</span>
           <div class="dp-track" id="theme-track">
             <div class="dp-thumb"></div>
           </div>
-          <span>Dark</span>
+          <span>Тёмная</span>
         </div>
       </div>
 
@@ -89,6 +80,18 @@
 
       <div id="widget-actions"></div>
     </div>
+
+  </header>
+
+  <!-- ── PREVIEW STAGE: widget iframe is injected here by dev-ui.ts ── -->
+  <main class="stage">
+    <div class="widget-frame-wrap" id="frame-wrap"></div>
+  </main>
+
+  <nav class="dp-step-rail" id="step-rail" aria-label="Шаги настройки"></nav>
+
+  <!-- ── RIGHT DEV SIDEBAR ── -->
+  <aside class="dev-sidebar">
 
     <!-- formSettings-driven settings form — populated by dev-ui.ts on frameReady -->
     <div class="dp-form" id="settings-form"></div>
